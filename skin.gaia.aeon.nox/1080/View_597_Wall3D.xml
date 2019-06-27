@@ -1,0 +1,597 @@
+<includes>
+	<!--##################################################################################   VISTA PANEL2 - ID 597   ##################################################################################-->
+	<include name="ViewWall3D">
+		<control type="group">
+			<visible>Control.IsVisible(597)</visible>
+			<left>-100</left>
+			<top>-77</top>
+			<animation effect="rotatey" center="50" start="7" end="7" time="0" condition="true">Conditional</animation>
+			<!-- default group -->
+			<animation effect="fade" time="400">VisibleChange</animation>
+			<include>ViewBack2</include>
+			<!-- Fundo -->
+			<control type="group">
+				<control type="group">
+					<animation effect="fade" delay="500" start="0" end="100" time="50">WindowOpen</animation>
+					<animation effect="slide" end="0,292" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Row,1)">Conditional</animation>
+					<animation effect="slide" end="0,292" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Row,0)">Conditional</animation>
+					<animation effect="slide" end="209,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Column,3)">Conditional</animation>
+					<animation effect="slide" end="209,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Column,2)">Conditional</animation>
+					<animation effect="slide" end="209,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Column,1)">Conditional</animation>
+					<animation effect="slide" end="209,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Column,0)">Conditional</animation>
+					<control type="image">		
+						<visible>Control.IsVisible(597)</visible>					
+						<left>771</left>
+						<top>168</top>
+						<width>215</width>
+						<height>285</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+						<colordiffuse>ff15d219</colordiffuse>
+					</control>
+					<control type="image">
+						<visible>Control.IsVisible(597)</visible>
+						<animation effect="fade" delay="1000" start="0" end="100" time="4000" pulse="true" condition="true">Conditional</animation>
+						<colordiffuse>ff144cec</colordiffuse>
+						<left>771</left>
+						<top>168</top>
+						<width>215</width>
+						<height>285</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+					</control>
+					<control type="image">
+						<visible>Control.IsVisible(597)</visible>
+						<animation effect="fade" delay="2000" start="0" end="100" time="3000" pulse="true" condition="true">Conditional</animation>
+						<left>771</left>
+						<top>168</top>
+						<width>215</width>
+						<height>285</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+						<colordiffuse>ffffeb44</colordiffuse>
+					</control>
+					<control type="image">
+						<visible>Control.IsVisible(597)</visible>
+						<animation effect="fade" delay="3000" start="0" end="100" time="2000" pulse="true" condition="true">Conditional</animation>
+						<left>771</left>
+						<top>168</top>
+						<width>215</width>
+						<height>285</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+						<colordiffuse>ffea4863</colordiffuse>
+					</control>
+				</control>
+				<control type="panel" id="597">
+					<viewtype label="Wall3D">icon</viewtype>
+					<left>780</left>
+					<top>175</top>
+					<width>1130</width>
+					<height>885</height>
+					<onleft>SetProperty(MediaMenu,True,home)</onleft>
+					<onleft>SetFocus(9050)</onleft>
+					<scrolltime>300</scrolltime>
+					<orientation>vertical</orientation>
+					<preloaditems>2</preloaditems>
+					<itemlayout width="210" height="293">
+						<control type="image">	
+							<left>8</left>
+							<top>8</top>
+							<width>178</width>
+							<height>253</height>
+							<aspectratio align="center">stretch</aspectratio>
+							<texture diffuse="spin/mask_cover3.png">spin/$VAR[GlobalCaseVarSpin]</texture>
+						</control>
+						<control type="image">
+							<left>9</left>
+							<top>9</top>
+							<width>176</width>
+							<height>251</height>
+							<texture fallback="spin/DefaultVideoPoster.png" diffuse="spin/mask_cover3.png" background="true">$VAR[PosterThumbVar]</texture>
+							<colordiffuse>ff909090</colordiffuse>
+							<aspectratio align="center">stretch</aspectratio>
+						</control>
+						<control type="image">
+							<left>162</left>
+							<top>10</top>
+							<width>25</width>
+							<height>50</height>
+							<texture>$VAR[OverlayVar]</texture>
+							<visible>StringCompare(ListItem.Overlay,OverlayWatched.png)</visible>
+						</control>
+						<control type="image">
+							<left>9</left>
+							<top>9</top>
+							<texture>spin/darkgrey.png</texture>
+							<colordiffuse>$VAR[ThemeLabelColor]</colordiffuse>
+							<animation effect="fade" start="25" end="25" condition="true">Conditional</animation>
+							<width>176</width>
+							<height>251</height>
+						</control>
+					</itemlayout>
+					<focusedlayout width="210" height="293">
+						<control type="group">
+							<animation effect="rotate" center="89,0" start="-2" end="2" time="2000" pulse="true" tween="sine" easing="inout" condition="true">Conditional</animation>					
+							<control type="image">	
+								<left>8</left>
+								<top>8</top>
+								<width>178</width>
+								<height>253</height>
+								<aspectratio align="center">stretch</aspectratio>
+								<texture diffuse="spin/mask_cover3.png">spin/$VAR[GlobalCaseVarSpin]</texture>
+							</control>
+							<control type="image">
+								<left>9</left>
+								<top>9</top>
+								<width>176</width>
+								<height>251</height>
+								<texture fallback="spin/DefaultVideoPoster.png" diffuse="spin/mask_cover3.png" background="true">$VAR[PosterThumbVar]</texture>
+								<aspectratio align="center">stretch</aspectratio>
+							</control>
+							<control type="image">
+								<left>162</left>
+								<top>10</top>
+								<width>25</width>
+								<height>50</height>
+								<texture>$VAR[OverlayVar]</texture>
+								<visible>StringCompare(ListItem.Overlay,OverlayWatched.png)</visible>
+							</control>
+						</control>
+					</focusedlayout>
+				</control>
+			</control>
+			<!-- Info Panel -->
+			<control type="group">
+				<visible>Control.IsVisible(597)</visible>
+				<left>115</left>
+				<top>120</top>
+				<control type="multiimage" id="5288">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<aspectratio>stretch</aspectratio>
+					<timeperimage>4000</timeperimage>
+					<visible>!ListItem.IsCollection + Container.HasFiles</visible>
+					<imagepath diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Path,,/extrafanart/]</imagepath>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<aspectratio>stretch</aspectratio>
+					<visible>IsEmpty(Control.GetLabel(5288))</visible>
+					<include>VisibleFadeAnimation</include>
+					<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(fanart)]</texture>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<aspectratio>stretch</aspectratio>
+					<visible>ListItem.IsCollection | !Container.HasFiles</visible>
+					<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(fanart)]</texture>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<texture background="true">spin/osd_black_bg.png</texture>
+					<aspectratio>stretch</aspectratio>
+				</control>
+				<control type="textbox">
+					<visible>!ListItem.IsCollection</visible>
+					<left>25</left>
+					<top>700</top>
+					<width>570</width>
+					<height>130</height>
+					<aligny>center</aligny>
+					<align>center</align>
+					<font>titlemove</font>
+					<label>$VAR[value_videotitle]</label>
+					<autoscroll delay="1500" time="2000" repeat="2000"/>
+					<textcolor>$VAR[ThemeLabelColor]</textcolor>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="textbox">
+					<visible>ListItem.IsCollection</visible>
+					<left>25</left>
+					<top>700</top>
+					<width>570</width>
+					<height>180</height>
+					<aligny>center</aligny>
+					<align>center</align>
+					<font>titlemove</font>
+					<label>$VAR[value_videotitle]</label>
+					<autoscroll delay="1500" time="2000" repeat="2000"/>
+					<textcolor>$VAR[ThemeLabelColor]</textcolor>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="textbox">
+					<left>25</left>
+					<top>840</top>
+					<width>570</width>
+					<height>38</height>
+					<visible>!IsEmpty(ListItem.Rating) + !ListItem.IsCollection</visible>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>font13_bold</font>
+					<label>$VAR[value_ground17_label]: [COLOR=FFFFFAF0]$VAR[value_ground17_value][/COLOR] - [COLOR $VAR[ThemeLabelColor]][B]$INFO[ListItem.Rating][/B][/COLOR] ($INFO[ListItem.Votes,, $LOCALIZE[205]])</label>
+					<textcolor>FFFFFAF0</textcolor>
+				</control>
+				<control type="image">
+					<left>330</left>
+					<top>250</top>
+					<width>250</width>
+					<height>150</height>
+					<texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+					<aspectratio>keep</aspectratio>
+				</control>
+				<control type="textbox">
+					<left>25</left>
+					<top>400</top>
+					<width>570</width>
+					<height>290</height>
+					<font>font13</font>
+					<align>justify</align>
+					<label>$VAR[value_plot]</label>
+					<autoscroll delay="10000" time="2000" repeat="10000"></autoscroll>
+				</control>
+				<include>IconsWall3D</include>
+			</control>
+		</control>
+	</include>
+	<include name="ViewWall3Dm">
+		<control type="group">
+			<include>WindowOpenCloseAnimation</include>
+			<visible>Control.IsVisible(597)</visible>
+			<left>-100</left>
+			<top>-77</top>
+			<animation effect="rotatey" center="50" start="7" end="7" time="0" condition="true">Conditional</animation>
+			<!-- default group -->
+			<animation effect="fade" time="400">VisibleChange</animation>
+			<include>ViewBack2</include>
+			<!-- Fundo -->
+			<control type="group">
+				<control type="group">
+					<animation effect="slide" end="0,220" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Row,2)">Conditional</animation>
+					<animation effect="slide" end="0,220" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Row,1)">Conditional</animation>
+					<animation effect="slide" end="0,220" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Row,0)">Conditional</animation>
+					<animation effect="slide" end="220,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Column,3)">Conditional</animation>
+					<animation effect="slide" end="220,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Column,2)">Conditional</animation>
+					<animation effect="slide" end="220,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Column,1)">Conditional</animation>
+					<animation effect="slide" end="220,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(597).Column,0)">Conditional</animation>
+					<control type="image">		
+						<visible>Control.IsVisible(597)</visible>					
+						<left>731</left>
+						<top>168</top>
+						<width>225</width>
+						<height>225</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+						<colordiffuse>ff15d219</colordiffuse>
+					</control>
+					<control type="image">
+						<visible>Control.IsVisible(597)</visible>
+						<animation effect="fade" delay="1000" start="0" end="100" time="4000" pulse="true" condition="true">Conditional</animation>
+						<colordiffuse>ff144cec</colordiffuse>
+						<left>731</left>
+						<top>168</top>
+						<width>225</width>
+						<height>225</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+					</control>
+					<control type="image">
+						<visible>Control.IsVisible(597)</visible>
+						<animation effect="fade" delay="2000" start="0" end="100" time="3000" pulse="true" condition="true">Conditional</animation>
+						<left>731</left>
+						<top>168</top>
+						<width>225</width>
+						<height>225</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+						<colordiffuse>ffffeb44</colordiffuse>
+					</control>
+					<control type="image">
+						<visible>Control.IsVisible(597)</visible>
+						<animation effect="fade" delay="3000" start="0" end="100" time="2000" pulse="true" condition="true">Conditional</animation>
+						<left>731</left>
+						<top>168</top>
+						<width>225</width>
+						<height>225</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+						<colordiffuse>ffea4863</colordiffuse>
+					</control>
+				</control>
+				<control type="panel" id="597">
+					<viewtype label="Wall3D">icon</viewtype>
+					<visible>[Container.Content(albums) | Container.Content(artists)]</visible>
+					<left>740</left>
+					<top>175</top>
+					<width>1130</width>
+					<height>885</height>
+					<onleft>SetProperty(MediaMenu,True,home)</onleft>
+					<onleft>SetFocus(9050)</onleft>
+					<scrolltime>300</scrolltime>
+					<orientation>vertical</orientation>
+					<preloaditems>2</preloaditems>
+					<itemlayout width="220" height="220">
+						<control type="image">
+							<left>9</left>
+							<top>9</top>
+							<width>190</width>
+							<height>190</height>
+							<texture fallback="spin/defaultalbumcover.png" diffuse="spin/mask_cover3.png" background="true">$VAR[PosterThumbVar]</texture>
+							<colordiffuse>ff909090</colordiffuse>
+							<aspectratio align="center">scale</aspectratio>
+						</control>
+						<control type="image">
+							<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+							<left>9</left>
+							<top>9</top>
+							<width>190</width>
+							<height>190</height>
+							<texture flipy="true" diffuse="spin/shelf/diffuse_box.png" background="true">spin/magazine/cmusiclandJ.png</texture>
+							<aspectratio scalediffuse="false">stretch</aspectratio>
+						</control>
+						<control type="textbox">
+							<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+							<left>28</left>
+							<top>8</top>
+							<width>150</width>
+							<height>190</height>
+							<font>titlesmall</font>
+							<textcolor>black</textcolor>
+							<align>center</align>
+							<aligny>center</aligny>
+							<label>$LOCALIZE[358]</label>
+						</control>
+						<control type="textbox">
+							<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+							<left>29</left>
+							<top>9</top>
+							<width>150</width>
+							<height>190</height>
+							<font>titlesmall</font>
+							<textcolor>white</textcolor>
+							<shadowcolor>black</shadowcolor>
+							<align>center</align>
+							<aligny>center</aligny>
+							<label>$LOCALIZE[358]</label>
+						</control>
+						<control type="image">	
+							<left>9</left>
+							<top>9</top>
+							<width>190</width>
+							<height>190</height>
+							<aspectratio align="center">stretch</aspectratio>
+							<colordiffuse>black</colordiffuse>
+							<texture background="true">bord.png</texture>
+						</control>
+						<control type="textbox">
+							<visible>Container.Content(artists)</visible>
+							<left>12</left>
+							<top>167</top>
+							<width>182</width>
+							<height>50</height>
+							<align>right</align>
+							<scroll>false</scroll>
+							<font>font10</font>
+							<label>[B]$INFO[ListItem.Artist][/B]</label>
+							<textcolor>white</textcolor>
+							<shadowcolor>black</shadowcolor>
+						</control>
+						<control type="image">
+							<left>9</left>
+							<top>9</top>
+							<texture>spin/darkgrey.png</texture>
+							<colordiffuse>$VAR[ThemeLabelColor]</colordiffuse>
+							<animation effect="fade" start="25" end="25" condition="true">Conditional</animation>
+							<width>190</width>
+							<height>190</height>
+						</control>
+					</itemlayout>
+					<focusedlayout width="220" height="220">
+						<control type="group">
+							<animation type="Focus" reversible="false">
+							</animation>
+							<animation effect="rotate" center="80,0" start="-2" end="2" time="2000" pulse="true" tween="sine" easing="inout" condition="true">Conditional</animation>					
+							<control type="image">
+								<left>9</left>
+								<top>9</top>
+								<width>190</width>
+								<height>190</height>
+								<texture fallback="spin/defaultalbumcover.png" diffuse="spin/mask_cover3.png" background="true">$VAR[PosterThumbVar]</texture>
+								<aspectratio align="center">scale</aspectratio>
+							</control>
+							<control type="image">
+								<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+								<left>9</left>
+								<top>9</top>
+								<width>190</width>
+								<height>190</height>
+								<texture flipy="true" diffuse="spin/shelf/diffuse_box.png" background="true">spin/magazine/cmusiclandJ.png</texture>
+								<aspectratio scalediffuse="false">stretch</aspectratio>
+							</control>
+							<control type="textbox">
+								<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+								<left>28</left>
+								<top>8</top>
+								<width>150</width>
+								<height>190</height>
+								<font>titlesmall</font>
+								<textcolor>black</textcolor>
+								<align>center</align>
+								<aligny>center</aligny>
+								<label>$LOCALIZE[358]</label>
+							</control>
+							<control type="textbox">
+								<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+								<left>29</left>
+								<top>9</top>
+								<width>150</width>
+								<height>190</height>
+								<font>titlesmall</font>
+								<textcolor>white</textcolor>
+								<shadowcolor>black</shadowcolor>
+								<align>center</align>
+								<aligny>center</aligny>
+								<label>$LOCALIZE[358]</label>
+							</control>
+							<control type="image">	
+								<left>9</left>
+								<top>9</top>
+								<width>190</width>
+								<height>190</height>
+								<aspectratio align="center">stretch</aspectratio>
+								<colordiffuse>black</colordiffuse>
+								<texture background="true">bord.png</texture>
+							</control>
+							<control type="textbox">
+							<visible>Container.Content(artists)</visible>
+							<left>12</left>
+							<top>167</top>
+							<width>182</width>
+							<height>50</height>
+							<align>right</align>
+							<scroll>false</scroll>
+							<font>font10</font>
+							<label>[B]$INFO[ListItem.Artist][/B]</label>
+							<textcolor>white</textcolor>
+							<shadowcolor>black</shadowcolor>
+						</control>
+						</control>
+					</focusedlayout>
+				</control>
+			</control>
+			<!-- Info Panel -->
+			<control type="group">
+				<visible>Control.IsVisible(597) + [Container.Content(albums) | Container.Content(artists)]</visible>
+				<left>115</left>
+				<top>120</top>
+				<control type="multiimage" id="4368">
+					<visible>![Container.Content(albums) + String.StartsWith(ListItem.Label,*)]</visible>
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<aspectratio aligny="top">scale</aspectratio>
+					<timeperimage>3250</timeperimage>
+					<fadetime>650</fadetime>
+					<imagepath diffuse="spin/mask_cover3.png" background="true">$INFO[Skin.String(pathlogosartists)]$INFO[ListItem.Artist,,/extrafanart/]</imagepath>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<aspectratio aligny="top">scale</aspectratio>
+					<visible>String.IsEmpty(Control.GetLabel(4368))</visible>
+					<visible>![Container.Content(albums) + String.StartsWith(ListItem.Label,*)]</visible>
+					<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(fanart)]</texture>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<aspectratio aligny="top">scale</aspectratio>
+					<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+					<texture diffuse="spin/mask_cover3.png" background="true">$INFO[Container.Art(artist.fanart)]</texture>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<texture background="true">spin/osd_black_bg.png</texture>
+					<aspectratio>stretch</aspectratio>
+				</control>
+				<control type="label">
+					<visible>![Container.Content(albums) + String.StartsWith(ListItem.Label,*)]</visible>
+					<left>25</left>
+					<top>870</top>
+					<width>570</width>
+					<height>40</height>
+					<aligny>center</aligny>
+					<align>center</align>
+					<font>titlemove</font>
+					<scroll>true</scroll>
+					<scrollspeed>50</scrollspeed>
+					<scrollsuffix> - </scrollsuffix>
+					<label>$VAR[value_videotitle]</label>
+					<textcolor>$VAR[ThemeLabelColor]</textcolor>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="image" id="3456">
+					<left>330</left>
+					<top>250</top>
+					<width>250</width>
+					<height>150</height>
+					<texture background="true">$INFO[Skin.String(pathlogosartists)]$INFO[ListItem.Artist,,/logo.png]</texture>
+					<aspectratio>keep</aspectratio>
+				</control>
+				<control type="label">
+					<visible>String.IsEmpty(Control.GetLabel(3456))</visible>
+					<left>20</left>
+					<top>324</top>
+					<width>560</width>
+					<height>40</height>
+					<align>right</align>
+					<font>titleshelf</font>
+					<scroll>true</scroll>
+					<scrollspeed>50</scrollspeed>
+					<scrollsuffix> - </scrollsuffix>
+					<label>$INFO[ListItem.Artist]</label>
+					<textcolor>FFFFFAF0</textcolor>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+					<left>20</left>
+					<top>324</top>
+					<width>560</width>
+					<height>40</height>
+					<align>right</align>
+					<font>titleshelf</font>
+					<scroll>true</scroll>
+					<scrollspeed>50</scrollspeed>
+					<scrollsuffix> - </scrollsuffix>
+					<label>$INFO[Container.FolderName]</label>
+					<textcolor>FFFFFAF0</textcolor>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="textbox">
+					<visible>Container.Content(artists) + !String.IsEmpty(ListItem.Artist)</visible>
+					<left>25</left>
+					<top>400</top>
+					<width>570</width>
+					<height>433</height>
+					<font>font13</font>
+					<align>justify</align>
+					<textcolor>$VAR[ThemeLabelColor]</textcolor>
+					<label>$LOCALIZE[132]: [COLOR=FFFFFAF0][B]$INFO[Window(Home).Property(Artist.Albums.Count)][/B][CR]$INFO[Window(Home).Property(SkinHelper.ListItem.Albums.Formatted)][/COLOR][CR]$LOCALIZE[176]: [COLOR=FFFFFAF0]$INFO[ListItem.Property(Artist_Style)][CR][CR]$VAR[value_plot][/COLOR]</label>
+					<autoscroll delay="7000" time="2000" repeat="7000"></autoscroll>
+				</control>
+				<control type="textbox">
+					<visible>Container.Content(albums) + !String.IsEmpty(ListItem.Album)</visible>
+					<left>25</left>
+					<top>400</top>
+					<height>433</height>
+					<width>570</width>
+					<font>font13</font>
+					<align>justify</align>
+					<textcolor>$VAR[ThemeLabelColor]</textcolor>
+					<autoscroll delay="7000" time="2000" repeat="7000"></autoscroll>
+					<label>$LOCALIZE[180]: [B][COLOR=FFFFFAF0]$INFO[Window(home).Property(Album.Songs.Duration)][/COLOR][/B][CR]$LOCALIZE[134]: [COLOR=FFFFFFFF][B]$INFO[Window(Home).Property(SkinHelper.ListItem.SongCount)][/B][/COLOR][CR][COLOR=FFFFFAF0]$INFO[Window(home).Property(SkinHelper.ListItem.Tracks.Formatted2)][CR]$INFO[ListItem.Property(Album_Description)][/COLOR]</label>
+				</control>
+			</control>
+		</control>
+	</include>
+</includes>

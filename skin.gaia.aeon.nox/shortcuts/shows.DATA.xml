@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<shortcuts>
+	<shortcut>
+		<defaultID>4</defaultID>
+		<label>Guide</label>
+		<label2>Custom item</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb />
+		<action>RunAddon(script.tv.show.next.aired,return)</action>
+		<visible>System.HasAddon(script.tv.show.next.aired)</visible>
+	</shortcut>
+	<shortcut>
+		<defaultID>recentlyaddedepisodes</defaultID>
+		<label>Arrivals</label>
+		<label2>Custom item</label2>
+		<icon>special://skin/extras/icons/DefaultFolder.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,library://video/tvshows/recentlyaddedepisodes.xml/,return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID />
+		<label>Browse</label>
+		<label2>Videos</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,"library://video/tvshows/",return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>744</defaultID>
+		<label>744</label>
+		<label2>item</label2>
+		<icon>special://skin/extras/icons/DefaultFolder.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,sources://video/,return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>1037</defaultID>
+		<label>Addons</label>
+		<label2>Videos</label2>
+		<icon>special://skin/extras/icons/DefaultAddonVideo.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,Addons,return)</action>
+	</shortcut>
+</shortcuts>

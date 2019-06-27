@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window id="1120" type="dialog">
+	<defaultcontrol always="true">90200</defaultcontrol>
+	<onunload condition="String.IsEqual(Skin.String(Viz.Background),4) + System.HasAddon(script.toolbox)">RunScript(script.toolbox,daemon=True,radius=30)</onunload>
+	<coordinates>
+		<system>1</system>
+		<left>199</left>
+		<top>210</top>
+	</coordinates>
+	<include>DialogOpenCloseAnimation</include>
+	<controls>
+		<control type="image">
+			<description>background image</description>
+			<width>1522</width>
+			<height>660</height>
+			<texture border="40">dialogs/default/bg.png</texture>
+		</control>
+		<control type="label" id="2">
+			<description>header label</description>
+			<left>30</left>
+			<top>32</top>
+			<width>1462</width>
+			<height>40</height>
+			<font>font15_title</font>
+			<label>19181</label>
+			<align>center</align>
+			<textcolor>dialogheader</textcolor>
+		</control>
+		<control type="grouplist" id="90200">
+			<description>control area</description>
+			<left>33</left>
+			<top>88</top>
+			<width>1452</width>
+			<height>540</height>
+			<pagecontrol>6</pagecontrol>
+			<onup>90200</onup>
+			<ondown>90200</ondown>
+			<onleft>6</onleft>
+			<onright>6</onright>
+			<control type="button" id="90201">
+				<description>Background Button</description>
+				<width>1452</width>
+				<label>$LOCALIZE[31102]:</label>
+				<label2>[COLOR $VAR[ThemeLabelColor]]$VAR[VizBackgroundLabelVar][/COLOR]</label2>
+				<onclick>$VAR[VizBackgroundClickVar]</onclick>
+			</control>
+			<control type="button" id="90901">
+				<description>Artist Slideshow Settings Button</description>
+				<width>1452</width>
+				<label>   - $INFO[System.AddonTitle(script.artistslideshow)] $LOCALIZE[5]</label>
+				<onclick>Addon.OpenSettings(script.artistslideshow)</onclick>
+				<visible>String.IsEqual(Skin.String(Viz.Background),3) + System.HasAddon(script.artistslideshow)</visible>
+			</control>
+			<control type="button" id="90902">
+				<description>Artist Slideshow Settings Button</description>
+				<width>1452</width>
+				<label>   - $LOCALIZE[31438]</label>
+				<onclick>InstallAddon(script.artistslideshow)</onclick>
+				<visible>String.IsEqual(Skin.String(Viz.Background),3) + !System.HasAddon(script.artistslideshow)</visible>
+			</control>
+			<control type="radiobutton" id="90205">
+				<description>Time &amp; Date Button</description>
+				<width>1452</width>
+				<label>$LOCALIZE[31267]</label>
+				<onclick>Skin.ToggleSetting(Disable.MusicVizTime)</onclick>
+				<selected>Skin.HasSetting(Disable.MusicVizTime)</selected>
+			</control>
+			<control type="radiobutton" id="90800">
+				<description>25% Dark Background</description>
+				<width>1452</width>
+				<label>+25% Dark Background</label>
+				<onclick>Skin.ToggleSetting(Dark.Background25)</onclick>
+				<selected>Skin.HasSetting(Dark.Background25)</selected>
+			</control>
+			<control type="radiobutton" id="90801">
+				<description>50% Dark Background</description>
+				<width>1452</width>
+				<label>+50% Dark Background</label>
+				<onclick>Skin.ToggleSetting(Dark.Background50)</onclick>
+				<selected>Skin.HasSetting(Dark.Background50)</selected>
+			</control>
+			<control type="radiobutton" id="90802">
+				<visible>!Skin.HasSetting(Classic.lyrics)</visible>
+				<description>Videoclip mode</description>
+				<width>1452</width>
+				<label>Videoclip mode</label>
+				<onclick condition="!Skin.HasSetting(Classic.lyrics)">Skin.ToggleSetting(Videoclip.mode)</onclick>
+				<onclick condition="Skin.HasSetting(Karaoke.mode)">Skin.ToggleSetting(Karaoke.mode)</onclick>
+				<selected>Skin.HasSetting(Videoclip.mode)</selected>
+			</control>
+			<control type="radiobutton" id="90803">
+			<visible>!Skin.HasSetting(Classic.lyrics)</visible>
+				<description>Karaoke mode</description>
+				<width>1452</width>
+				<label>Karaoke mode</label>
+				<onclick condition="!Skin.HasSetting(Classic.lyrics)">Skin.ToggleSetting(Karaoke.mode)</onclick>
+				<onclick condition="Skin.HasSetting(Videoclip.mode)">Skin.ToggleSetting(Videoclip.mode)</onclick>
+				<selected>Skin.HasSetting(Karaoke.mode)</selected>
+			</control>
+			<control type="radiobutton" id="90804">
+			<visible>!Skin.HasSetting(Classic.lyrics)</visible>
+				<description>Constant color lyrics</description>
+				<width>1452</width>
+				<label>Constant color videolyrics</label>
+				<onclick condition="!Skin.HasSetting(Classic.lyrics)">Skin.ToggleSetting(Alt_color.lyrics)</onclick>
+				<selected>Skin.HasSetting(Alt_color.lyrics)</selected>
+			</control>
+			<control type="radiobutton" id="90805">
+				<description>Classic lyrics</description>
+				<width>1452</width>
+				<label>Classic lyrics</label>
+				<onclick>Skin.ToggleSetting(Classic.lyrics)</onclick>
+				<onclick condition="Skin.HasSetting(Karaoke.mode)">Skin.ToggleSetting(Karaoke.mode)</onclick>
+				<onclick condition="Skin.HasSetting(Videoclip.mode)">Skin.ToggleSetting(Videoclip.mode)</onclick>
+				<selected>Skin.HasSetting(Classic.lyrics)</selected>
+			</control>
+			<control type="radiobutton" id="90912">
+				<width>1452</width>
+				<label>$LOCALIZE[31972]</label>
+				<onclick>Skin.ToggleSetting(launchmusicfullscreen)</onclick>
+				<selected>Skin.HasSetting(launchmusicfullscreen)</selected>
+			</control>
+			<control type="button" id="90911">
+				<width>1452</width>
+				<label>$LOCALIZE[31175]</label>
+				<label2>[COLOR $VAR[ThemeLabelColor]]$INFO[Skin.String(pathlogosartists)][/COLOR]</label2>
+				<onclick>Skin.Reset(pathlogosartists)</onclick>
+				<onclick>Skin.SetPath(pathlogosartists)</onclick>
+				<visible>!System.HasAddon(script.skin.helper.service)</visible>
+			</control>
+			<control type="radiobutton" id="90915">
+				<width>1452</width>
+				<label>$LOCALIZE[31269]</label>
+				<onclick>Skin.ToggleSetting(Disable.MusicPlayerNextTrack)</onclick>
+				<selected>Skin.HasSetting(Disable.MusicPlayerNextTrack)</selected>
+				<visible>String.IsEqual(Skin.String(MusicVizLayout),1)</visible>
+			</control>
+		</control>
+		<control type="scrollbar" id="6">
+			<left>1480</left>
+			<top>88</top>
+			<width>8</width>
+			<height>540</height>
+			<texturesliderbackground />
+			<texturesliderbar colordiffuse="55ffffff" border="1">scrollbar/texturesliderbar2.png</texturesliderbar>
+			<texturesliderbarfocus border="1">scrollbar/texturesliderbar2.png</texturesliderbarfocus>
+			<onleft>90200</onleft>
+			<onright>90200</onright>
+			<showonepage>false</showonepage>
+			<orientation>vertical</orientation>
+		</control>
+	</controls>
+</window>

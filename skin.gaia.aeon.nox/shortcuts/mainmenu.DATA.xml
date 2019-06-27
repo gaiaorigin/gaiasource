@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<shortcuts>
+<shortcut>
+		<defaultID>programs</defaultID>
+		<label>Addons</label>
+		<label2 />
+		<icon>special://skin/extras/iconssmall/DefaultProgram.png</icon>
+		<thumb>special://skin/extras/iconssmall/DefaultProgram.png</thumb>
+		<action>ActivateWindow(1133)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>settings</defaultID>
+		<label>System</label>
+		<label2 />
+		<icon>special://skin/extras/iconssmall/DefaultAddonService.png</icon>
+		<thumb>special://skin/extras/iconssmall/DefaultAddonService.png</thumb>
+		<action>ActivateWindow(Settings)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>power</defaultID>
+		<label>Power</label>
+		<label2 />
+		<icon>special://skin/extras/iconssmall/Power.png</icon>
+		<thumb>special://skin/extras/iconssmall/Power.png</thumb>
+		<action>ActivateWindow(shutdownmenu)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>music</defaultID>
+		<label>Music</label>
+		<label2 />
+		<icon>special://skin/extras/iconssmall/DefaultAudio.png</icon>
+		<thumb>special://skin/extras/iconssmall/DefaultAudio.png</thumb>
+		<action>ActivateWindow(Music,musicdb://,return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>movies</defaultID>
+		<label>Movies</label>
+		<label2 />
+		<icon>special://skin/extras/iconssmall/DefaultMovies.png</icon>
+		<thumb>special://skin/extras/iconssmall/DefaultMovies.png</thumb>
+		<action>ActivateWindow(Videos,videodb://movies/titles/,return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>tvshows</defaultID>
+		<label>Shows</label>
+		<label2 />
+		<icon>special://skin/extras/iconssmall/DefaultTVShows.png</icon>
+		<thumb>special://skin/extras/iconssmall/DefaultTVShows.png</thumb>
+		<action>ActivateWindow(Videos,videodb://tvshows/titles/,return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>gaia</defaultID>
+		<label>Gaia</label>
+		<label2 />
+		<icon>special://skin/extras/iconssmall/GaiaFull.png</icon>
+		<thumb>special://skin/extras/iconssmall/GaiaFull.png</thumb>
+		<action>RunAddon(plugin.video.gaia)</action>
+	</shortcut>
+	
+</shortcuts>

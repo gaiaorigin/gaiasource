@@ -1,0 +1,9 @@
+Git Bash replace:
+
+find ./ -type f -exec sed -i -e 's/import six/from resources.lib.externals.six import six/g' {} \;
+find ./ -type f -exec sed -i -e 's/from pyjsparser.pyjsparserdata import \*/from resources.lib.externals.pyjsparser.pyjsparserdata import \*/g' {} \;
+find ./ -type f -exec sed -i -e 's/import pyjsparser.parser/from resources.lib.externals.pyjsparser import parser/g' {} \;
+find ./ -type f -exec sed -i -e 's/from pyjsparser import PyJsParser/from resources.lib.externals.pyjsparser import PyJsParser/g' {} \;
+find ./ -type f -exec sed -i -e 's/import pyjsparser/from resources.lib.externals import pyjsparser/g' {} \;
+find ./ -type f -exec sed -i -e 's/from tzlocal/from resources.lib.externals.tzlocal/g' {} \;
+

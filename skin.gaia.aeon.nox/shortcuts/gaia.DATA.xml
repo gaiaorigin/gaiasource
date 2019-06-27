@@ -1,0 +1,42 @@
+<shortcuts>
+	<shortcut>
+		<defaultID />
+		<label>Movies</label>
+		<label2>Custom item</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,"plugin://plugin.video.gaia/?action=movies&amp;type=movie&amp;kids=0",return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID />
+		<label>Shows</label>
+		<label2>Custom item</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,"plugin://plugin.video.gaia/?action=shows&amp;type=show&amp;kids=0",return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID />
+		<label>Arrivals</label>
+		<label2>Custom item</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,"plugin://plugin.video.gaia/?action=navigatorArrivals&amp;kids=0",return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID />
+		<label>Search</label>
+		<label2>Custom item</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,"plugin://plugin.video.gaia/?action=search",return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID />
+		<label>Tools</label>
+		<label2>Custom item</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,"plugin://plugin.video.gaia/?action=navigatorTools",return)</action>
+	</shortcut>
+</shortcuts>

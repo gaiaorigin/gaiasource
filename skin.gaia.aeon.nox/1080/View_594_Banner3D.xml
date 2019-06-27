@@ -1,0 +1,329 @@
+<includes>
+	<!--##################################################################################   VISTA Banner3D - ID 594   ##################################################################################-->
+	<include name="ViewBanner3D">
+		<control type="group">
+			<visible>Control.IsVisible(594)</visible>
+			<left>-100</left>
+			<top>-77</top>
+			<animation effect="rotatey" center="50" start="7" end="7" time="0" condition="true">Conditional</animation>
+			<!-- default group -->
+			<animation effect="fade" time="400">VisibleChange</animation>
+			<include>ViewBack2</include>
+			<!-- Fundo -->
+			<control type="group">
+				<control type="group">
+					<animation effect="fade" delay="500" start="0" end="100" time="50">WindowOpen</animation>
+					<animation effect="slide" end="0,112" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(594).Row,6)">Conditional</animation>
+					<animation effect="slide" end="0,112" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(594).Row,5)">Conditional</animation>
+					<animation effect="slide" end="0,112" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(594).Row,4)">Conditional</animation>
+					<animation effect="slide" end="0,112" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(594).Row,3)">Conditional</animation>
+					<animation effect="slide" end="0,112" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(594).Row,2)">Conditional</animation>
+					<animation effect="slide" end="0,112" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(594).Row,1)">Conditional</animation>
+					<animation effect="slide" end="0,112" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(594).Row,0)">Conditional</animation>
+					<animation effect="slide" end="560,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(594).Column,0)">Conditional</animation>
+					<control type="image">		
+						<visible>Control.IsVisible(594)</visible>					
+						<left>732</left>
+						<top>168</top>
+						<width>559</width>
+						<height>118</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+						<colordiffuse>ff15d219</colordiffuse>
+					</control>
+					<control type="image">
+						<visible>Control.IsVisible(594)</visible>
+						<animation effect="fade" delay="1000" start="0" end="100" time="4000" pulse="true" condition="true">Conditional</animation>
+						<colordiffuse>ff144cec</colordiffuse>
+						<left>732</left>
+						<top>168</top>
+						<width>559</width>
+						<height>118</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+					</control>
+					<control type="image">
+						<visible>Control.IsVisible(594)</visible>
+						<animation effect="fade" delay="2000" start="0" end="100" time="3000" pulse="true" condition="true">Conditional</animation>
+						<left>732</left>
+						<top>168</top>
+						<width>559</width>
+						<height>118</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+						<colordiffuse>ffffeb44</colordiffuse>
+					</control>
+					<control type="image">
+						<visible>Control.IsVisible(594)</visible>
+						<animation effect="fade" delay="3000" start="0" end="100" time="2000" pulse="true" condition="true">Conditional</animation>
+						<left>732</left>
+						<top>168</top>
+						<width>559</width>
+						<height>118</height>
+						<texture diffuse="spin/mask_cover3.png">solid_bg.png</texture>
+						<aspectratio align="center">stretch</aspectratio>
+						<colordiffuse>ffea4863</colordiffuse>
+					</control>
+				</control>
+				<control type="panel" id="594">
+					<viewtype label="Banner3D">icon</viewtype>
+					<left>750</left>
+					<top>180</top>
+					<width>1130</width>
+					<height>896</height>
+					<onleft>SetProperty(MediaMenu,True,home)</onleft>
+					<onleft>SetFocus(9050)</onleft>
+					<scrolltime>300</scrolltime>
+					<orientation>vertical</orientation>
+					<preloaditems>2</preloaditems>
+					<itemlayout height="112" width="560">
+						<control type="image">	
+							<left>-1</left>
+							<top>2</top>
+							<width>6</width>
+							<height>90</height>
+							<aspectratio align="center">stretch</aspectratio>
+							<texture diffuse="spin/mask_cover3.png">spin/$VAR[GlobalCaseVarSpin]</texture>
+						</control>
+						<control type="image">
+							<left>2</left>
+							<top>2</top>
+							<width>520</width>
+							<height>90</height>
+							<aspectratio>scale</aspectratio>
+							<texture diffuse="spin/mask_cover3.png" background="true">$VAR[BannerThumb]</texture>
+							<colordiffuse>ff909090</colordiffuse>
+							<visible>!String.IsEmpty(ListItem.Art(banner)) | String.IsEmpty(ListItem.Art(fanart))</visible>
+						</control>
+						<control type="group">
+							<visible>String.IsEmpty(ListItem.Art(banner))</visible>
+							<control type="image">
+								<left>2</left>
+								<top>2</top>
+								<width>520</width>
+								<height>90</height>
+								<aspectratio>scale</aspectratio>
+								<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(fanart)]</texture>
+								<colordiffuse>ff909090</colordiffuse>
+							</control>
+							<control type="image">
+								<left>2</left>
+								<top>5</top>
+								<width>270</width>
+								<height>85</height>
+								<aspectratio>keep</aspectratio>
+								<texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+								<bordersize>4</bordersize>
+							</control>
+							<control type="textbox">
+								<visible>String.IsEmpty(ListItem.Art(clearlogo))</visible>
+								<left>10</left>
+								<top>10</top>
+								<width>480</width>
+								<height>80</height>
+								<aligny>center</aligny>
+								<align>left</align>
+								<font>titlesmall</font>
+								<label>$VAR[value_videotitle]</label>
+								<textcolor>white</textcolor>
+								<shadowcolor>black</shadowcolor>
+							</control>
+						</control>
+						<control type="image">
+							<top>2</top>
+							<left>495</left>
+							<width>25</width>
+							<height>50</height>
+							<texture>$VAR[OverlayVar]</texture>
+							<aspectratio align="center" aligny="top">scale</aspectratio>
+						</control>
+						<control type="image">
+							<left>2</left>
+							<top>2</top>
+							<width>520</width>
+							<height>90</height>
+							<texture>spin/darkgrey.png</texture>
+							<colordiffuse>$VAR[ThemeLabelColor]</colordiffuse>
+							<animation effect="fade" start="25" end="25" condition="true">Conditional</animation>
+						</control>
+						<control type="group">
+							<left>10</left>
+							<top>10</top>
+							<include condition="Skin.HasSetting(Disable.UnwatchedIcon)">UnwatchedIcon</include>
+						</control>
+					</itemlayout>
+					<focusedlayout height="112" width="560">
+						<control type="group">
+							<animation effect="rotate" center="261,0" start="-1.5" end="1.5" time="2000" pulse="true" tween="sine" easing="inout" condition="true">Conditional</animation>					
+							<control type="image">	
+								<left>-1</left>
+								<top>2</top>
+								<width>6</width>
+								<height>90</height>
+								<aspectratio align="center">stretch</aspectratio>
+								<texture diffuse="spin/mask_cover3.png">spin/$VAR[GlobalCaseVarSpin]</texture>
+							</control>
+							<control type="image">
+								<left>2</left>
+								<top>2</top>
+								<width>520</width>
+								<height>90</height>
+								<aspectratio>scale</aspectratio>
+								<texture diffuse="spin/mask_cover3.png" background="true">$VAR[BannerThumb]</texture>
+								<visible>!String.IsEmpty(ListItem.Art(banner)) | String.IsEmpty(ListItem.Art(fanart))</visible>
+							</control>
+							<control type="group">
+								<visible>String.IsEmpty(ListItem.Art(banner))</visible>
+								<control type="image">
+									<left>2</left>
+									<top>2</top>
+									<width>520</width>
+									<height>90</height>
+									<aspectratio>scale</aspectratio>
+									<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(fanart)]</texture>
+								</control>
+								<control type="image">
+									<left>2</left>
+									<top>5</top>
+									<width>270</width>
+									<height>85</height>
+									<aspectratio>keep</aspectratio>
+									<texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+									<bordersize>4</bordersize>
+								</control>
+								<control type="textbox">
+									<visible>String.IsEmpty(ListItem.Art(clearlogo))</visible>
+									<left>10</left>
+									<top>10</top>
+									<width>480</width>
+									<height>80</height>
+									<aligny>center</aligny>
+									<align>left</align>
+									<font>titlesmall</font>
+									<label>$VAR[value_videotitle]</label>
+									<textcolor>white</textcolor>
+									<shadowcolor>black</shadowcolor>
+								</control>
+							</control>
+							<control type="image">
+								<top>2</top>
+								<left>495</left>
+								<width>25</width>
+								<height>50</height>
+								<texture>$VAR[OverlayVar]</texture>
+								<aspectratio align="center" aligny="top">scale</aspectratio>
+							</control>
+							<control type="group">
+								<left>10</left>
+								<top>10</top>
+								<include condition="Skin.HasSetting(Disable.UnwatchedIcon)">UnwatchedIcon</include>
+							</control>
+						</control>
+					</focusedlayout>
+				</control>
+			</control>
+			<!-- Info Panel -->
+			<control type="group">
+				<visible>Control.IsVisible(594)</visible>
+				<left>115</left>
+				<top>120</top>
+				<control type="multiimage" id="5288">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<aspectratio>stretch</aspectratio>
+					<timeperimage>4000</timeperimage>
+					<visible>!ListItem.IsCollection + Container.HasFiles</visible>
+					<imagepath diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Path,,/extrafanart/]</imagepath>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<aspectratio>stretch</aspectratio>
+					<visible>IsEmpty(Control.GetLabel(5288))</visible>
+					<include>VisibleFadeAnimation</include>
+					<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(fanart)]</texture>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<aspectratio>stretch</aspectratio>
+					<visible>ListItem.IsCollection | !Container.HasFiles</visible>
+					<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(fanart)]</texture>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<texture background="true">spin/osd_black_bg.png</texture>
+					<aspectratio>stretch</aspectratio>
+				</control>
+				<control type="textbox">
+					<visible>!ListItem.IsCollection</visible>
+					<left>25</left>
+					<top>700</top>
+					<width>570</width>
+					<height>130</height>
+					<aligny>center</aligny>
+					<align>center</align>
+					<font>titlemove</font>
+					<label>$VAR[value_videotitle]</label>
+					<autoscroll delay="1500" time="2000" repeat="2000"/>
+					<textcolor>$VAR[ThemeLabelColor]</textcolor>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="textbox">
+					<visible>ListItem.IsCollection</visible>
+					<left>25</left>
+					<top>700</top>
+					<width>570</width>
+					<height>180</height>
+					<aligny>center</aligny>
+					<align>center</align>
+					<font>titlemove</font>
+					<label>$VAR[value_videotitle]</label>
+					<autoscroll delay="1500" time="2000" repeat="2000"/>
+					<textcolor>$VAR[ThemeLabelColor]</textcolor>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="textbox">
+					<left>25</left>
+					<top>840</top>
+					<width>570</width>
+					<height>38</height>
+					<visible>!IsEmpty(ListItem.Rating) + !ListItem.IsCollection</visible>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>font13_bold</font>
+					<label>$VAR[value_ground17_label]: [COLOR=FFFFFAF0]$VAR[value_ground17_value][/COLOR] - [COLOR $VAR[ThemeLabelColor]][B]$INFO[ListItem.Rating][/B][/COLOR] ($INFO[ListItem.Votes,, $LOCALIZE[205]])</label>
+					<textcolor>FFFFFAF0</textcolor>
+				</control>
+				<control type="image">
+					<left>330</left>
+					<top>250</top>
+					<width>250</width>
+					<height>150</height>
+					<texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+					<aspectratio>keep</aspectratio>
+				</control>
+				<control type="textbox">
+					<left>25</left>
+					<top>400</top>
+					<width>570</width>
+					<height>290</height>
+					<font>font13</font>
+					<align>justify</align>
+					<label>$VAR[value_plot]</label>
+					<autoscroll delay="10000" time="2000" repeat="10000"></autoscroll>
+				</control>
+				<include>IconsWall3D</include>
+			</control>
+		</control>
+	</include>
+</includes>

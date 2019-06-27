@@ -1,0 +1,5 @@
+Git Bash replace:
+
+find ./ -type f -exec sed -i -e 's/from requests/from resources.lib.externals.requests/g' {} \;
+find ./ -type f -exec sed -i -e 's/from urllib3/from resources.lib.externals.urllib3/g' {} \;
+find ./ -type f -exec sed -i -e 's/import js2py/from resources.lib.externals import js2py/g' {} \;

@@ -1,0 +1,1895 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+	<!--#############################################################################   VISTA LIST 3D - ID 596   #############################################################################-->
+	<include name="ViewList3D">
+		<control type="group">	
+			<left>-20</left>
+			<top>40</top>
+			<animation effect="rotatey" center="auto" start="10" end="10" time="0" condition="true">Conditional</animation>
+			<animation effect="fade" time="400">VisibleChange</animation>
+			<visible>Control.IsVisible(596)</visible>
+			<control type="group">
+				<animation effect="slide" time="500" start="0,600" end="0,0" tween="cubic" easing="out">WindowOpen</animation>
+				<animation effect="slide" time="500" start="0,600" end="0,0" tween="cubic" easing="out">Visible</animation>
+				<animation effect="fade" time="200" start="100" end="0">Hidden</animation>
+				<control type="image">
+					<left>-100</left>
+					<top>865</top>
+					<width>2050</width>
+					<height>270</height>
+					<texture diffuse="spin/shadow_mask.png">spin/darkgrey.png</texture>
+					<colordiffuse>black</colordiffuse>
+				</control>
+				<control type="image">	
+					<left>-100</left>
+					<top>865</top>
+					<width>2050</width>
+					<height>270</height>
+					<texture>spin/shadow_mask.png</texture>
+					<colordiffuse>black</colordiffuse>
+				</control>
+				<control type="image">
+					<left>-65</left>
+					<top>610</top>
+					<width>1990</width>
+					<height>315</height>
+					<texture>spin/gradient_small.png</texture>
+					<colordiffuse>E9FFFFFF</colordiffuse>
+				</control>
+				<control type="image">
+					<left>-65</left>
+					<top>882</top>
+					<width>1990</width>
+					<height>45</height>
+					<texture>spin/shadow_h.png</texture>
+					<colordiffuse>C3FFFFFF</colordiffuse>
+				</control>
+				<control type="image">
+					<left>-65</left>
+					<top>925</top>
+					<width>1990</width>
+					<height>350</height>
+					<texture flipy="true" diffuse="spin/shadow_mask.png">spin/darkgrey.png</texture>
+					<colordiffuse>$VAR[ThemeLabelColor]</colordiffuse>
+					<animation effect="fade" end="85" condition="true">Conditional</animation>
+				</control>
+				<control type="image">
+					<left>800</left>
+					<top>-105</top>
+					<width>1130</width>
+					<height>1030</height>
+					<texture diffuse="spin/shadow_mask_v.png">spin/darkgrey.png</texture>
+					<colordiffuse>$VAR[ThemeLabelColor]</colordiffuse>
+					<animation effect="fade" end="90" condition="true">Conditional</animation>
+				</control>
+			</control>
+			<control type="group">
+				<visible>!Container.Content(episodes)</visible>
+				<animation effect="zoom" delay="0" center="auto" start="125" end="125" time="0" condition="true">Conditional</animation>
+				<left>90</left>
+				<top>-40</top>
+				<control type="group">
+					<!--Caratula normal-->
+					<visible>Control.HasFocus(596)</visible>
+					<animation effect="zoom" delay="0" center="auto" start="140" end="140" time="0" condition="true">Conditional</animation>
+					<animation type="Conditional" condition="System.IdleTime(4)" reversible="false">
+						<effect type="rotatey" delay="0" center="615" start="360" end="180" time="1600" tween="quadratic" easing="out" />
+						<effect type="fade" delay="600" start="100" end="0" time="50" />
+					</animation>
+					<left>580</left>
+					<top>335</top>
+					<include>Carat_movie</include>
+				</control>
+				<!--Caratula normal nf-->
+				<control type="group">
+					<visible>!Control.HasFocus(596)</visible>
+					<animation effect="zoom" delay="0" center="auto" start="140" end="140" time="0" condition="true">Conditional</animation>
+					<left>580</left>
+					<top>335</top>
+					<include>Carat_movie</include>
+				</control>
+				<control type="group">
+					<!--Caratula normal-2-->
+					<visible>System.IdleTime(11) + Control.HasFocus(596)</visible>
+					<animation effect="zoom" delay="0" center="auto" start="140" end="140" time="0" condition="true">Conditional</animation>
+					<animation type="Visible" reversible="false">
+						<effect type="rotatey" center="615" start="180" end="0" time="800" tween="quadratic" easing="out" />
+						<effect type="fade" delay="200" start="0" end="100" time="100" />
+					</animation>
+					<left>580</left>
+					<top>335</top>
+					<include>Carat_movie</include>
+				</control>
+				<control type="group">
+					<!--Trasera caja-->
+					<top>349</top>
+					<left>179</left>
+					<visible>System.IdleTime(4) + !System.IdleTime(12) + !ListItem.IsCollection + Control.HasFocus(596)</visible>
+					<animation type="Visible" reversible="false">
+						<effect type="rotatey" delay="0" center="356" start="180" end="0" time="1600" tween="quadratic" easing="out" />
+						<effect type="fade" start="0" end="100" delay="700" time="50" />
+					</animation>
+					<animation type="Conditional" condition="System.IdleTime(11) + !ListItem.IsCollection" reversible="false">
+						<effect type="rotatey" delay="0" center="356" start="0" end="-180" time="800" tween="quadratic" easing="out" />
+						<effect type="fade" delay="200" start="100" end="0" time="100" />
+					</animation>
+					<control type="group">
+						<left>8</left>
+						<top>74</top>
+						<control type="image">
+							<!-- Poster back    -->
+							<width>354</width>
+							<height>476</height>
+							<texture diffuse="spin/mask_cover3.png" background="true">spin/shelf/back.png</texture>
+							<aspectratio scalediffuse="false">stretch</aspectratio>
+						</control>
+						<control type="image">
+							<!-- Fanart -->
+							<top>-15</top>
+							<height>225</height>
+							<width>354</width>
+							<aspectratio align="center" aligny="top">keep</aspectratio>
+							<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(fanart)]</texture>
+						</control>
+						<control type="image">
+							<!-- thumb 1 -->
+							<left>224</left>
+							<top>124</top>
+							<width>141</width>
+							<height>82</height>
+							<aspectratio align="center" aligny="center">scale</aspectratio>
+							<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Path,,extrathumbs/thumb2.jpg]</texture>
+						</control>
+						<control type="image">
+							<!-- thumb 2 -->
+							<top>192</top>
+							<width>180</width>
+							<height>70</height>
+							<aspectratio align="center" aligny="center">scale</aspectratio>
+							<texture diffuse="spin/mask_cover3.png" fallback="spin/shelf/thumbfall.png" background="true">$INFO[ListItem.Path,,extrathumbs/thumb3.jpg]</texture>
+						</control>
+						<control type="image">
+							<left>6</left>
+							<top>266</top>
+							<height>120</height>
+							<width>334</width>
+							<colordiffuse>C9FFFFFF</colordiffuse>
+							<aspectratio align="left" aligny="top">keep</aspectratio>
+							<texture diffuse="spin/mask_cover3.png" fallback="spin/shelf/fallban.png" background="true">$INFO[ListItem.Art(banner)]</texture>
+						</control>
+						<control type="image">
+							<!-- Poster back    -->
+							<width>354</width>
+							<height>476</height>
+							<visible>String.Contains(ListItem.DBTYPE,movie)</visible>
+							<texture diffuse="spin/mask_cover3.png" background="true">spin/shelf/back_black.png</texture>
+							<aspectratio scalediffuse="false">stretch</aspectratio>
+						</control>
+						<control type="image">
+							<!-- Poster back    -->
+							<width>354</width>
+							<height>476</height>
+							<visible>!String.Contains(ListItem.DBTYPE,movie)</visible>
+							<texture background="true">spin/shelf/back_black2.png</texture>
+							<aspectratio scalediffuse="false">stretch</aspectratio>
+						</control>
+						<control type="textbox">
+							<left>8</left>
+							<top>127</top>
+							<width>217</width>
+							<height>63</height>
+							<align>justify</align>
+							<aligny>center</aligny>
+							<visible>String.Contains(ListItem.DBTYPE,movie)</visible>
+							<font>Backplot</font>
+							<label>$INFO[ListItem.Plot]</label>
+							<textcolor>white</textcolor>
+						</control>
+						<control type="image">
+							<!-- clearart -->
+							<left>195</left>
+							<top>195</top>
+							<width>142</width>
+							<height>64</height>
+							<aspectratio align="left" aligny="top">keep</aspectratio>
+							<colordiffuse>C9FFFFFF</colordiffuse>
+							<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(clearart)]</texture>
+						</control>
+						<control type="image">
+							<!-- clearlogo -->
+							<left>195</left>
+							<top>195</top>
+							<width>142</width>
+							<height>64</height>
+							<visible>IsEmpty(ListItem.Art(clearart))</visible>
+							<aspectratio align="left" aligny="top">keep</aspectratio>
+							<colordiffuse>C9FFFFFF</colordiffuse>
+							<texture diffuse="spin/mask_cover3.png" fallback="spin/shelf/falllog.png" background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+						</control>
+					</control>
+					<control type="image">
+						<left>14</left>
+						<top>502</top>
+						<texture>$VAR[PathFlagsStudios]$INFO[ListItem.Studio,,.png]</texture>
+						<colordiffuse>C9FFFFFF</colordiffuse>
+						<width>46</width>
+						<height>46</height>
+						<aspectratio>keep</aspectratio>
+					</control>
+					<control type="image">
+						<left>72</left>
+						<top>504</top>
+						<width>50</width>
+						<height>50</height>
+						<aspectratio>keep</aspectratio>
+						<colordiffuse>C9FFFFFF</colordiffuse>
+						<texture>$VAR[MediaFlagsPathVar]/audiocodec/$INFO[ListItem.AudioCodec,,.png]</texture>
+					</control>
+					<control type="image">
+						<left>99</left>
+						<top>512</top>
+						<width>120</width>
+						<height>30</height>
+						<aspectratio>keep</aspectratio>
+						<colordiffuse>C9FFFFFF</colordiffuse>
+						<texture fallback="flags/mpaa/NR.png">$VAR[RatingFlagVar]</texture>
+					</control>
+					<control type="image">
+						<left>280</left>
+						<top>507</top>
+						<width>40</width>
+						<height>40</height>
+						<aspectratio>keep</aspectratio>
+						<colordiffuse>C9FFFFFF</colordiffuse>
+						<texture>$VAR[MediaFlagsPathVar]/videocodec/$VAR[SourceFlagVar]</texture>
+					</control>
+					<control type="image">
+						<!-- Estuche back -->
+						<left>1</left>
+						<top>20</top>
+						<width>380</width>
+						<height>538</height>
+						<texture background="true">spin/shelf/b$VAR[GlobalCaseVarSpin]</texture>
+						<aspectratio>stretch</aspectratio>
+					</control>
+					<control type="label">
+						<left>212</left>
+						<top>294</top>
+						<width>310</width>
+						<height>14</height>
+						<align>center</align>
+						<aligny>top</aligny>
+						<scroll>false</scroll>
+						<animation effect="rotate" delay="5000" center="auto" start="90" end="90" time="800" condition="true">Conditional</animation>
+						<font>spiner</font>
+						<label>$VAR[value_videotitle]</label>
+						<textcolor>white</textcolor>
+					</control>
+				</control>
+				<control type="group">
+					<!--Trasera caja set-->
+					<top>349</top>
+					<left>179</left>
+					<visible>System.IdleTime(4) + !System.IdleTime(12) + ListItem.IsCollection + Control.HasFocus(596)</visible>
+					<animation type="Visible" reversible="false">
+						<effect type="rotatey" delay="0" center="356" start="180" end="0" time="1600" tween="quadratic" easing="out" />
+						<effect type="fade" start="0" end="100" delay="700" time="50" />
+					</animation>
+					<animation type="Conditional" condition="System.IdleTime(11)" reversible="false">
+						<effect type="rotatey" delay="0" center="356" start="0" end="-180" time="800" tween="quadratic" easing="out" />
+						<effect type="fade" delay="200" start="100" end="0" time="100" />
+					</animation>
+					<control type="group">
+						<left>8</left>
+						<top>74</top>
+						<control type="image">
+							<width>354</width>
+							<height>476</height>
+							<texture diffuse="spin/mask_cover3.png" background="true">spin/shelf/backset.png</texture>
+							<aspectratio scalediffuse="false">stretch</aspectratio>
+						</control>
+						<control type="image">
+							<left>-62</left>
+							<top>60</top>
+							<height>352</height>
+							<width>476</width>
+							<colordiffuse>33FFFFFF</colordiffuse>
+							<aspectratio align="center" aligny="center">scale</aspectratio>
+							<animation effect="rotate" center="auto" start="90" end="90" condition="true">Conditional</animation>
+							<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(fanart)]</texture>
+						</control>
+						<include content="Set_car4">
+							<param name="orders4">0</param>
+							<param name="lefts4">40</param>
+							<param name="tops4">20</param>
+							<param name="rots4">3</param>
+						</include>
+						<include content="Set_car4">
+							<param name="orders4">1</param>
+							<param name="lefts4">200</param>
+							<param name="tops4">240</param>
+							<param name="rots4">3</param>
+						</include>
+						<include content="Set_car4">
+							<param name="orders4">2</param>
+							<param name="lefts4">50</param>
+							<param name="tops4">240</param>
+							<param name="rots4">3</param>
+						</include>
+						<include content="Set_car4">
+							<param name="orders4">3</param>
+							<param name="lefts4">200</param>
+							<param name="tops4">38</param>
+							<param name="rots4">3</param>
+						</include>
+						<include content="Set_car">
+							<param name="orders">0</param>
+							<param name="lefts">15</param>
+							<param name="tops">5</param>
+							<param name="rots">-2</param>
+						</include>
+						<include content="Set_car">
+							<param name="orders">1</param>
+							<param name="lefts">10</param>
+							<param name="tops">112</param>
+							<param name="rots">4</param>
+						</include>
+						<include content="Set_car">
+							<param name="orders">4</param>
+							<param name="lefts">15</param>
+							<param name="tops">214</param>
+							<param name="rots">-3</param>
+						</include>
+						<include content="Set_car">
+							<param name="orders">6</param>
+							<param name="lefts">10</param>
+							<param name="tops">321</param>
+							<param name="rots">2</param>
+						</include>
+						<include content="Set_car">
+							<param name="orders">2</param>
+							<param name="lefts">187</param>
+							<param name="tops">5</param>
+							<param name="rots">4</param>
+						</include>
+						<include content="Set_car">
+							<param name="orders">3</param>
+							<param name="lefts">182</param>
+							<param name="tops">112</param>
+							<param name="rots">-3</param>
+						</include>
+						<include content="Set_car">
+							<param name="orders">5</param>
+							<param name="lefts">187</param>
+							<param name="tops">214</param>
+							<param name="rots">2</param>
+						</include>
+						<include content="Set_car">
+							<param name="orders">7</param>
+							<param name="lefts">182</param>
+							<param name="tops">321</param>
+							<param name="rots">-2</param>
+						</include>
+						<include content="Set_tit">
+							<param name="orderx">0</param>
+							<param name="leftx">50</param>
+							<param name="topx">170</param>
+						</include>
+						<include content="Set_tit">
+							<param name="orderx">1</param>
+							<param name="leftx">205</param>
+							<param name="topx">387</param>
+						</include>
+						<include content="Set_tit">
+							<param name="orderx">2</param>
+							<param name="leftx">52</param>
+							<param name="topx">384</param>
+						</include>
+						<include content="Set_tit">
+							<param name="orderx">3</param>
+							<param name="leftx">200</param>
+							<param name="topx">190</param>
+						</include>
+						<include content="Tit_set">
+							<param name="orderm">0</param>
+							<param name="leftm">92</param>
+							<param name="topm">1</param>
+						</include>
+						<include content="Tit_set">
+							<param name="orderm">1</param>
+							<param name="leftm">87</param>
+							<param name="topm">107</param>
+						</include>
+						<include content="Tit_set">
+							<param name="orderm">4</param>
+							<param name="leftm">92</param>
+							<param name="topm">209</param>
+						</include>
+						<include content="Tit_set">
+							<param name="orderm">6</param>
+							<param name="leftm">87</param>
+							<param name="topm">316</param>
+						</include>
+						<include content="Tit_set">
+							<param name="orderm">2</param>
+							<param name="leftm">266</param>
+							<param name="topm">10</param>
+						</include>
+						<include content="Tit_set">
+							<param name="orderm">3</param>
+							<param name="leftm">261</param>
+							<param name="topm">117</param>
+						</include>
+						<include content="Tit_set">
+							<param name="orderm">5</param>
+							<param name="leftm">266</param>
+							<param name="topm">219</param>
+						</include>
+						<include content="Tit_set">
+							<param name="orderm">7</param>
+							<param name="leftm">261</param>
+							<param name="topm">326</param>
+						</include>
+						<control type="image">
+							<width>354</width>
+							<height>476</height>
+							<texture diffuse="spin/mask_cover3.png" background="true">spin/shelf/textset.png</texture>
+							<aspectratio scalediffuse="false">stretch</aspectratio>
+						</control>
+					</control>
+					<control type="image">
+						<!-- Estuche back -->
+						<left>1</left>
+						<top>20</top>
+						<width>380</width>
+						<height>538</height>
+						<texture background="true">spin/shelf/b$VAR[GlobalCaseVarSpin]</texture>
+						<aspectratio>stretch</aspectratio>
+					</control>
+					<control type="label">
+						<left>166</left>
+						<top>305</top>
+						<width>400</width>
+						<height>14</height>
+						<align>center</align>
+						<aligny>top</aligny>
+						<scroll>false</scroll>
+						<animation effect="rotate" delay="5000" center="auto" start="90" end="90" time="800" condition="true">Conditional</animation>
+						<font>spiner</font>
+						<label>$VAR[value_videotitle]</label>
+						<textcolor>white</textcolor>
+					</control>
+					<!--Trasera caja set reflejo-->
+					<control type="group">
+						<top>-16</top>
+						<control type="group">
+							<left>8</left>
+							<top>567</top>
+							<control type="image">
+								<!-- Poster back    -->
+								<top>3</top>
+								<width>354</width>
+								<height>476</height>
+								<colordiffuse>30FFFFFF</colordiffuse>
+								<texture diffuse="spin/mask_cover3.png" flipy="true" background="true">spin/shelf/back.png</texture>
+								<aspectratio scalediffuse="false">stretch</aspectratio>
+							</control>
+							<control type="image">
+								<left>-62</left>
+								<top>66</top>
+								<height>352</height>
+								<width>476</width>
+								<colordiffuse>25FFFFFF</colordiffuse>
+								<aspectratio align="center" aligny="center">scale</aspectratio>
+								<animation effect="rotate" center="auto" start="270" end="270" condition="true">Conditional</animation>
+								<texture diffuse="spin/mask_cover3.png" flipy="true" background="true">$INFO[ListItem.Art(fanart)]</texture>
+							</control>
+							<control type="image">
+								<!-- Poster back    -->
+								<top>3</top>
+								<width>354</width>
+								<height>476</height>
+								<colordiffuse>55FFFFFF</colordiffuse>
+								<texture diffuse="spin/mask_cover3.png" flipy="true" background="true">spin/shelf/textset.png</texture>
+								<aspectratio scalediffuse="false">stretch</aspectratio>
+							</control>
+						</control>
+						<control type="group">
+							<left>5</left>
+							<top>411</top>
+							<include content="Set_titr">
+								<param name="orderx">1</param>
+								<param name="leftx">208</param>
+								<param name="topx">198</param>
+							</include>
+							<include content="Set_titr">
+								<param name="orderx">2</param>
+								<param name="leftx">56</param>
+								<param name="topx">195</param>
+							</include>
+							<include content="Set_car4r">
+								<param name="orders4">1</param>
+								<param name="lefts4">200</param>
+								<param name="tops4">243</param>
+								<param name="rots4">-3</param>
+							</include>
+							<include content="Set_car4r">
+								<param name="orders4">2</param>
+								<param name="lefts4">50</param>
+								<param name="tops4">243</param>
+								<param name="rots4">-3</param>
+							</include>
+							<include content="Set_carr">
+								<param name="orders">6</param>
+								<param name="lefts">13</param>
+								<param name="tops">200</param>
+								<param name="rots">-2</param>
+							</include>
+							<include content="Set_carr">
+								<param name="orders">7</param>
+								<param name="lefts">184</param>
+								<param name="tops">200</param>
+								<param name="rots">2</param>
+							</include>
+							<include content="Tit_setr">
+								<param name="orderm">6</param>
+								<param name="leftm">89</param>
+								<param name="topm">-317</param>
+							</include>
+							<include content="Tit_setr">
+								<param name="orderm">7</param>
+								<param name="leftm">263</param>
+								<param name="topm">-307</param>
+							</include>
+						</control>
+						<control type="image">
+							<!-- Estuche back -->
+							<left>1</left>
+							<top>561</top>
+							<width>380</width>
+							<height>524</height>
+							<colordiffuse>50FFFFFF</colordiffuse>
+							<texture flipy="true" background="true">spin/shelf/rb$VAR[GlobalCaseVarSpin]</texture>
+							<aspectratio>stretch</aspectratio>
+						</control>
+					</control>
+				</control>
+				<control type="group">
+					<top>333</top>
+					<left>179</left>
+					<!--Trasera caja reflejo-->
+					<visible>System.IdleTime(4) + !System.IdleTime(12) + !ListItem.IsCollection + Control.HasFocus(596)</visible>
+					<animation type="Visible" reversible="false">
+						<effect type="rotatey" center="356" start="180" end="0" time="1600" tween="quadratic" easing="out" />
+						<effect type="fade" start="0" end="100" delay="700" time="50" />
+					</animation>
+					<animation type="Conditional" condition="System.IdleTime(11) + !ListItem.IsCollection" reversible="false">
+						<effect type="rotatey" center="356" start="0" end="-180" time="800" tween="quadratic" easing="out" />
+						<effect type="fade" delay="200" start="100" end="0" time="100" />
+					</animation>
+					<control type="group">
+						<left>8</left>
+						<top>567</top>
+						<control type="image">
+							<!-- Poster back    -->
+							<top>3</top>
+							<width>354</width>
+							<height>476</height>
+							<colordiffuse>25FFFFFF</colordiffuse>
+							<texture diffuse="spin/mask_cover3.png" flipy="true" background="true">spin/shelf/back_black.png</texture>
+							<aspectratio scalediffuse="false">stretch</aspectratio>
+						</control>
+					</control>
+					<control type="image">
+						<left>14</left>
+						<top>566</top>
+						<texture flipy="true">$VAR[PathFlagsStudios]$INFO[ListItem.Studio,,.png]</texture>
+						<colordiffuse>25FFFFFF</colordiffuse>
+						<width>46</width>
+						<height>46</height>
+						<aspectratio>keep</aspectratio>
+					</control>
+					<control type="image">
+						<left>72</left>
+						<top>561</top>
+						<width>50</width>
+						<height>50</height>
+						<aspectratio>keep</aspectratio>
+						<colordiffuse>25FFFFFF</colordiffuse>
+						<texture flipy="true">$VAR[MediaFlagsPathVar]/audiocodec/$INFO[ListItem.AudioCodec,,.png]</texture>
+					</control>
+					<control type="image">
+						<left>99</left>
+						<top>573</top>
+						<width>120</width>
+						<height>30</height>
+						<aspectratio>keep</aspectratio>
+						<colordiffuse>25FFFFFF</colordiffuse>
+						<texture flipy="true" fallback="flags/mpaa/NR.png">$VAR[RatingFlagVar]</texture>
+					</control>
+					<control type="image">
+						<left>280</left>
+						<top>568</top>
+						<width>40</width>
+						<height>40</height>
+						<aspectratio>keep</aspectratio>
+						<colordiffuse>25FFFFFF</colordiffuse>
+						<texture flipy="true">$VAR[MediaFlagsPathVar]/videocodec/$VAR[SourceFlagVar]</texture>
+					</control>	
+					<control type="image">
+						<!-- Estuche back -->
+						<left>1</left>
+						<top>561</top>
+						<width>380</width>
+						<height>524</height>
+						<colordiffuse>40FFFFFF</colordiffuse>
+						<texture flipy="true" background="true">spin/shelf/rb$VAR[GlobalCaseVarSpin]</texture>
+						<aspectratio>stretch</aspectratio>
+					</control>
+				</control>
+			</control>
+			<control type="image">
+			<left>1911</left>
+			<top>480</top>
+			<width>460</width>
+			<height>460</height>
+			<colordiffuse>01FFFFFF</colordiffuse>
+			<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+			<texture diffuse="spin/shelf/disc_diffuse.png" background="true">$INFO[ListItem(0).Art(discart)]</texture>
+		</control>
+			<control type="group">
+				<left>360</left>
+				<top>-251</top>
+				<width>405</width>
+				<height>405</height>
+				<visible>!ListItem.IsCollection + Control.HasFocus(596) + System.IdleTime(5)</visible>
+				<animation type="Conditional" condition="System.IdleTime(5)" reversible="false">
+					<effect type="fade" start="0" end="100" time="500" />
+					<effect type="slide" end="0,803" time="2000" tween="bounce" easing="out" />
+					<effect type="rotate" start="180" center="auto" end="360" time="2000" tween="cubic" easing="out" />
+				</animation>
+				<animation type="Conditional" condition="System.IdleTime(6)" reversible="false">
+					<effect type="fade" delay="7200" start="100" end="0" time="1200" />
+					<effect type="slide" start="0,0" end="2000,0" time="2500" delay="7000" tween="cubic" easing="out" />
+					<effect type="rotate" start="360" center="auto" end="-180" delay="7000" time="2500" tween="cubic" easing="out" />
+				</animation>
+				<control type="image">
+					<visible>System.IdleTime(5)</visible>
+					<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+					<texture diffuse="spin/shelf/disc_diffuse.png" background="true">$INFO[ListItem(0).Art(discart)]</texture>
+				</control>
+			</control>
+			<control type="group">
+				<left>360</left>
+				<top>1757</top>
+				<width>405</width>
+				<height>405</height>
+				<visible>!ListItem.IsCollection + Control.HasFocus(596) + System.IdleTime(5)</visible>
+				<animation type="Conditional" condition="System.IdleTime(5)" reversible="false">
+					<effect type="fade" start="0" end="100" time="500" />
+					<effect type="slide" end="0,-803" time="2000" tween="bounce" easing="out" />
+					<effect type="rotate" start="-180" center="auto" end="-360" time="2000" tween="cubic" easing="out" />
+				</animation>
+				<animation type="Conditional" condition="System.IdleTime(6)" reversible="false">
+					<effect type="slide" start="0,0" end="2000,0" time="2500" delay="7000" tween="cubic" easing="out" />
+					<effect type="rotate" start="-360" center="auto" end="180" delay="7000" time="2500" tween="cubic" easing="out" />
+				</animation>
+				<control type="image">
+					<visible>System.IdleTime(5) + !String.IsEmpty(ListItem(0).Art(discart))</visible>
+					<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+					<colordiffuse>dd000000</colordiffuse>
+					<texture background="true">spin/shelf/disc_diffuse.png</texture>
+				</control>
+				<control type="image">
+					<visible>System.IdleTime(5)</visible>
+					<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+					<colordiffuse>30FFFFFF</colordiffuse>
+					<texture diffuse="spin/shelf/disc_diffuse.png" flipy="true" background="true">$INFO[ListItem(0).Art(discart)]</texture>
+				</control>
+			</control>
+			<control type="fixedlist" id="596">
+				<viewtype label="List 3D">list</viewtype>
+				<left>600</left>
+				<top>45</top>
+				<width>1320</width>
+				<height>854</height>
+				<pagecontrol>80</pagecontrol>
+				<onleft>SetProperty(MediaMenu,True,home)</onleft>
+				<onleft>SetFocus(9050)</onleft>
+				<onright>80</onright>
+				<focusposition>2</focusposition>
+				<orientation>vertical</orientation>
+				<preloaditems>2</preloaditems>
+				<animation effect="slide" start="0,0" end="-45,0" time="200" easing="inout" tween="cubic" condition="Control.HasFocus(80)">Conditional</animation>
+				<animation effect="fade" start="100" end="20" time="200" condition="Window.IsVisible(6621)">Conditional</animation>
+				<itemlayout height="45">
+					<control type="image">
+						<left>0</left>
+						<top>0</top>
+						<width>1320</width>
+						<height>3</height>
+						<texture diffuse="spin/shadow_mask_v5.png">spin/line.png</texture>
+					</control>
+					<control type="label">
+						<left>158</left>
+						<top>1</top>
+						<width>1110</width>
+						<height>45</height>
+						<font>font15</font>
+						<align>right</align>
+						<aligny>center</aligny>
+						<textcolor>FF9E9E9E</textcolor>
+						<label>$VAR[value_videotitle]</label>
+						<scroll>false</scroll>
+					</control>
+					<control type="image">
+						<left>1270</left>
+						<top>1</top>
+						<width>45</width>
+						<height>45</height>
+						<aspectratio>keep</aspectratio>
+						<texture colordiffuse="white">$VAR[ListItem.Overlay]</texture>
+					</control>
+				</itemlayout>
+				<focusedlayout condition="!System.IdleTime(3)" height="90">
+					<control type="image">
+						<left>0</left>
+						<top>0</top>
+						<width>1320</width>
+						<height>3</height>
+						<texture diffuse="spin/shadow_mask_v5.png">spin/line.png</texture>
+					</control>
+					<control type="group">
+						<top>4</top>
+						<control type="label">
+							<left>277</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<label>$VAR[value_videotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>277</left>
+							<top>-1</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<label>$VAR[value_videotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>278</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>$VAR[ThemeLabelColor]</textcolor>
+							<label>$VAR[value_videotitle]</label>
+							<shadowcolor>black</shadowcolor>
+							<scroll>false</scroll>
+						</control>
+					</control>
+					<include>Listfor3D</include>
+				</focusedlayout>
+				<focusedlayout condition="System.IdleTime(3)" height="225">
+					<control type="image">
+						<left>0</left>
+						<top>0</top>
+						<width>1320</width>
+						<height>3</height>
+						<texture diffuse="spin/shadow_mask_v5.png">spin/line.png</texture>
+					</control>
+					<control type="group">
+						<top>4</top>
+						<control type="label">
+							<left>277</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<label>$VAR[value_videotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>277</left>
+							<top>-1</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<label>$VAR[value_videotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>278</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>$VAR[ThemeLabelColor]</textcolor>
+							<label>$VAR[value_videotitle]</label>
+							<shadowcolor>black</shadowcolor>
+							<scroll>false</scroll>
+						</control>
+					</control>
+					<include>Listfor3D</include>
+				</focusedlayout>
+			</control>
+			<control type="image">
+				<!-- clearlogo -->
+				<left>90</left>
+				<top>-65</top>
+				<width>350</width>
+				<height>170</height>
+				<aspectratio align="left" aligny="top">keep</aspectratio>
+				<texture diffuse="spin/mask_cover3.png" background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+			</control>
+			<control type="group">
+				<top>450</top>
+				<left>-10</left>
+				<animation effect="rotatey" center="auto" start="-2" end="-2" time="0" condition="true">Conditional</animation>
+				<include>IconsList3D</include>
+			</control>
+			<control type="label">
+				<visible>ListItem.IsCollection</visible>
+				<animation effect="fade" delay="0" start="0" end="100" time="0" condition="System.IdleTime(1)">Conditional</animation>
+				<left>958</left>
+				<top>178</top>
+				<width>907</width>
+				<height>45</height>
+				<font>font13_bold</font>
+				<align>right</align>
+				<aligny>center</aligny>
+				<textcolor>$VAR[ThemeLabelColor]</textcolor>
+				<label>[COLOR=FFFFFAF0]$INFO[Window(Home).Property(SkinHelper.ListItem.Years)] - [/COLOR]$LOCALIZE[180]: $VAR[Durat_mov_set]</label>
+			</control>
+			<control type="textbox">
+				<animation effect="fade" start="0" end="100" time="500">Visible</animation>
+				<visible>System.IdleTime(3) + ListItem.IsCollection</visible>
+				<left>1135</left>
+				<top>215</top>
+				<width>730</width>
+				<height>141</height>
+				<font>font13</font>
+				<align>right</align>
+				<aligny>top</aligny>
+				<textcolor>FFFFFFFF</textcolor>
+				<label>$INFO[Window(Home).Property(SkinHelper.ListItem.Titles)]</label>
+				<autoscroll delay="5000" time="2000" repeat="2000"></autoscroll>
+			</control>
+			<control type="textbox">
+				<animation effect="fade" start="0" end="100" time="500">Visible</animation>
+				<visible>System.IdleTime(3) + !ListItem.IsCollection</visible>
+				<left>1135</left>
+				<top>215</top>
+				<width>730</width>
+				<height>141</height>
+				<font>font13</font>
+				<align>right</align>
+				<aligny>top</aligny>
+				<textcolor>FFFFFFFF</textcolor>
+				<label>$VAR[value_plot]</label>
+				<autoscroll delay="5000" time="2000" repeat="5000"></autoscroll>
+			</control>
+			<control type="group">
+				<visible>Container.Content(episodes)</visible>
+				<left>60</left>
+				<top>450</top>
+				<control type="image">
+					<left>-8</left>
+					<top>42</top>
+					<width>626</width>
+					<height>360</height>
+					<texture>spin/fanartframe.png</texture>
+				</control>
+				<control type="image">
+					<left>15</left>
+					<top>63</top>
+					<width>580</width>
+					<height>315</height>
+					<texture diffuse="spin/mask_cover3.png" fallback="spin/DefaultExtraThumbs.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
+					<aspectratio>stretch</aspectratio>
+					<fadetime>500</fadetime>
+				</control>
+			</control>
+			<control type="group">
+				<visible>Container.Content(episodes) | Container.Content(seasons)</visible>
+				<control type="textbox">
+					<left>99</left>
+					<top>-16</top>
+					<width>800</width>
+					<height>315</height>
+					<aligny>top</aligny>
+					<font>titlelist</font>
+					<label>$INFO[ListItem.TVShowTitle]</label>
+					<textcolor>black</textcolor>
+				</control>
+				<control type="textbox">
+					<left>100</left>
+					<top>-15</top>
+					<width>800</width>
+					<height>315</height>
+					<aligny>top</aligny>
+					<font>titlelist</font>
+					<label>$INFO[ListItem.TVShowTitle]</label>
+					<textcolor>FFFFFFFF</textcolor>
+					<shadowcolor>black</shadowcolor>
+				</control>
+			</control>
+			<control type="scrollbar" id="80">
+				<include>ScrollBar_Vertical</include>
+				<left>1875</left>
+				<top>40</top>
+				<height>865</height>
+				<onleft>596</onleft>
+				<onright>596</onright>
+				<visible allowhiddenfocus="true">Control.IsVisible(596) + Control.HasFocus(80)</visible>
+			</control>
+		</control>
+	</include>
+	<!--#############################################################################   music   #############################################################################-->
+	<include name="ViewList3Dm">
+		<control type="group">	
+			<left>-20</left>
+			<top>40</top>
+			<animation effect="rotatey" center="auto" start="8" end="8" time="0" condition="true">Conditional</animation>
+			<animation effect="fade" time="400">VisibleChange</animation>
+			<visible>Control.IsVisible(596)</visible>
+			<control type="group">
+				<animation effect="rotatey" center="auto" start="-1" end="-1" condition="true">Conditional</animation>
+				<animation effect="slide" time="500" start="0,600" end="0,0" tween="cubic" easing="out">WindowOpen</animation>
+				<animation effect="slide" time="500" start="0,600" end="0,0" tween="cubic" easing="out">Visible</animation>
+				<animation effect="fade" time="200" start="100" end="0">Hidden</animation>
+				<control type="image">
+					<left>-100</left>
+					<top>865</top>
+					<width>2050</width>
+					<height>270</height>
+					<texture diffuse="spin/shadow_mask.png">spin/darkgrey.png</texture>
+					<colordiffuse>black</colordiffuse>
+				</control>
+				<control type="image">	
+					<left>-100</left>
+					<top>865</top>
+					<width>2050</width>
+					<height>270</height>
+					<texture>spin/shadow_mask.png</texture>
+					<colordiffuse>black</colordiffuse>
+				</control>
+				<control type="image">
+					<left>-65</left>
+					<top>610</top>
+					<width>1990</width>
+					<height>315</height>
+					<texture>spin/gradient_small.png</texture>
+					<colordiffuse>E9FFFFFF</colordiffuse>
+				</control>
+				<control type="image">
+					<left>-65</left>
+					<top>882</top>
+					<width>1990</width>
+					<height>45</height>
+					<texture>spin/shadow_h.png</texture>
+					<colordiffuse>C3FFFFFF</colordiffuse>
+				</control>
+				<control type="image">
+					<left>-65</left>
+					<top>925</top>
+					<width>1990</width>
+					<height>350</height>
+					<texture flipy="true" diffuse="spin/shadow_mask.png">spin/darkgrey.png</texture>
+					<colordiffuse>$VAR[ThemeLabelColor]</colordiffuse>
+					<animation effect="fade" end="85" condition="true">Conditional</animation>
+				</control>
+				<control type="image">
+					<left>800</left>
+					<top>-105</top>
+					<width>1130</width>
+					<height>1030</height>
+					<texture diffuse="spin/shadow_mask_v.png">spin/darkgrey.png</texture>
+					<colordiffuse>$VAR[ThemeLabelColor]</colordiffuse>
+					<animation effect="fade" end="90" condition="true">Conditional</animation>
+				</control>
+			</control>
+			<control type="group">
+				<control type="textbox" id="8914">
+					<visible>Container.Content(artists) + !String.IsEmpty(ListItem.Artist) + System.IdleTime(3)</visible>
+					<animation effect="fade" start="0" end="100" time="500">Visible</animation>
+					<left>1233</left>
+					<top>222</top>
+					<width>630</width>
+					<height>134</height>
+					<font>font13b</font>
+					<align>right</align>
+					<textcolor>FFFFFFFF</textcolor>
+					<label>$INFO[ListItem.Property(Artist_Description)]</label>
+					<autoscroll delay="8000" time="2000" repeat="5000"></autoscroll>
+				</control>
+				<control type="textbox">
+					<animation effect="fade" start="0" end="100" time="500">Visible</animation>
+					<left>1233</left>
+					<top>222</top>
+					<width>630</width>
+					<height>134</height>
+					<font>font13b</font>
+					<align>right</align>
+					<textcolor>$VAR[ThemeLabelColor]</textcolor>
+					<visible>String.IsEmpty(Control.GetLabel(8914)) + Container.Content(artists) + !String.IsEmpty(ListItem.Artist) + !String.IsEmpty(ListItem.Property(Artist_Style)) + System.IdleTime(3)</visible>
+					<label>$LOCALIZE[132]: [COLOR=FFFFFAF0][B]$INFO[Window(Home).Property(Artist.Albums.Count)][/B][CR]$INFO[Window(Home).Property(SkinHelper.ListItem.Albums.Formatted)][/COLOR]</label>
+					<autoscroll delay="5000" time="1200" repeat="3000"></autoscroll>
+				</control>
+				<control type="textbox">
+					<animation effect="fade" start="0" end="100" time="500">Visible</animation>
+					<left>1233</left>
+					<top>185</top>
+					<width>630</width>
+					<height>170</height>
+					<font>font13b</font>
+					<align>right</align>
+					<textcolor>$VAR[ThemeLabelColor]</textcolor>
+					<visible>String.IsEmpty(Control.GetLabel(8914)) + Container.Content(artists) + !String.IsEmpty(ListItem.Artist) + String.IsEmpty(ListItem.Property(Artist_Style)) + System.IdleTime(3)</visible>
+					<label>$LOCALIZE[132]: [COLOR=FFFFFAF0][B]$INFO[Window(Home).Property(Artist.Albums.Count)][/B][CR]$INFO[Window(Home).Property(SkinHelper.ListItem.Albums.Formatted)][/COLOR]</label>
+					<autoscroll delay="5000" time="1200" repeat="3000"></autoscroll>
+				</control>
+			</control>
+			<control type="group">
+				<control type="textbox" id="8944">
+					<visible>Container.Content(albums) + !String.IsEmpty(ListItem.Album) + System.IdleTime(3)</visible>
+					<animation effect="fade" start="0" end="100" time="500">Visible</animation>
+					<left>1233</left>
+					<top>222</top>
+					<width>630</width>
+					<height>134</height>
+					<font>font13b</font>
+					<align>right</align>
+					<textcolor>FFFFFFFF</textcolor>
+					<label>$INFO[ListItem.Property(Album_Description)]</label>
+					<autoscroll delay="8000" time="2000" repeat="5000"></autoscroll>
+				</control>
+				<control type="textbox">
+					<animation effect="fade" start="0" end="100" time="500">Visible</animation>
+					<left>1233</left>
+					<top>222</top>
+					<width>630</width>
+					<height>134</height>
+					<font>font13b</font>
+					<align>right</align>
+					<visible>Container.Content(albums) + !String.IsEmpty(ListItem.Album) + System.IdleTime(3) + String.IsEmpty(Control.GetLabel(8944)) + String.IsEmpty(ListItem.Property(Album_Description))</visible>
+					<label>[COLOR=FFFFFAF0][B]$INFO[Window(Home).Property(SkinHelper.ListItem.SongCount)][/B] $LOCALIZE[134][/COLOR] - $LOCALIZE[180]: [B][COLOR=FFFFFAF0]$INFO[Window(home).Property(Album.Songs.Duration)][/COLOR][/B][CR][COLOR=FFFFFAF0]$INFO[Window(home).Property(SkinHelper.ListItem.Tracks.Formatted2)][/COLOR]</label>
+					<autoscroll delay="5000" time="1200" repeat="3000"></autoscroll>
+				</control>
+			</control>
+			<control type="fixedlist" id="596">
+				<viewtype label="List 3D">list</viewtype>
+				<left>600</left>
+				<top>45</top>
+				<width>1320</width>
+				<height>854</height>
+				<pagecontrol>80</pagecontrol>
+				<onleft>SetProperty(MediaMenu,True,home)</onleft>
+				<onleft>SetFocus(9050)</onleft>
+				<onright>80</onright>
+				<focusposition>2</focusposition>
+				<orientation>vertical</orientation>
+				<preloaditems>2</preloaditems>
+				<animation effect="slide" start="0,0" end="-45,0" time="200" easing="inout" tween="cubic" condition="Control.HasFocus(80)">Conditional</animation>
+				<animation effect="fade" start="100" end="20" time="200" condition="Window.IsVisible(6621)">Conditional</animation>
+				<itemlayout height="45" condition="Container.Content(artists) | Container.Content(albums) | Container.Content(songs)">
+					<control type="image">
+						<left>0</left>
+						<top>0</top>
+						<width>1320</width>
+						<height>3</height>
+						<texture diffuse="spin/shadow_mask_v5.png">spin/line.png</texture>
+					</control>
+					<control type="label">
+						<left>158</left>
+						<top>1</top>
+						<width>1110</width>
+						<height>45</height>
+						<font>font15</font>
+						<align>right</align>
+						<aligny>center</aligny>
+						<textcolor>FF9E9E9E</textcolor>
+						<label>$VAR[value_audiotitle]</label>
+						<scroll>false</scroll>
+					</control>
+				</itemlayout>
+				<focusedlayout condition="[!System.IdleTime(3) + Container.Content(artists) + String.IsEmpty(ListItem.Property(Artist_Style))] | String.StartsWith(ListItem.Label,*)" height="52">
+					<control type="image">
+						<left>0</left>
+						<top>0</top>
+						<width>1320</width>
+						<height>3</height>
+						<texture diffuse="spin/shadow_mask_v5.png">spin/line.png</texture>
+					</control>
+					<control type="group">
+						<top>4</top>
+						<control type="label">
+							<left>277</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<label>$VAR[value_audiotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>277</left>
+							<top>-1</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<label>$VAR[value_audiotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>278</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>$VAR[ThemeLabelColor]</textcolor>
+							<label>$VAR[value_audiotitle]</label>
+							<shadowcolor>black</shadowcolor>
+							<scroll>false</scroll>
+						</control>
+					</control>
+				</focusedlayout>
+				<focusedlayout condition="[!System.IdleTime(3) + Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_Style))] | [!System.IdleTime(3) + Container.Content(albums) + !String.StartsWith(ListItem.Label,*)] | Container.Content(songs)" height="90">
+					<control type="image">
+						<left>0</left>
+						<top>0</top>
+						<width>1320</width>
+						<height>3</height>
+						<texture diffuse="spin/shadow_mask_v5.png">spin/line.png</texture>
+					</control>
+					<control type="group">
+						<top>4</top>
+						<control type="label">
+							<left>277</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<selectedcolor>black</selectedcolor>
+							<label>$VAR[value_audiotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>277</left>
+							<top>-1</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<selectedcolor>black</selectedcolor>
+							<label>$VAR[value_audiotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>278</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>$VAR[ThemeLabelColor]</textcolor>
+							<selectedcolor>$VAR[ThemeLabelColor]</selectedcolor>
+							<label>$VAR[value_audiotitle]</label>
+							<shadowcolor>black</shadowcolor>
+							<scroll>false</scroll>
+						</control>
+					</control>
+					<include>Listfor3Dm</include>
+				</focusedlayout>
+				<focusedlayout condition="System.IdleTime(3) + [Container.Content(artists) | [Container.Content(albums) + !String.StartsWith(ListItem.Label,*)]]" height="225">
+					<control type="image">
+						<left>0</left>
+						<top>0</top>
+						<width>1320</width>
+						<height>3</height>
+						<texture diffuse="spin/shadow_mask_v5.png">spin/line.png</texture>
+					</control>
+					<control type="group">
+						<top>4</top>
+						<control type="label">
+							<left>277</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<label>$VAR[value_audiotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>277</left>
+							<top>-1</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>black</textcolor>
+							<label>$VAR[value_audiotitle]</label>
+							<scroll>false</scroll>
+						</control>
+						<control type="label">
+							<left>278</left>
+							<top>0</top>
+							<width>990</width>
+							<height>45</height>
+							<font>titleshelf</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>$VAR[ThemeLabelColor]</textcolor>
+							<label>$VAR[value_audiotitle]</label>
+							<shadowcolor>black</shadowcolor>
+							<scroll>false</scroll>
+						</control>
+					</control>
+					<include>Listfor3Dm</include>
+				</focusedlayout>
+			</control>
+			<control type="image">
+				<visible>Control.IsVisible(596) + [Container.Content(albums) | Container.Content(songs)]</visible>
+				<left>105</left>
+				<top>-65</top>
+				<width>350</width>
+				<height>170</height>
+				<aspectratio align="left" aligny="top">keep</aspectratio>
+				<texture background="true">$INFO[Window(Home).Property(SkinHelper.ListItem.Art.ClearLogo)]</texture>
+			</control>
+			<control type="scrollbar" id="80">
+				<include>ScrollBar_Vertical</include>
+				<left>1875</left>
+				<top>40</top>
+				<height>865</height>
+				<onleft>596</onleft>
+				<onright>596</onright>
+				<visible allowhiddenfocus="true">Control.IsVisible(596) + Control.HasFocus(80)</visible>
+			</control>
+		</control>
+		<control type="group">
+			<visible>Control.HasFocus(596) + Container.Content(songs)</visible>
+			<left>423</left>
+			<top>357</top>
+			<animation effect="rotatey" center="auto" start="5" end="5" time="0" condition="true">Conditional</animation>
+			<animation effect="zoom" center="auto" start="155" end="155" condition="true">Conditional</animation>
+			<control type="group">
+				<left>150</left>
+				<top>-20</top>
+				<include>Poralbu</include>
+			</control>
+		</control>							
+		<control type="group">
+			<visible>Container.Content(artists) | Container.Content(albums)</visible>
+			<control type="group">
+				<visible>Control.IsVisible(596)</visible>
+				<left>423</left>
+				<top>357</top>
+				<animation effect="rotatey" center="auto" start="5" end="5" time="0" condition="true">Conditional</animation>
+				<animation effect="zoom" center="auto" start="155" end="155" condition="true">Conditional</animation>
+				<control type="group">
+					<!--Portada-->
+					<visible>Control.HasFocus(596)</visible>
+					<animation type="Conditional" condition="System.IdleTime(4)" reversible="false">
+						<effect type="rotatey" delay="0" center="216,0" start="360" end="180" time="1600" tween="quadratic" easing="out" />
+						<effect type="fade" delay="600" start="100" end="0" time="50" />
+					</animation>
+					<left>150</left>
+					<top>-20</top>
+					<include>Poralbu</include>
+				</control>
+				<control type="group">
+					<!--Portada 2-->
+					<visible>System.IdleTime(10) + Control.HasFocus(596)</visible>
+					<animation type="Visible" reversible="false">
+						<effect type="rotatey" center="216,0" start="180" end="0" time="800" tween="quadratic" easing="out" />
+						<effect type="fade" delay="100" start="0" end="100" time="100" />
+					</animation>
+					<left>150</left>
+					<top>-20</top>
+					<include>Poralbu</include>
+				</control>
+				<!--Portada nf-->
+				<control type="group">
+					<visible>!Control.HasFocus(596)</visible>
+					<left>150</left>
+					<top>-20</top>
+					<include>Poralbu</include>
+				</control>
+			</control>
+			<control type="group">
+				<!--Trasera caja-->
+				<left>130</left>
+				<top>415</top>
+				<animation effect="rotatey" center="auto" start="5" end="5" time="0" condition="true">Conditional</animation>
+				<visible>System.IdleTime(4) + !System.IdleTime(11) + Control.HasFocus(596) + !Window.IsVisible(106)</visible>
+				<animation type="Visible" reversible="false">
+					<effect type="rotatey" center="350,0" start="180" end="0" time="1600" tween="quadratic" easing="out" />
+					<effect type="fade" start="0" end="100" delay="700" time="50" />
+				</animation>
+				<animation type="Conditional" condition="System.IdleTime(10)" reversible="false">
+					<effect type="rotatey" center="350,0" start="0" end="-180" time="800" tween="quadratic" easing="out" />
+					<effect type="fade" delay="300" start="100" end="0" time="100" />
+				</animation>
+				<control type="group">
+					<left>-20</left>
+					<top>108</top>
+					<control type="image">
+						<width>480</width>
+						<height>465</height>
+						<texture background="true">spin/shelf/backw.png</texture>
+						<aspectratio scalediffuse="false">stretch</aspectratio>
+					</control>
+					<control type="image">
+						<width>480</width>
+						<height>465</height>
+						<colordiffuse>E2FFFFFF</colordiffuse>
+						<aspectratio align="center" aligny="center">scale</aspectratio>
+						<visible>Container.Content(albums)</visible>
+						<texture background="true" fallback="spin/artists.png">spin/shelf/cdback/$VAR[cdbackVar]$VAR[cdbackVar2]</texture>
+					</control>
+					<control type="image">
+						<width>480</width>
+						<height>465</height>
+						<colordiffuse>E2FFFFFF</colordiffuse>
+						<aspectratio align="center" aligny="center">scale</aspectratio>
+						<visible>Container.Content(artists)</visible>
+						<texture background="true" fallback="spin/artists.png">spin/shelf/cdback/$VAR[cdbackVar3]$VAR[cdbackVar2]</texture>
+					</control>
+					<control type="image">
+						<width>480</width>
+						<height>465</height>
+						<colordiffuse>E2FFFFFF</colordiffuse>
+						<aspectratio align="center" aligny="center">scale</aspectratio>
+						<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+						<texture diffuse="spin/shelf/diffuse_box.png" background="true">spin/magazine/cmusiclandJ.png</texture>
+					</control>
+					<control type="image">
+						<width>480</width>
+						<height>465</height>
+						<aspectratio scalediffuse="false">stretch</aspectratio>
+						<texture background="true">spin/shelf/barr.png</texture>
+					</control>
+				</control>
+				<control type="image">
+					<visible>Container.Content(albums)</visible>
+					<animation effect="rotate" center="auto" start="90" end="90" time="0" condition="true">Conditional</animation>
+					<width>280</width>
+					<height>280</height>
+					<left>255</left>
+					<top>197</top>
+					<aspectratio>keep</aspectratio>
+					<colordiffuse>85FFFFFF</colordiffuse>
+					<texture background="true">$INFO[Skin.String(pathlogosartists)]$INFO[ListItem.Artist,,/logo.png]</texture>
+				</control>
+				<control type="image">
+					<width>161</width>
+					<height>40</height>
+					<left>337</left>
+					<top>125</top>
+					<aspectratio>keep</aspectratio>
+					<colordiffuse>ddFFFFFF</colordiffuse>
+					<texture>$INFO[ListItem.Property(Album_Label),resource://resource.images.recordlabels.white/,.png]</texture>
+				</control>
+				<!--Contraportada artistas-->
+				<include content="Discs_art4">
+					<param name="order4">1</param>
+					<param name="left4">40</param>
+					<param name="top4">144</param>
+					<param name="rotw4">3</param>
+				</include>
+				<include content="Discs_art4">
+					<param name="order4">3</param>
+					<param name="left4">40</param>
+					<param name="top4">345</param>
+					<param name="rotw4">3</param>
+				</include>
+				<include content="Discs_art4">
+					<param name="order4">4</param>
+					<param name="left4">260</param>
+					<param name="top4">130</param>
+					<param name="rotw4">3</param>
+				</include>
+				<include content="Discs_art4">
+					<param name="order4">2</param>
+					<param name="left4">260</param>
+					<param name="top4">324</param>
+					<param name="rotw4">3</param>
+				</include>
+				<include content="Discs_arts">
+					<param name="order">1</param>
+					<param name="left">5</param>
+					<param name="top">124</param>
+					<param name="rotw">6</param>
+				</include>
+				<include content="Discs_arts">
+					<param name="order">2</param>
+					<param name="left">10</param>
+					<param name="top">225</param>
+					<param name="rotw">-2</param>
+				</include>
+				<include content="Discs_arts">
+					<param name="order">5</param>
+					<param name="left">1</param>
+					<param name="top">326</param>
+					<param name="rotw">3</param>
+				</include>
+				<include content="Discs_arts">
+					<param name="order">7</param>
+					<param name="left">3</param>
+					<param name="top">424</param>
+					<param name="rotw">-4</param>
+				</include>
+				<include content="Discs_arts">
+					<param name="order">3</param>
+					<param name="left">232</param>
+					<param name="top">124</param>
+					<param name="rotw">-3</param>
+				</include>
+				<include content="Discs_arts">
+					<param name="order">4</param>
+					<param name="left">225</param>
+					<param name="top">225</param>
+					<param name="rotw">2</param>
+				</include>
+				<include content="Discs_arts">
+					<param name="order">6</param>
+					<param name="left">229</param>
+					<param name="top">326</param>
+					<param name="rotw">-5</param>
+				</include>
+				<include content="Discs_arts">
+					<param name="order">8</param>
+					<param name="left">221</param>
+					<param name="top">424</param>
+					<param name="rotw">6</param>
+				</include>
+				<control type="image">
+					<animation effect="fade" end="45" condition="true">Conditional</animation>
+					<left>-20</left>
+					<top>108</top>
+						<width>480</width>
+						<height>465</height>
+						<aspectratio scalediffuse="false">stretch</aspectratio>
+						<texture diffuse="spin/mask_cover3.png" background="true">background.png</texture>
+					</control>
+				<!--Tracklists-->
+				<include content="Trackl">
+					<param name="ordert">0</param>
+					<param name="fontt">bcd0</param>
+				</include>
+				<include content="Trackl">
+					<param name="ordert">1</param>
+					<param name="fontt">bcd1</param>
+				</include>
+				<include content="Trackl">
+					<param name="ordert">2</param>
+					<param name="fontt">bcd2</param>
+				</include>
+				<include content="Trackl">
+					<param name="ordert">3</param>
+					<param name="fontt">bcd3</param>
+				</include>
+				<include content="Trackl">
+					<param name="ordert">4</param>
+					<param name="fontt">bcd4</param>
+				</include>
+				<include content="Trackl">
+					<param name="ordert">5</param>
+					<param name="fontt">bcd5</param>
+				</include>
+				<include content="Trackl">
+					<param name="ordert">6</param>
+					<param name="fontt">bcd6</param>
+				</include>
+				<include content="Trackl">
+					<param name="ordert">7</param>
+					<param name="fontt">bcd7</param>
+				</include>
+				<include content="Trackl">
+					<param name="ordert">8</param>
+					<param name="fontt">bcd8</param>
+				</include>
+				<include content="Trackl">
+					<param name="ordert">9</param>
+					<param name="fontt">bcd9</param>
+				</include>
+				<!--Titulos albums-->
+				<include content="Tit_alb4">
+					<param name="ordera4">1</param>
+					<param name="lefta4">20</param>
+					<param name="topa4">302</param>
+				</include>
+				<include content="Tit_alb4">
+					<param name="ordera4">3</param>
+					<param name="lefta4">20</param>
+					<param name="topa4">503</param>
+				</include>
+				<include content="Tit_alb4">
+					<param name="ordera4">4</param>
+					<param name="lefta4">235</param>
+					<param name="topa4">283</param>
+				</include>
+				<include content="Tit_alb4">
+					<param name="ordera4">2</param>
+					<param name="lefta4">235</param>
+					<param name="topa4">480</param>
+				</include>
+				<include content="Tit_albu">
+					<param name="ordera">1</param>
+					<param name="lefta">110</param>
+					<param name="topa">124</param>
+				</include>
+				<include content="Tit_albu">
+					<param name="ordera">2</param>
+					<param name="lefta">110</param>
+					<param name="topa">225</param>
+				</include>
+				<include content="Tit_albu">
+					<param name="ordera">5</param>
+					<param name="lefta">105</param>
+					<param name="topa">326</param>
+				</include>
+				<include content="Tit_albu">
+					<param name="ordera">7</param>
+					<param name="lefta">105</param>
+					<param name="topa">424</param>
+				</include>
+				<include content="Tit_albu">
+					<param name="ordera">3</param>
+					<param name="lefta">340</param>
+					<param name="topa">124</param>
+				</include>
+				<include content="Tit_albu">
+					<param name="ordera">4</param>
+					<param name="lefta">330</param>
+					<param name="topa">225</param>
+				</include>
+				<include content="Tit_albu">
+					<param name="ordera">6</param>
+					<param name="lefta">335</param>
+					<param name="topa">326</param>
+				</include>
+				<include content="Tit_albu">
+					<param name="ordera">8</param>
+					<param name="lefta">330</param>
+					<param name="topa">424</param>
+				</include>
+				<!-- Estuche trasera-->
+				<control type="image">
+					<left>-24</left>
+					<top>100</top>
+					<width>502</width>
+					<height>480</height>
+					<texture background="true">spin/shelf/caja_cd_b.png</texture>
+					<aspectratio>stretch</aspectratio>
+				</control>
+				<control type="group">
+					<top>-100</top>
+					<control type="label">
+						<left>312</left>
+						<top>440</top>
+						<width>310</width>
+						<height>14</height>
+						<align>center</align>
+						<aligny>top</aligny>
+						<scroll>false</scroll>
+						<animation effect="rotate" center="auto" start="90" end="90" time="0" condition="true">Conditional</animation>
+						<font>spiner3</font>
+						<label>$INFO[ListItem.Title]</label>
+						<textcolor>white</textcolor>
+					</control>
+					<control type="label">
+						<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+						<left>312</left>
+						<top>440</top>
+						<width>310</width>
+						<height>14</height>
+						<align>center</align>
+						<aligny>top</aligny>
+						<scroll>false</scroll>
+						<animation effect="rotate" center="auto" start="90" end="90" time="0" condition="true">Conditional</animation>
+						<font>spiner3</font>
+						<label>$LOCALIZE[358]</label>
+						<textcolor>white</textcolor>
+					</control>
+					<control type="label">
+						<visible>Container.Content(artists)</visible>
+						<left>312</left>
+						<top>440</top>
+						<width>310</width>
+						<height>14</height>
+						<align>center</align>
+						<aligny>top</aligny>
+						<scroll>false</scroll>
+						<animation effect="rotate" center="auto" start="90" end="90" time="0" condition="true">Conditional</animation>
+						<font>spiner3</font>
+						<label>$INFO[ListItem.Artist]</label>
+						<textcolor>white</textcolor>
+					</control>
+				</control>
+			</control>
+			<control type="group">
+				<!--Trasera caja reflejo-->
+				<left>129</left>
+				<top>408</top>
+				<animation effect="rotatey" center="auto" start="5" end="5" time="0" condition="true">Conditional</animation>
+				<visible>System.IdleTime(4) + !System.IdleTime(11) + Control.HasFocus(596) + !Window.IsVisible(106)</visible>
+				<animation type="Visible" reversible="false">
+					<effect type="rotatey" center="350,0" start="180" end="0" time="1600" tween="quadratic" easing="out" />
+					<effect type="fade" start="0" end="100" delay="700" time="50" />
+				</animation>
+				<animation type="Conditional" condition="System.IdleTime(10)" reversible="false">
+					<effect type="rotatey" center="350,0" start="0" end="-180" time="800" tween="quadratic" easing="out" />
+					<effect type="fade" delay="300" start="100" end="0" time="100" />
+				</animation>
+				<control type="group">
+					<left>-20</left>
+					<top>585</top>
+					<control type="image">
+						<width>480</width>
+						<height>465</height>
+						<colordiffuse>DDFFFFFF</colordiffuse>
+						<texture background="true">spin/shelf/back.png</texture>
+						<aspectratio scalediffuse="false">stretch</aspectratio>
+					</control>
+					<control type="image">
+						<visible>Container.Content(albums)</visible>
+						<width>480</width>
+						<height>465</height>
+						<colordiffuse>45FFFFFF</colordiffuse>
+						<aspectratio align="center" aligny="center">scale</aspectratio>
+						<texture background="true" flipy="true" fallback="spin/artists.png">spin/shelf/cdback/$VAR[cdbackVar]$VAR[cdbackVar2]</texture>
+					</control>
+					<control type="image">
+						<visible>Container.Content(artists)</visible>
+						<width>480</width>
+						<height>465</height>
+						<colordiffuse>33FFFFFF</colordiffuse>
+						<aspectratio align="center" aligny="center">scale</aspectratio>
+						<texture background="true" flipy="true" fallback="spin/artists.png">spin/shelf/cdback/$VAR[cdbackVar3]$VAR[cdbackVar2]</texture>
+					</control>
+					<control type="image">
+						<width>480</width>
+						<height>465</height>
+						<colordiffuse>45FFFFFF</colordiffuse>
+						<aspectratio align="center" aligny="top">scale</aspectratio>
+						<visible>Container.Content(albums) + String.StartsWith(ListItem.Label,*)</visible>
+						<texture diffuse="spin/shelf/diffuse_box.png" flipy="true" background="true">$VAR[PosterThumbVar]</texture>
+					</control>
+					<control type="image">
+						<width>480</width>
+						<height>465</height>
+						<colordiffuse>45FFFFFF</colordiffuse>
+						<aspectratio scalediffuse="false">stretch</aspectratio>
+						<texture background="true">spin/side_fade.png</texture>
+					</control>
+					<control type="image">
+						<width>480</width>
+						<height>465</height>
+						<colordiffuse>33FFFFFF</colordiffuse>
+						<aspectratio scalediffuse="false">stretch</aspectratio>
+						<texture flipy="true" background="true">spin/shelf/barr.png</texture>
+					</control>
+				</control>
+				<control type="image">
+					<visible>Container.Content(albums)</visible>
+					<animation effect="rotate" center="auto" start="90" end="90" time="0" condition="true">Conditional</animation>
+					<width>280</width>
+					<height>280</height>
+					<left>255</left>
+					<top>677</top>
+					<aspectratio>keep</aspectratio>
+					<colordiffuse>33FFFFFF</colordiffuse>
+					<texture flipx="true" background="true">$INFO[Skin.String(pathlogosartists)]$INFO[ListItem.Artist,,/logo.png]</texture>
+				</control>
+				<include content="Tracklr">
+					<param name="orderr">0</param>
+					<param name="fontr">bcd0</param>
+				</include>
+				<include content="Tracklr">
+					<param name="orderr">1</param>
+					<param name="fontr">bcd1</param>
+				</include>
+				<include content="Tracklr">
+					<param name="orderr">2</param>
+					<param name="fontr">bcd2</param>
+				</include>
+				<include content="Tracklr">
+					<param name="orderr">3</param>
+					<param name="fontr">bcd3</param>
+				</include>
+				<include content="Tracklr">
+					<param name="orderr">4</param>
+					<param name="fontr">bcd4</param>
+				</include>
+				<include content="Tracklr">
+					<param name="orderr">5</param>
+					<param name="fontr">bcd5</param>
+				</include>
+				<include content="Tracklr">
+					<param name="orderr">6</param>
+					<param name="fontr">bcd6</param>
+				</include>
+				<include content="Tracklr">
+					<param name="orderr">7</param>
+					<param name="fontr">bcd7</param>
+				</include>
+				<include content="Tracklr">
+					<param name="orderr">8</param>
+					<param name="fontr">bcd8</param>
+				</include>
+				<include content="Tracklr">
+					<param name="orderr">9</param>
+					<param name="fontr">bcd9</param>
+				</include>
+				<include content="Tit_alb4r">
+					<param name="ordera4r">2</param>
+					<param name="lefta4r">235</param>
+					<param name="topa4r">-480</param>
+				</include>
+				<include content="Tit_alb4r">
+					<param name="ordera4r">3</param>
+					<param name="lefta4r">20</param>
+					<param name="topa4r">-457</param>
+				</include>
+				<include content="Discs_art4r">
+					<param name="order4r">2</param>
+					<param name="left4r">260</param>
+					<param name="top4r">685</param>
+					<param name="rotw4r">-3</param>
+				</include>
+				<include content="Discs_art4r">
+					<param name="order4r">3</param>
+					<param name="left4r">40</param>
+					<param name="top4r">664</param>
+					<param name="rotw4r">-3</param>
+				</include>
+				<include content="Discs_artsr">
+					<param name="orderr">7</param>
+					<param name="leftr">3</param>
+					<param name="topr">637</param>
+					<param name="rotwr">4</param>
+				</include>
+				<include content="Discs_artsr">
+					<param name="orderr">8</param>
+					<param name="leftr">221</param>
+					<param name="topr">637</param>
+					<param name="rotwr">-6</param>
+				</include>
+				<include content="Tit_albur">
+					<param name="orderar">7</param>
+					<param name="leftar">105</param>
+					<param name="topar">-623</param>
+				</include>
+				<include content="Tit_albur">
+					<param name="orderar">8</param>
+					<param name="leftar">330</param>
+					<param name="topar">-623</param>
+				</include>
+				<control type="image">
+					<!-- Estuche trasera-->
+					<left>-24</left>
+					<top>574</top>
+					<width>502</width>
+					<height>480</height>
+					<colordiffuse>89FFFFFF</colordiffuse>
+					<texture background="true">spin/shelf/caja_cd_br.png</texture>
+					<aspectratio>stretch</aspectratio>
+				</control>
+			</control>
+		</control>
+		<control type="image">
+			<left>1911</left>
+			<top>480</top>
+			<width>460</width>
+			<height>460</height>
+			<colordiffuse>01FFFFFF</colordiffuse>
+			<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+			<texture diffuse="cdart_diffuse.png" background="true">$INFO[Window(Home).Property(SkinHelper.ListItem.Art.DiscArt)]</texture>
+		</control>
+		<control type="group">
+			<left>33</left>
+			<top>43</top>
+			<animation effect="rotatey" center="auto" start="8" end="8" time="0" condition="true">Conditional</animation>
+			<control type="group">
+				<left>360</left>
+				<top>-251</top>
+				<width>405</width>
+				<height>405</height>
+				<visible>Container.Content(albums) + Control.HasFocus(596) + System.IdleTime(5)</visible>
+				<animation type="Conditional" condition="System.IdleTime(5)" reversible="false">
+					<effect type="fade" start="0" end="100" time="500" />
+					<effect type="slide" end="0,803" time="2000" tween="bounce" easing="out" />
+					<effect type="rotate" start="180" center="auto" end="360" time="2000" tween="cubic" easing="out" />
+				</animation>
+				<animation type="Conditional" condition="System.IdleTime(6)" reversible="false">
+					<effect type="fade" delay="5900" start="100" end="0" time="1200" />
+					<effect type="slide" start="0,0" end="2000,0" time="2500" delay="5700" tween="cubic" easing="out" />
+					<effect type="rotate" start="360" center="auto" end="-180" delay="5700" time="2500" tween="cubic" easing="out" />
+				</animation>
+				<control type="image" id="3483">
+					<visible>System.IdleTime(5)</visible>
+					<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+					<texture diffuse="cdart_diffuse.png" background="true">$INFO[Skin.String(pathlogosartists)]$INFO[ListItem.Artist]$INFO[ListItem.Album,/,/cdart.png]</texture>
+				</control>
+				<control type="image">
+					<visible>System.IdleTime(5) + String.IsEmpty(Control.GetLabel(3483))</visible>
+					<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+					<texture diffuse="cdart_diffuse.png" background="true">$INFO[Window(Home).Property(SkinHelper.ListItem.Art.DiscArt)]</texture>
+				</control>
+			</control>
+			<control type="group">
+				<left>360</left>
+				<top>1757</top>
+				<width>405</width>
+				<height>405</height>
+				<visible>Container.Content(albums) + Control.HasFocus(596) + System.IdleTime(5)</visible>
+				<animation type="Conditional" condition="System.IdleTime(5)" reversible="false">
+					<effect type="fade" start="0" end="100" time="500" />
+					<effect type="slide" end="0,-803" time="2000" tween="bounce" easing="out" />
+					<effect type="rotate" start="-180" center="auto" end="-360" time="2000" tween="cubic" easing="out" />
+				</animation>
+				<animation type="Conditional" condition="System.IdleTime(6)" reversible="false">
+					<effect type="slide" start="0,0" end="2000,0" time="2500" delay="5700" tween="cubic" easing="out" />
+					<effect type="rotate" start="-360" center="auto" end="180" delay="5700" time="2500" tween="cubic" easing="out" />
+				</animation>
+				<control type="image">
+					<visible>System.IdleTime(5) + [!String.IsEmpty(Window(Home).Property(SkinHelper.ListItem.Art.DiscArt)) | !String.IsEmpty(Control.GetLabel(3483))]</visible>
+					<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+					<colordiffuse>ff000000</colordiffuse>
+					<texture background="true">cdart_diffuse.png</texture>
+				</control>
+				<control type="image">
+					<visible>System.IdleTime(5)</visible>
+					<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+					<colordiffuse>34FFFFFF</colordiffuse>
+					<texture diffuse="cdart_diffuse.png" flipy="true" background="true">$INFO[Skin.String(pathlogosartists)]$INFO[ListItem.Artist]$INFO[ListItem.Album,/,/cdart.png]</texture>
+				</control>
+				<control type="image">
+					<visible>System.IdleTime(5) + String.IsEmpty(Control.GetLabel(3483))</visible>
+					<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
+					<colordiffuse>34FFFFFF</colordiffuse>
+					<texture diffuse="cdart_diffuse.png" flipy="true" background="true">$INFO[Window(Home).Property(SkinHelper.ListItem.Art.DiscArt)]</texture>
+				</control>
+			</control>
+		</control>
+	</include>
+</includes>

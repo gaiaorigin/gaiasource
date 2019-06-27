@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<shortcuts>
+	<shortcut>
+		<defaultID>16101</defaultID>
+		<label>16101</label>
+		<label2 />
+		<icon>DefaultShortcut.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,C:\Users\GOOmuckel\AppData\Roaming\Kodi\addons\skin.gaia.aeon.nox\extras/UnwatchedMovies.xsp,return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>recentlyaddedmovies</defaultID>
+		<label>Arrivals</label>
+		<label2>Custom item</label2>
+		<icon>special://skin/extras/icons/DefaultFolder.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,library://video/movies/recentlyaddedmovies.xml/,return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID />
+		<label>Browse</label>
+		<label2>Videos</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,"library://video/movies/",return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>744</defaultID>
+		<label>744</label>
+		<label2>item</label2>
+		<icon>special://skin/extras/icons/DefaultFolder.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,sources://video/,return)</action>
+	</shortcut>
+	<shortcut>
+		<defaultID>1037</defaultID>
+		<label>Addons</label>
+		<label2>Videos</label2>
+		<icon>special://skin/extras/icons/DefaultAddonVideo.png</icon>
+		<thumb />
+		<action>ActivateWindow(Videos,Addons,return)</action>
+	</shortcut>
+</shortcuts>
