@@ -621,19 +621,19 @@ class Hash(object):
 
 	@classmethod
 	def sha1(self, data):
-		return hashlib.sha1(data).hexdigest().upper()
+		return hashlib.sha1(data.encode('utf-8')).hexdigest().upper()
 
 	@classmethod
 	def sha256(self, data):
-		return hashlib.sha256(data).hexdigest().upper()
+		return hashlib.sha256(data.encode('utf-8')).hexdigest().upper()
 
 	@classmethod
 	def sha512(self, data):
-		return hashlib.sha512(data).hexdigest().upper()
+		return hashlib.sha512(data.encode('utf-8')).hexdigest().upper()
 
 	@classmethod
 	def md5(self, data):
-		return hashlib.md5(data).hexdigest().upper()
+		return hashlib.md5(data.encode('utf-8')).hexdigest().upper()
 
 	@classmethod
 	def file(self, path):
