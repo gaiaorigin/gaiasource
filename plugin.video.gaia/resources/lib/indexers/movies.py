@@ -930,8 +930,7 @@ class movies:
 				# Gaia
 				# HTML syntax error, " directly followed by attribute name. Insert space in between. parseDOM can otherwise not handle it.
 				result = result.replace('"class="lister-page-next', '" class="lister-page-next')
-
-				next = client.parseDOM(result, 'a', ret='href', attrs = {'class': '.+?lister-page-next.+?'})
+				next = client.parseDOM(result, 'a', ret='href', attrs = {'class': '.*?lister-page-next.*?'})
 
 				if len(next) == 0:
 					next = client.parseDOM(result, 'div', attrs = {'class': 'pagination'})[0]

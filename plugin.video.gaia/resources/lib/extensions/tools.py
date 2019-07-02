@@ -1771,6 +1771,13 @@ class System(object):
 				from resources.lib.extensions import cache
 				cache.Cache().clear(confirm = False)
 
+			# gaiaremove
+			if versionOld < 503 and versionNew >= 503:
+				# The database structure has changed, causing the cache to fail since it cannot insert anything.
+				# Drop the entire table instead of deleting rows from the table, like in version 5.0.0 above.
+				from resources.lib.extensions import cache
+				cache.Cache()._drop(cache.Cache.Name)
+
 			# Backup - Import
 			Backup.automaticImport()
 
