@@ -4706,7 +4706,7 @@ class RealDebrid(Debrid):
 	LimitHashesGet = 40 # Maximum number of 40-character hashes to use in GET parameter so that the URL length limit is not exceeded.
 
 	# Time
-	TimeOffset = 0
+	TimeOffset = None
 
 	# User Agent
 	UserAgent = tools.System.name() + ' ' + tools.System.version()
@@ -5536,15 +5536,23 @@ class RealDebrid(Debrid):
 	##############################################################################
 
 	def _timeOffset(self):
-		timeServer = self._retrieve(mode = RealDebrid.ModeGet, category = RealDebrid.CategoryTime)
-		timeServer = convert.ConverterTime(timeServer, format = convert.ConverterTime.FormatDateTime).timestamp()
-		timeUtc = tools.Time.timestamp()
-		timeOffset = timeServer - timeUtc
-		RealDebrid.TimeOffset = int(3600 * round(timeOffset / float(3600))) # Round to the nearest hour
-		return RealDebrid.TimeOffset
+		try:
+			timeServer = self._retrieve(mode = RealDebrid.ModeGet, category = RealDebrid.CategoryTime)
+			timeServer = convert.ConverterTime(timeServer, format = convert.ConverterTime.FormatDateTime).timestamp()
+			timeUtc = tools.Time.timestamp()
+			timeOffset = timeServer - timeUtc
+			return int(3600 * round(timeOffset / float(3600))) # Round to the nearest hour
+		except:
+			return 0
 
 	def timeOffset(self):
-		return cache.Cache().cacheMedium(self._timeOffset)
+		# Only initialize TimeOffset if it was not already intialized before.
+		# There is an issue with RealDebrid servers being flooded with /time API requests.
+		# Not sure why this happens, but might be because the cache is not working (eg: write permission on Android).
+		# Always check if TimeOffset is already in memory from a previous request, so that issues with caching the value to disk do not cause continues API calls.
+		if RealDebrid.TimeOffset is None:
+			RealDebrid.TimeOffset = cache.Cache().cacheMedium(self._timeOffset)
+		return RealDebrid.TimeOffset
 
 	##############################################################################
 	# ITEMS
@@ -5672,21 +5680,23 @@ class RealDebrid(Debrid):
 			if 'links' in dictionary and len(dictionary['links']) > 0:
 				index = None
 				largest = None
-				files = dictionary['files']
-				if pack:
-					meta = metadata.Metadata()
-					for i in range(len(files)):
-						file = files[i]
-						if file['selected'] and meta.episodeContains(title = file['path'], season = season, episode = episode):
-							if largest == None or file['bytes'] > largest['bytes']:
+				try:
+					files = dictionary['files']
+					if pack:
+						meta = metadata.Metadata()
+						for i in range(len(files)):
+							file = files[i]
+							if file['selected'] and meta.episodeContains(title = file['path'], season = season, episode = episode):
+								if largest == None or file['bytes'] > largest['bytes']:
+									largest = file
+									index = i
+					if index == None:
+						for i in range(len(files)):
+							file = files[i]
+							if file['selected'] and (largest == None or file['bytes'] > largest['bytes']):
 								largest = file
 								index = i
-				if index == None:
-					for i in range(len(files)):
-						file = files[i]
-						if file['selected'] and (largest == None or file['bytes'] > largest['bytes']):
-							largest = file
-							index = i
+				except: pass # If there is not 'files' attribute in the results.
 				if index == None: index = 0
 				try: result['link'] = dictionary['links'][index]
 				except: result['link'] = dictionary['links'][0] # Sometimes RD only has 1 link for all the files.
