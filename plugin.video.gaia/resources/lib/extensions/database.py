@@ -238,6 +238,10 @@ class Database(object):
 			result = self._commit()
 		return result
 
+	def _deleteFile(self):
+		from resources.lib.extensions import tools
+		return tools.File.delete(self.mPath)
+
 	# Drops single table.
 	def _drop(self, table, parameters = None, commit = True):
 		result = self._execute('DROP TABLE IF EXISTS %s;' % table, parameters = parameters)

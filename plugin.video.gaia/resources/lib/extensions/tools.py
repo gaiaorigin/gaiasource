@@ -1778,6 +1778,13 @@ class System(object):
 				from resources.lib.extensions import cache
 				cache.Cache()._drop(cache.Cache.Name)
 
+			# gaiaremove
+			if versionOld < 504 and versionNew >= 504:
+				# Seems that some systems didn't correctly drop the database in version 5.0.3.
+				# Just delete the entire file.
+				from resources.lib.extensions import cache
+				cache.Cache()._deleteFile()
+
 			# Backup - Import
 			Backup.automaticImport()
 
