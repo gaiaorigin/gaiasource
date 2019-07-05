@@ -40,7 +40,7 @@ from resources.lib.externals.beautifulsoup import BeautifulSoup
 class movies:
 
 	def __init__(self, type = tools.Media.TypeMovie, kids = tools.Selection.TypeUndefined, notifications = True):
-		self.count = 60
+		self.count = tools.Settings.getInteger('interface.navigation.limit')
 
 		self.type = type
 		if type == tools.Media.TypeDocumentary:
@@ -134,7 +134,7 @@ class movies:
 			self.popular_link = 'http://www.imdb.com/search/title?title_type=%s&languages=en&num_votes=1000,&production_status=released&groups=top_1000&sort=moviemeter,asc&count=%d&start=1%s' % (self.category, self.count, self.certificates)
 			self.new_link = 'http://www.imdb.com/search/title?title_type=%s&languages=en&num_votes=100,&production_status=released&release_date=date[%d],date[1]&sort=moviemeter,asc&count=%d&start=1%s' % (self.category, 180 if self.kidsOnly() else 90, self.count, self.certificates)
 			self.home_link = 'http://www.imdb.com/search/title?online_availability=US/today/Amazon/paid,US/today/Amazon/subs,US/today/Amazon/subs,UK/today/Amazon/paid,UK/today/Amazon/subs,UK/today/Amazon/subs&title_type=%s&languages=en&num_votes=100,&production_status=released&release_date=date[365],date[30]&sort=moviemeter,asc&count=%d&start=1%s' % (self.category, self.count, self.certificates)
-			self.disc_link = 'https://www.imdb.com/list/ls016522954/?title_type=%s&languages=en&num_votes=50,&production_status=released&release_date=date[365],date[30]&sort=moviemeter,asc&count=200' % self.category # Has some extra movies to home_link. Updated often and maintained by IMDB editors.
+			self.disc_link = None if self.count <= 20 else ('https://www.imdb.com/list/ls016522954/?title_type=%s&languages=en&num_votes=50,&production_status=released&release_date=date[365],date[30]&sort=moviemeter,asc' % self.category) # Has some extra movies to home_link. Updated often and maintained by IMDB editors.
 			self.trending_link = 'http://api-v2launch.trakt.tv/movies/trending?limit=%d&page=1' % self.count
 
 		self.traktlists_link = 'http://api-v2launch.trakt.tv/users/me/lists'
@@ -618,7 +618,7 @@ class movies:
 
 	def languages(self):
 		languages = tools.Language.languages(universal = False)
-		for i in languages: self.list.append({'name': str(i['name']), 'url': self.language_link % (i['codes'][0], self.certificates), 'image': 'languages.png', 'action': self.parameterize('moviesRetrieve')})
+		for i in languages: self.list.append({'name': str(i['name']), 'url': self.language_link % (i['code'][0], self.certificates), 'image': 'languages.png', 'action': self.parameterize('moviesRetrieve')})
 		self.addDirectory(self.list)
 		return self.list
 
@@ -737,6 +737,8 @@ class movies:
 
 
 	def trakt_list(self, url, user):
+		list = []
+
 		try:
 			q = dict(urlparse.parse_qsl(urlparse.urlsplit(url).query))
 			q.update({'extended': 'full'})
@@ -838,14 +840,16 @@ class movies:
 				plot = client.replaceHTMLCodes(plot)
 				plot = plot.encode('utf-8')
 
-				self.list.append({'title': title, 'originaltitle': title, 'year': year, 'premiered': premiered, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'plot': plot, 'imdb': imdb, 'tmdb': tmdb, 'tvdb': '0', 'poster': '0', 'next': next, 'progress' : progress})
+				list.append({'title': title, 'originaltitle': title, 'year': year, 'premiered': premiered, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'plot': plot, 'imdb': imdb, 'tmdb': tmdb, 'tvdb': '0', 'poster': '0', 'next': next, 'progress' : progress})
 			except:
 				pass
 
-		return self.list
+		return list
 
 
 	def trakt_user_list(self, url, user):
+		list = []
+
 		try:
 			result = trakt.getTrakt(url)
 			items = json.loads(result)
@@ -864,12 +868,12 @@ class movies:
 				url = self.traktlist_link % url
 				url = url.encode('utf-8')
 
-				self.list.append({'name': name, 'url': url})
+				list.append({'name': name, 'url': url})
 			except:
 				pass
 
-		self.list = sorted(self.list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
-		return self.list
+		list = sorted(list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
+		return list
 
 
 	def imdb_list(self, url, full = False):
@@ -1104,6 +1108,7 @@ class movies:
 
 
 	def imdb_person_list(self, url):
+		list = []
 		try:
 			result = client.request(url)
 			result = result.decode('iso-8859-1').encode('utf-8')
@@ -1128,14 +1133,16 @@ class movies:
 				image = client.replaceHTMLCodes(image)
 				image = image.encode('utf-8')
 
-				self.list.append({'name': name, 'url': url, 'image': image})
+				list.append({'name': name, 'url': url, 'image': image})
 			except:
 				tools.Logger.error()
 
-		return self.list
+		return list
 
 
 	def imdb_user_list(self, url):
+		list = []
+
 		try:
 			result = client.request(url)
 			result = result.decode('iso-8859-1').encode('utf-8')
@@ -1155,12 +1162,12 @@ class movies:
 				url = client.replaceHTMLCodes(url)
 				url = url.encode('utf-8')
 
-				self.list.append({'name': name, 'url': url})
+				list.append({'name': name, 'url': url})
 			except:
 				pass
 
-		self.list = sorted(self.list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
-		return self.list
+		list = sorted(list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
+		return list
 
 
 	def imdb_account(self, watched = None, ratings = None):
@@ -1451,7 +1458,7 @@ class movies:
 		syshandle = int(sys.argv[1])
 
 		addonPoster, addonBanner = control.addonPoster(), control.addonBanner()
-		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.fanart')
+		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.theme.fanart')
 
 		indicators = playcount.getMovieIndicators()
 		isPlayable = 'true' if not 'plugin' in control.infoLabel('Container.PluginName') else 'false'

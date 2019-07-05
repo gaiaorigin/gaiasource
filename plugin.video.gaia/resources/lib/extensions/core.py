@@ -245,6 +245,9 @@ class Core:
 
 	def scrape(self, title = None, year = None, imdb = None, tvdb = None, season = None, episode = None, tvshowtitle = None, premiered = None, metadata = None, autoplay = None, preset = None, seasoncount = None, library = False, exact = False, items = None, process = True, binge = None, cache = True):
 		try:
+			# External addons (eg OpenMeta) does not call functions correctly, and the type might not be set.
+			if self.type is None: self.type = tools.Media.TypeShow if season or episode else tools.Media.TypeMovie
+
 			if not self.silent: tools.Donations.popup()
 
 			new = items == None
@@ -278,7 +281,7 @@ class Core:
 					from resources.lib.indexers import tvshows
 					# TODO: The episode metadata should be retrieved, not the show metadata.
 					# Currently the metadata is always passed as a parameter, but if that changes, this has to be fixed.
-					metadata = tvshows.tvshows().metadataRetrieve(title = title, year = year, imdb = imdb, tvdb = tvdb)
+					metadata = tvshows.tvshows().metadataRetrieve(tvshowtitle = tvshowtitle, title = title, year = year, imdb = imdb, tvdb = tvdb, season = season, episode = episode)
 				else:
 					from resources.lib.indexers import movies
 					metadata = movies.movies().metadataRetrieve(imdb = imdb)
@@ -1964,7 +1967,7 @@ class Core:
 		sysmeta = tools.Converter.quoteTo(tools.Converter.jsonTo(metadata))
 		duration = self._duration(metadata)
 
-		hasFanart = tools.Settings.getBoolean('interface.fanart')
+		hasFanart = tools.Settings.getBoolean('interface.theme.fanart')
 		addonPoster = control.addonPoster()
 		addonBanner = control.addonBanner()
 		addonFanart = control.addonFanart()
@@ -3844,6 +3847,7 @@ class Core:
 			# FILTERS - AUDIO LANGUAGE
 
 			filterAudioLanguage = interface.Filters.audioLanguage(label = True)
+			filterAudioLanguageHas = not _filterInvalid(filterAudioLanguage)
 			if _filterInvalid(filterAudioLanguage):
 				filterAudioLanguage = _filterSetting('audio.language')
 				filterAudioLanguage = 0 if _filterInvalid(filterAudioLanguage) else int(filterAudioLanguage)
@@ -3854,7 +3858,6 @@ class Core:
 					if filterAudioLanguage == labelNone: filterAudioLanguage = None
 			elif filterAudioLanguage == labelAny:
 				filterAudioLanguage = None
-			filterAudioLanguageHas = not _filterInvalid(filterAudioLanguage)
 			if filterAudioLanguageHas: filterAudioLanguage = tools.Language.code(filterAudioLanguage)
 			interface.Filters.audioLanguage('' if filterAudioLanguage == None else filterAudioLanguage)
 
@@ -4065,7 +4068,10 @@ class Core:
 							if languages == None or len(languages) == 0:
 								languages = []
 							else:
-								languages = [l[0] for l in languages]
+								codes = []
+								for l in languages:
+									codes.extend(l['code'])
+								languages = list(set(codes))
 							if any(l in audioLanguages for l in languages):
 								filter.append(i)
 					items = filter

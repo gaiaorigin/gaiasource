@@ -202,6 +202,8 @@ class seasons:
 
 
 	def tvdb_list(self, tvshowtitle, year, imdb, tvdb, lang, limit=''):
+		list = []
+
 		try:
 			if imdb == '0':
 				try:
@@ -441,7 +443,7 @@ class seasons:
 				try: seasoncount = counts[season]
 				except: seasoncount = None
 
-				self.list.append({'season': season, 'seasoncount': seasoncount, 'tvshowtitle': tvshowtitle, 'label': label, 'year': year, 'premiered': premiered, 'status': status, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'cast': cast, 'plot': plot, 'imdb': imdb, 'tvdb': tvdb, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb})
+				list.append({'season': season, 'seasoncount': seasoncount, 'tvshowtitle': tvshowtitle, 'label': label, 'year': year, 'premiered': premiered, 'status': status, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'cast': cast, 'plot': plot, 'imdb': imdb, 'tvdb': tvdb, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb})
 			except:
 				pass
 
@@ -529,11 +531,11 @@ class seasons:
 				try: seasoncount = counts[season]
 				except: seasoncount = None
 
-				self.list.append({'title': title, 'label': label, 'seasoncount' : seasoncount, 'season': season, 'episode': episode, 'tvshowtitle': tvshowtitle, 'year': year, 'premiered': premiered, 'status': status, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'director': director, 'writer': writer, 'cast': cast, 'plot': episodeplot, 'imdb': imdb, 'tvdb': tvdb, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb})
+				list.append({'title': title, 'label': label, 'seasoncount' : seasoncount, 'season': season, 'episode': episode, 'tvshowtitle': tvshowtitle, 'year': year, 'premiered': premiered, 'status': status, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'director': director, 'writer': writer, 'cast': cast, 'plot': episodeplot, 'imdb': imdb, 'tvdb': tvdb, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb})
 			except:
 				pass
 
-		return self.list
+		return list
 
 	@classmethod
 	def seasonCountParse(self, season = None, items = None, seasons = None, episodes = None):
@@ -650,7 +652,7 @@ class seasons:
 		media = tools.Media()
 
 		addonPoster, addonBanner = control.addonPoster(), control.addonBanner()
-		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.fanart')
+		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.theme.fanart')
 
 		try: indicators = playcount.getSeasonIndicators(items[0]['imdb'])
 		except: indicators = None

@@ -508,6 +508,7 @@ class episodes:
 	def trakt_progress_list(self, url, user, lang, direct = None):
 		from resources.lib.indexers import seasons
 		if direct is None: direct = tools.Settings.getBoolean('interface.tvshows.direct')
+		self.listNew = []
 
 		try:
 			url += '?extended=full'
@@ -780,7 +781,7 @@ class episodes:
 				if 'airzone' in i and not i['airzone'] == None and not i['airzone'] == '':
 					values['airzone'] = i['airzone']
 
-				self.list.append(values)
+				self.listNew.append(values)
 			except:
 				pass
 
@@ -792,12 +793,13 @@ class episodes:
 		[i.start() for i in threads]
 		[i.join() for i in threads]
 
-		return self.list
+		return self.listNew
 
 
 	def trakt_episodes_list(self, url, user, lang, direct = False):
 		from resources.lib.indexers import seasons
 
+		self.listNew = []
 		items = self.trakt_list(url, user)
 		def items_list(i):
 			try:
@@ -991,7 +993,7 @@ class episodes:
 				except:
 					pass
 
-				self.list.append(values)
+				self.listNew.append(values)
 			except:
 				pass
 
@@ -1002,10 +1004,12 @@ class episodes:
 		[i.start() for i in threads]
 		[i.join() for i in threads]
 
-		return self.list
+		return self.listNew
 
 
 	def trakt_user_list(self, url, user):
+		list = []
+
 		try:
 			result = trakt.getTrakt(url)
 			items = json.loads(result)
@@ -1024,12 +1028,12 @@ class episodes:
 				url = self.traktlist_link % url
 				url = url.encode('utf-8')
 
-				self.list.append({'name': name, 'url': url})
+				list.append({'name': name, 'url': url})
 			except:
 				pass
 
-		self.list = sorted(self.list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
-		return self.list
+		list = sorted(list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
+		return list
 
 
 	def tvmaze_list(self, url, limit, count = True, direct = False):
@@ -1202,7 +1206,7 @@ class episodes:
 		media = tools.Media()
 
 		addonPoster, addonBanner = control.addonPoster(), control.addonBanner()
-		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.fanart')
+		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.theme.fanart')
 
 		indicators = playcount.getShowIndicators()
 

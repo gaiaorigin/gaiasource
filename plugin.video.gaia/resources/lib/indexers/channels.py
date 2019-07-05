@@ -283,7 +283,7 @@ class channels:
 		syshandle = int(sys.argv[1])
 
 		addonPoster, addonBanner = control.addonPoster(), control.addonBanner()
-		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.fanart')
+		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.theme.fanart')
 
 		indicators = playcount.getMovieIndicators()
 		isPlayable = 'true' if not 'plugin' in control.infoLabel('Container.PluginName') else 'false'

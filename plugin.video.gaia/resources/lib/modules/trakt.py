@@ -47,7 +47,7 @@ def getTrakt2():
 databaseName = control.cacheFile
 databaseTable = 'trakt'
 
-def getTrakt(url, post = None, cache = True, check = True, timestamp = None, extended = False, direct = False, authentication = None):
+def getTrakt(url, post = None, cache = True, check = True, timestamp = None, extended = False, direct = False, authentication = None, timeout = 30):
 	try:
 		if not url.startswith('http://api-v2launch.trakt.tv'):
 			url = urlparse.urljoin('http://api-v2launch.trakt.tv', url)
@@ -66,11 +66,11 @@ def getTrakt(url, post = None, cache = True, check = True, timestamp = None, ext
 		if not post == None: post = json.dumps(post)
 
 		if direct or not valid:
-			result = client.request(url, post = post, headers = headers)
+			result = client.request(url, post = post, headers = headers, timeout = timeout)
 			return result
 
 		headers['Authorization'] = 'Bearer %s' % token
-		result = client.request(url, post = post, headers = headers, output = 'extended', error = True)
+		result = client.request(url, post = post, headers = headers, output = 'extended', error = True, timeout = timeout)
 		if result and not (result[1] == '401' or result[1] == '405'):
 			if check: _cacheCheck()
 			if extended: return result[0], result[2]
@@ -85,7 +85,7 @@ def getTrakt(url, post = None, cache = True, check = True, timestamp = None, ext
 		oauth = 'http://api-v2launch.trakt.tv/oauth/token'
 		opost = {'client_id': getTrakt1(), 'client_secret': getTrakt2(), 'redirect_uri': 'urn:ietf:wg:oauth:2.0:oob', 'grant_type': 'refresh_token', 'refresh_token': refresh}
 
-		result = client.request(oauth, post = json.dumps(opost), headers = headers, error = True)
+		result = client.request(oauth, post = json.dumps(opost), headers = headers, error = True, timeout = timeout)
 
 		try: code = str(result[1])
 		except: code = ''
@@ -105,7 +105,7 @@ def getTrakt(url, post = None, cache = True, check = True, timestamp = None, ext
 
 		headers['Authorization'] = 'Bearer %s' % token
 
-		result = client.request(url, post = post, headers = headers, output = 'extended')
+		result = client.request(url, post = post, headers = headers, output = 'extended', timeout = timeout)
 		if check: _cacheCheck()
 
 		if extended: return result[0], result[2]
@@ -678,53 +678,68 @@ def request(imdb = None, tmdb = None, tvdb = None, season = None, episode = None
 		result.append(value)
 	return result
 
+def timeout(items):
+	return max(30, len(items) * 2)
+
 def markMovieAsWatched(imdb = None, tmdb = None, items = None):
-	return getTrakt('/sync/history', {"movies": request(imdb = imdb, tmdb = tmdb, items = items)})
+	items = request(imdb = imdb, tmdb = tmdb, items = items)
+	return getTrakt('/sync/history', {"movies": items}, timeout = timeout(items))
 
 def markMovieAsNotWatched(imdb = None, tmdb = None, items = None):
-	return getTrakt('/sync/history/remove', {"movies": request(imdb = imdb, tmdb = tmdb, items = items)})
+	items = request(imdb = imdb, tmdb = tmdb, items = items)
+	return getTrakt('/sync/history/remove', {"movies": items}, timeout = timeout(items))
 
 def markTVShowAsWatched(imdb = None, tvdb = None, items = None):
-	result = getTrakt('/sync/history', {"shows": request(imdb = imdb, tvdb = tvdb, items = items)})
+	items = request(imdb = imdb, tvdb = tvdb, items = items)
+	result = getTrakt('/sync/history', {"shows": items}, timeout = timeout(items))
 	seasonCount(imdb = imdb, items = items)
 	return result
 
 def markTVShowAsNotWatched(imdb = None, tvdb = None, items = None):
-	result = getTrakt('/sync/history/remove', {"shows": request(imdb = imdb, tvdb = tvdb, items = items)})
+	items = request(imdb = imdb, tvdb = tvdb, items = items)
+	result = getTrakt('/sync/history/remove', {"shows": items}, timeout = timeout(items))
 	seasonCount(imdb = imdb, items = items)
 	return result
 
 def markSeasonAsWatched(imdb = None, tvdb = None, season = None, items = None):
-	result = getTrakt('/sync/history', {"shows": request(imdb = imdb, tvdb = tvdb, season = season, items = items)})
+	items = request(imdb = imdb, tvdb = tvdb, season = season, items = items)
+	result = getTrakt('/sync/history', {"shows": items}, timeout = timeout(items))
 	seasonCount(imdb = imdb, items = items)
 	return result
 
 def markSeasonAsNotWatched(imdb = None, tvdb = None, season = None, items = None):
-	result = getTrakt('/sync/history/remove', {"shows": request(imdb = imdb, tvdb = tvdb, season = season, items = items)})
+	items = request(imdb = imdb, tvdb = tvdb, season = season, items = items)
+	result = getTrakt('/sync/history/remove', {"shows": items}, timeout = timeout(items))
 	seasonCount(imdb = imdb, items = items)
 	return result
 
 def markEpisodeAsWatched(imdb = None, tvdb = None, season = None, episode = None, items = None):
-	result = getTrakt('/sync/history', {"shows": request(imdb = imdb, tvdb = tvdb, season = season, episode = episode, items = items)})
+	items = request(imdb = imdb, tvdb = tvdb, season = season, episode = episode, items = items)
+	result = getTrakt('/sync/history', {"shows": items}, timeout = timeout(items))
 	seasonCount(imdb = imdb, items = items)
 	return result
 
 def markEpisodeAsNotWatched(imdb = None, tvdb = None, season = None, episode = None, items = None):
-	result = getTrakt('/sync/history/remove', {"shows": request(imdb = imdb, tvdb = tvdb, season = season, episode = episode, items = items)})
+	items = request(imdb = imdb, tvdb = tvdb, season = season, episode = episode, items = items)
+	result = getTrakt('/sync/history/remove', {"shows": items}, timeout = timeout(items))
 	seasonCount(imdb = imdb, items = items)
 	return result
 
 def rateMovie(imdb = None, tmdb = None, rating = None, items = None):
-	return getTrakt('/sync/ratings', {"movies": request(imdb = imdb, tmdb = tmdb, rating = rating, items = items)})
+	items = request(imdb = imdb, tmdb = tmdb, rating = rating, items = items)
+	return getTrakt('/sync/ratings', {"movies": items}, timeout = timeout(items))
 
 def rateShow(imdb = None, tvdb = None, rating = None, items = None):
-	return getTrakt('/sync/ratings', {"shows": request(imdb = imdb, tvdb = tvdb, rating = rating, items = items)})
+	items = request(imdb = imdb, tvdb = tvdb, rating = rating, items = items)
+	return getTrakt('/sync/ratings', {"shows": items}, timeout = timeout(items))
 
 def rateSeason(imdb = None, tvdb = None, season = None, rating = None, items = None):
-	return getTrakt('/sync/ratings', {"shows": request(imdb = imdb, tvdb = tvdb, season = season, rating = rating, items = items)})
+	items = request(imdb = imdb, tvdb = tvdb, season = season, rating = rating, items = items)
+	return getTrakt('/sync/ratings', {"shows": items}, timeout = timeout(items))
 
 def rateEpisode(imdb = None, tvdb = None, season = None, episode = None, rating = None, items = None):
-	return getTrakt('/sync/ratings', {"shows": request(imdb = imdb, tvdb = tvdb, season = season, episode = episode, rating = rating, items = items)})
+	items = request(imdb = imdb, tvdb = tvdb, season = season, episode = episode, rating = rating, items = items)
+	return getTrakt('/sync/ratings', {"shows": items}, timeout = timeout(items))
 
 
 def getMovieTranslation(id, lang, full=False):

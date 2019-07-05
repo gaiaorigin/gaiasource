@@ -27,6 +27,8 @@ from resources.lib.extensions import cache
 
 def request(url, close=True, redirect=True, error=False, proxy=None, post=None, headers=None, mobile=False, XHR=False, limit=None, referer=None, cookie=None, compression=True, output='', timeout='30', ignoreSsl = False, flare = True, ignoreErrors = None):
 	try:
+		timeout = str(timeout)
+
 		# Gaia
 		if url == None: return None
 		handlers = []

@@ -2228,7 +2228,7 @@ class Metadata(object):
 
 	def __loadValue(self, value, splitAll = True):
 		if value:
-			value = value.lower()
+			value = value.encode('utf-8').lower()
 			value = client.replaceHTMLCodes(value)
 			value = value.replace("\n", '') # Double quotes with escape characters.
 			if splitAll: split = [item for item in re.split('\.|\,|\(|\)|\[|\]|\s|\-|\_|\+|\/|\\\'|\"', value) if not item == '']

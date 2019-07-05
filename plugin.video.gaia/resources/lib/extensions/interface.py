@@ -1981,51 +1981,54 @@ class Context(object):
 		if not mode == self.ModeNone: self._load(mode = mode, items = items, source = source, metadata = metadata, art = art, link = link, trailer = trailer, label = label, title = title, year = year, season = season, episode = episode, imdb = imdb, tmdb = tmdb, tvdb = tvdb, id = id, orion = orion, location = location, create = create, delete = delete, library = library, queue = queue, watched = watched, refresh = refresh, type = type, kids = kids, loader = loader)
 
 	def _load(self, mode = ModeNone, items = None, source = None, metadata = None, art = None, link = None, trailer = None, label = None, title = None, year = None, season = None, episode = None, imdb = None, tmdb = None, tvdb = None, id = None, orion = None, location = None, create = None, delete = None, library = None, queue = None, watched = None, refresh = None, type = None, kids = None, loader = False):
-		self.mMode = mode
-		self.mType = type
-		self.mKids = kids
+		try:
+			self.mMode = mode
+			self.mType = type
+			self.mKids = kids
 
-		if isinstance(items, basestring): items = tools.Converter.jsonFrom(items)
-		self.mItems = items if items else []
-		self.mData = None
+			if isinstance(items, basestring): items = tools.Converter.jsonFrom(items)
+			self.mItems = items if items else []
+			self.mData = None
 
-		if isinstance(source, dict): source = tools.Converter.quoteTo(tools.Converter.jsonTo(source))
-		self.mSource = source
+			if isinstance(source, dict): source = tools.Converter.quoteTo(tools.Converter.jsonTo(source))
+			self.mSource = source
 
-		if isinstance(metadata, dict): metadata = tools.Converter.quoteTo(tools.Converter.jsonTo(metadata))
-		self.mMetadata = metadata
+			if isinstance(metadata, dict): metadata = tools.Converter.quoteTo(tools.Converter.jsonTo(metadata))
+			self.mMetadata = metadata
 
-		if isinstance(art, dict): art = tools.Converter.quoteTo(tools.Converter.jsonTo(art))
-		self.mArt = art
+			if isinstance(art, dict): art = tools.Converter.quoteTo(tools.Converter.jsonTo(art))
+			self.mArt = art
 
-		if isinstance(orion, dict): orion = tools.Converter.quoteTo(tools.Converter.jsonTo(orion))
-		self.mOrion = orion
+			if isinstance(orion, dict): orion = tools.Converter.quoteTo(tools.Converter.jsonTo(orion))
+			self.mOrion = orion
 
-		self.mLink = tools.Converter.quoteTo(link) # Important to quote (for scrape options, shortcuts, etc).
-		self.mTrailer = trailer
-		self.mLabel = label
-		self.mTitle = title
-		self.mYear = year
-		self.mSeason = season
-		self.mEpisode = episode
-		self.mImdb = imdb
-		self.mTmdb = tmdb
-		self.mTvdb = tvdb
+			self.mLink = tools.Converter.quoteTo(link) # Important to quote (for scrape options, shortcuts, etc).
+			self.mTrailer = trailer
+			self.mLabel = label
+			self.mTitle = title
+			self.mYear = year
+			self.mSeason = season
+			self.mEpisode = episode
+			self.mImdb = imdb
+			self.mTmdb = tmdb
+			self.mTvdb = tvdb
 
-		self.mId = id
-		self.mLocation = location
-		self.mCreate = create
-		self.mDelete = delete
-		self.mLibrary = library
-		self.mQueue = queue
-		self.mWatched = watched
-		self.mRefresh = refresh
+			self.mId = id
+			self.mLocation = location
+			self.mCreate = create
+			self.mDelete = delete
+			self.mLibrary = library
+			self.mQueue = queue
+			self.mWatched = watched
+			self.mRefresh = refresh
 
-		self._initialize()
-		if len(self.mItems) == 0:
-			if self.mMode == Context.ModeGeneric: self.addGeneric()
-			elif self.mMode == Context.ModeItem: self.addItem()
-			elif self.mMode == Context.ModeStream: self.addStream()
+			self._initialize()
+			if len(self.mItems) == 0:
+				if self.mMode == Context.ModeGeneric: self.addGeneric()
+				elif self.mMode == Context.ModeItem: self.addItem()
+				elif self.mMode == Context.ModeStream: self.addStream()
+		except:
+			tools.Logger.error()
 
 	def _initialize(self):
 		if Context.LabelMenu == None:
@@ -2348,46 +2351,58 @@ class Context(object):
 		return self._commandPlugin(action = 'libraryUpdate', parameters = {'force' : True})
 
 	def add(self, label, action = None, command = None, condition = None, loader = None, items = None):
-		item = {'label' : self._translate(label)}
-		if action: item['action'] = action
-		if command: item['command'] = command
-		if condition: item['condition'] = condition
-		if loader: item['loader'] = loader
-		if items: item['items'] = [i for i in items if i]
-		self.mItems.append(item)
+		try:
+			item = {'label' : self._translate(label)}
+			if action: item['action'] = action
+			if command: item['command'] = command
+			if condition: item['condition'] = condition
+			if loader: item['loader'] = loader
+			if items: item['items'] = [i for i in items if i]
+			self.mItems.append(item)
+		except:
+			tools.Logger.error()
 
 	def addGeneric(self):
-		self.addLibrary()
-		self.addPlaylist()
-		self.addShortcut()
+		try:
+			self.addLibrary()
+			self.addPlaylist()
+			self.addShortcut()
+		except:
+			tools.Logger.error()
 
 	def addItem(self):
-		self.addInformation()
-		self.addTrailer()
-		self.addRefresh()
-		self.addBrowse()
-		self.addBinge()
-		self.addScrape()
-		self.addMark()
-		self.addTrakt()
-		self.addLibrary()
-		self.addPlaylist()
-		self.addShortcut()
-		self.addDownloads()
+		try:
+			self.addInformation()
+			self.addTrailer()
+			self.addRefresh()
+			self.addBrowse()
+			self.addBinge()
+			self.addScrape()
+			self.addMark()
+			self.addTrakt()
+			self.addLibrary()
+			self.addPlaylist()
+			self.addShortcut()
+			self.addDownloads()
+		except:
+			tools.Logger.error()
 
 	def addStream(self):
-		self.addInformation()
-		self.addFilters()
-		self.addCache()
-		self.addPlay()
-		self.addLink()
-		self.addMark()
-		self.addTrakt()
-		self.addOrion()
-		self.addLibrary()
-		self.addPlaylist()
-		self.addShortcut()
-		self.addManual()
+		try:
+			self.addInformation()
+			self.addFilters()
+			self.addCache()
+			self.addPlay()
+			self.addLink()
+			self.addMark()
+			self.addTrakt()
+			self.addOrion()
+			self.addLibrary()
+			self.addPlaylist()
+			self.addShortcut()
+			self.addManual()
+		except:
+			tools.Logger.error()
 
 	def addInformation(self):
 		items = []

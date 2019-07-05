@@ -40,7 +40,7 @@ from resources.lib.externals.beautifulsoup import BeautifulSoup
 class tvshows:
 
 	def __init__(self, type = tools.Media.TypeShow, kids = tools.Selection.TypeUndefined, notifications = True):
-		self.count = 60
+		self.count = tools.Settings.getInteger('interface.navigation.limit')
 
 		self.type = type
 
@@ -530,7 +530,7 @@ class tvshows:
 
 	def languages(self):
 		languages = tools.Language.languages(universal = False)
-		for i in languages: self.list.append({'name': str(i['name']), 'url': self.language_link % (i['codes'][0], self.certificates), 'image': 'languages.png', 'action': self.parameterize('showsRetrieve')})
+		for i in languages: self.list.append({'name': str(i['name']), 'url': self.language_link % (i['code'][0], self.certificates), 'image': 'languages.png', 'action': self.parameterize('showsRetrieve')})
 		self.addDirectory(self.list)
 		return self.list
 
@@ -648,6 +648,8 @@ class tvshows:
 
 
 	def trakt_list(self, url, user):
+		list = []
+
 		try:
 			dupes = []
 
@@ -758,14 +760,16 @@ class tvshows:
 				plot = client.replaceHTMLCodes(plot)
 				plot = plot.encode('utf-8')
 
-				self.list.append({'title': title, 'originaltitle': title, 'year': year, 'premiered': premiered, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'plot': plot, 'imdb': imdb, 'tvdb': tvdb, 'poster': '0', 'next': next})
+				list.append({'title': title, 'originaltitle': title, 'year': year, 'premiered': premiered, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'plot': plot, 'imdb': imdb, 'tvdb': tvdb, 'poster': '0', 'next': next})
 			except:
 				pass
 
-		return self.list
+		return list
 
 
 	def trakt_user_list(self, url, user):
+		list = []
+
 		try:
 			result = trakt.getTrakt(url)
 			items = json.loads(result)
@@ -784,15 +788,16 @@ class tvshows:
 				url = self.traktlist_link % url
 				url = url.encode('utf-8')
 
-				self.list.append({'name': name, 'url': url})
+				list.append({'name': name, 'url': url})
 			except:
 				pass
 
-		self.list = sorted(self.list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
-		return self.list
+		list = sorted(list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
+		return list
 
 
 	def imdb_list(self, url, full = False):
+		list = []
 		items = []
 		dupes = []
 		isRating = '/ratings' in url
@@ -819,11 +824,11 @@ class tvshows:
 				id = None
 
 				if url == self.imdbwatchlist_link:
-					url = cache.Cache().cacheMedium(imdb_watchlist_id, url)
-					if id: url = self.imdblist_link % url
+					id = cache.Cache().cacheMedium(imdb_watchlist_id, url)
+					if id: url = self.imdblist_link % id
 				elif url == self.imdbwatchlist2_link:
-					url = cache.Cache().cacheMedium(imdb_watchlist_id, url)
-					if id: url = self.imdblist2_link % url
+					id = cache.Cache().cacheMedium(imdb_watchlist_id, url)
+					if id: url = self.imdblist2_link % id
 
 				if isOwn and not isRating and (not id or id.startswith('ur')):
 					if len(items) == 0: return privacyNotification()
@@ -1004,14 +1009,16 @@ class tvshows:
 				plot = client.replaceHTMLCodes(plot)
 				plot = plot.encode('utf-8')
 
-				self.list.append({'title': title, 'originaltitle': title, 'year': year, 'genre': genre, 'duration': duration, 'rating': rating, 'ratingown': ratingown, 'ratingtime' : ratingtime, 'votes': votes, 'mpaa': mpaa, 'director': director, 'cast': cast, 'plot': plot, 'imdb': imdb, 'tvdb': '0', 'poster': poster, 'next': next})
+				list.append({'title': title, 'originaltitle': title, 'year': year, 'genre': genre, 'duration': duration, 'rating': rating, 'ratingown': ratingown, 'ratingtime' : ratingtime, 'votes': votes, 'mpaa': mpaa, 'director': director, 'cast': cast, 'plot': plot, 'imdb': imdb, 'tvdb': '0', 'poster': poster, 'next': next})
 			except:
 				pass
 
-		return self.list
+		return list
 
 
 	def imdb_person_list(self, url):
+		list = []
+
 		try:
 			result = client.request(url)
 			result = result.decode('iso-8859-1').encode('utf-8')
@@ -1036,14 +1043,16 @@ class tvshows:
 				image = client.replaceHTMLCodes(image)
 				image = image.encode('utf-8')
 
-				self.list.append({'name': name, 'url': url, 'image': image})
+				list.append({'name': name, 'url': url, 'image': image})
 			except:
 				tools.Logger.error()
 
-		return self.list
+		return list
 
 
 	def imdb_user_list(self, url):
+		list = []
+
 		try:
 			result = client.request(url)
 			result = result.decode('iso-8859-1').encode('utf-8')
@@ -1063,12 +1072,12 @@ class tvshows:
 				url = client.replaceHTMLCodes(url)
 				url = url.encode('utf-8')
 
-				self.list.append({'name': name, 'url': url})
+				list.append({'name': name, 'url': url})
 			except:
 				pass
 
-		self.list = sorted(self.list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
-		return self.list
+		list = sorted(list, key=lambda k: re.sub('(^the |^a |^an )', '', k['name'].lower()))
+		return list
 
 
 	def imdb_account(self, watched = None, ratings = None):
@@ -1130,6 +1139,8 @@ class tvshows:
 
 
 	def tvmaze_list(self, url):
+		list = []
+
 		try:
 			result = client.request(url)
 			result = client.parseDOM(result, 'section', attrs = {'id': 'this-seasons-shows'})
@@ -1220,7 +1231,7 @@ class tvshows:
 				if content == None or content == '': content = '0'
 				content = content.encode('utf-8')
 
-				self.list.append({'title': title, 'originaltitle': title, 'year': year, 'premiered': premiered, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'plot': plot, 'imdb': imdb, 'tvdb': tvdb, 'poster': poster, 'content': content})
+				list.append({'title': title, 'originaltitle': title, 'year': year, 'premiered': premiered, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'plot': plot, 'imdb': imdb, 'tvdb': tvdb, 'poster': poster, 'content': content})
 			except:
 				pass
 
@@ -1230,11 +1241,11 @@ class tvshows:
 			[i.start() for i in threads]
 			[i.join() for i in threads]
 
-			filter = [i for i in self.list if i['content'] == 'scripted']
-			filter += [i for i in self.list if not i['content'] == 'scripted']
-			self.list = filter
+			filter = [i for i in list if i['content'] == 'scripted']
+			filter += [i for i in list if not i['content'] == 'scripted']
+			list = filter
 
-			return self.list
+			return list
 		except:
 			return
 
@@ -1275,8 +1286,8 @@ class tvshows:
 		except:
 			tools.Logger.error()
 
-	def metadataRetrieve(self, title, year, imdb, tvdb):
-		self.list = [{'metacache' : False, 'title' : title, 'year' : year, 'imdb' : imdb, 'tvdb' : tvdb}]
+	def metadataRetrieve(self, tvshowtitle, title, year, imdb, tvdb, season, episode):
+		self.list = [{'metacache' : False, 'tvshowtitle' : tvshowtitle, 'title' : title, 'year' : year, 'imdb' : imdb, 'tvdb' : tvdb, 'season' : season, 'episode' : episode}]
 		self.worker()
 		return self.list[0]
 
@@ -1520,7 +1531,7 @@ class tvshows:
 		syshandle = int(sys.argv[1])
 
 		addonPoster, addonBanner = control.addonPoster(), control.addonBanner()
-		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.fanart')
+		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.theme.fanart')
 
 		indicators = playcount.getShowIndicators()
 

@@ -1589,7 +1589,7 @@ msgid "Special Episodes"
 msgstr ""
 
 msgctxt "#33237"
-msgid "Fanart Backdrops"
+msgid "XXXXXXXXXXXXXXXXXXXXXX"
 msgstr ""
 
 msgctxt "#33238"
@@ -6298,6 +6298,10 @@ msgstr ""
 
 msgctxt "#34422"
 msgid "The type of rating to show. Either show the average rating cast by the public, or your own rating if available."
+msgstr ""
+
+msgctxt "#34423"
+msgid "The maximum number of movies or shows listed per page before requiring to navigate to the next page."
 msgstr ""
 
 

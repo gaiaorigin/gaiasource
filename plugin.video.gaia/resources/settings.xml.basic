@@ -161,12 +161,9 @@
 		<setting id="interface.theme.icon" type="action" label="33338" default="White" action="RunPlugin(plugin://plugin.video.gaia/?action=themeIconSelect)" />
 		<setting id="interface.theme.icon.quality" type="enum" label="33641" lvalues="33642|33643|33644" default="0" subsetting="true" visible="!eq(-1,Default)" />
 		<setting id="interface.theme.background" type="bool" label="32337" default="true" />
+		<setting id="interface.theme.fanart" type="bool" label="35260" default="true" />
 		<setting id="interface.theme.poster" type="enum" label="33453" lvalues="33112|33455|33456|33457" default="2" />
 		<setting id="interface.theme.banner" type="enum" label="33454" lvalues="33112|33455|33456" default="2" />
-
-		<setting type="lsep" label="[UPPERCASE][B]$ADDON[plugin.video.gaia 32311][/B][/UPPERCASE]" />
-		<setting type="sep" />
-		<setting id="interface.fanart" type="bool" label="33237" default="true" />
 
 		<setting type="lsep" label="[UPPERCASE][B]$ADDON[plugin.video.gaia 33787][/B][/UPPERCASE]" />
 		<setting type="sep" />
@@ -175,6 +172,7 @@
 
 		<setting type="lsep" label="[UPPERCASE][B]$ADDON[plugin.video.gaia 33232][/B][/UPPERCASE]" />
 		<setting type="sep" />
+		<setting id="interface.navigation.limit" type="slider" label="35307" default="50" range="5,200" option="int" />
 		<setting id="interface.navigation.cinema" type="bool" label="35567" default="false" />
 		<setting id="interface.navigation.cinema.progress" type="bool" label="35568" default="true" subsetting="true" visible="eq(-1,true)" />
 		<setting id="interface.navigation.cinema.curtains" type="bool" label="35584" default="true" subsetting="true" visible="eq(-2,true)" />

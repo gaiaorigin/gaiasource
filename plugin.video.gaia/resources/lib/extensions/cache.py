@@ -108,6 +108,7 @@ class Cache(database.Database):
 		return repr(data)
 
 	def _cacheDataFrom(self, data):
+		if data is None: return data
 		try: data = data.encode('utf-8')
 		except: pass
 		return ast.literal_eval(data)
