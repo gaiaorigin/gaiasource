@@ -286,50 +286,6 @@ def unwatch(type, imdb = None, tmdb = None, tvdb = None, season = None, episode 
 	except:
 		tools.Logger.error()
 
-def rate(imdb = None, tvdb = None, season = None, episode = None):
-	return _rating(action = 'rate', imdb = imdb, tvdb = tvdb, season = season, episode = episode)
-
-def unrate(imdb = None, tvdb = None, season = None, episode = None):
-	return _rating(action = 'unrate', imdb = imdb, tvdb = tvdb, season = season, episode = episode)
-
-def rateShow(imdb = None, tvdb = None, season = None, episode = None):
-	if tools.Settings.getInteger('accounts.informants.trakt.rating') == 1:
-		rate(imdb = imdb, tvdb = tvdb, season = season, episode = episode)
-
-def _rating(action, imdb = None, tvdb = None, season = None, episode = None):
-	try:
-		addon = 'script.trakt'
-		if tools.System.installed(addon):
-			data = {}
-			data['action'] = action
-			if not tvdb == None:
-				data['video_id'] = tvdb
-				if not episode == None:
-					data['media_type'] = 'episode'
-					data['dbid'] = 1
-					data['season'] = int(season)
-					data['episode'] = int(episode)
-				elif not season == None:
-					data['media_type'] = 'season'
-					data['dbid'] = 5
-					data['season'] = int(season)
-				else:
-					data['media_type'] = 'show'
-					data['dbid'] = 2
-			else:
-				data['video_id'] = imdb
-				data['media_type'] = 'movie'
-				data['dbid'] = 4
-
-			script = os.path.join(tools.System.path(addon), 'resources', 'lib', 'sqlitequeue.py')
-			sqlitequeue = imp.load_source('sqlitequeue', script)
-			data = {'action' : 'manualRating', 'ratingData' : data}
-			sqlitequeue.SqliteQueue().append(data)
-		else:
-			interface.Dialog.notification(title = 32315, message = 33659)
-	except:
-		pass
-
 def manager(imdb = None, tvdb = None, season = None, episode = None, refresh = True):
 	try:
 		interface.Loader.show()
@@ -741,6 +697,49 @@ def rateEpisode(imdb = None, tvdb = None, season = None, episode = None, rating 
 	items = request(imdb = imdb, tvdb = tvdb, season = season, episode = episode, rating = rating, items = items)
 	return getTrakt('/sync/ratings', {"shows": items}, timeout = timeout(items))
 
+def rate(imdb = None, tvdb = None, season = None, episode = None):
+	return _rate(action = 'rate', imdb = imdb, tvdb = tvdb, season = season, episode = episode)
+
+def unrate(imdb = None, tvdb = None, season = None, episode = None):
+	return _rate(action = 'unrate', imdb = imdb, tvdb = tvdb, season = season, episode = episode)
+
+def rateManual(imdb = None, tvdb = None, season = None, episode = None):
+	if tools.Settings.getInteger('accounts.informants.trakt.rating') == 1:
+		manualRate(imdb = imdb, tvdb = tvdb, season = season, episode = episode)
+
+def _rate(action, imdb = None, tvdb = None, season = None, episode = None):
+	try:
+		addon = 'script.trakt'
+		if tools.System.installed(addon):
+			data = {}
+			data['action'] = action
+			if not tvdb == None:
+				data['video_id'] = tvdb
+				if not episode == None:
+					data['media_type'] = 'episode'
+					data['dbid'] = 1
+					data['season'] = int(season)
+					data['episode'] = int(episode)
+				elif not season == None:
+					data['media_type'] = 'season'
+					data['dbid'] = 5
+					data['season'] = int(season)
+				else:
+					data['media_type'] = 'show'
+					data['dbid'] = 2
+			else:
+				data['video_id'] = imdb
+				data['media_type'] = 'movie'
+				data['dbid'] = 4
+
+			script = os.path.join(tools.System.path(addon), 'resources', 'lib', 'sqlitequeue.py')
+			sqlitequeue = imp.load_source('sqlitequeue', script)
+			data = {'action' : 'manualRating', 'ratingData' : data}
+			sqlitequeue.SqliteQueue().append(data)
+		else:
+			interface.Dialog.notification(title = 32315, message = 33659)
+	except:
+		tools.Logger.error()
 
 def getMovieTranslation(id, lang, full=False):
 	url = '/movies/%s/translations/%s' % (id, lang)

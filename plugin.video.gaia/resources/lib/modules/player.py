@@ -758,7 +758,7 @@ class player(xbmc.Player):
 		self._debridClear()
 		self._showStreams()
 		if control.window.getProperty('%s.player.overlay' % control.addonInfo('id')) == '7':
-			trakt.rateShow(imdb = self.idImdb, tvdb = self.idTvdb, season = self.season, episode = self.episode)
+			trakt.rateManual(imdb = self.idImdb, tvdb = self.idTvdb, season = self.season, episode = self.episode)
 		self._bingePlay()
 
 	def onPlayBackEnded(self):

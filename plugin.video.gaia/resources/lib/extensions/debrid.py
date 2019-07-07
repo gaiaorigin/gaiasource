@@ -296,6 +296,8 @@ class Premiumize(Debrid):
 		self.mParameters = None
 		self.mSuccess = None
 		self.mError = None
+		self.mErrorCode = None
+		self.mErrorDescription = None
 		self.mResult = None
 
 	##############################################################################
@@ -346,6 +348,8 @@ class Premiumize(Debrid):
 			self.mParameters = parameters
 			self.mSuccess = None
 			self.mError = None
+			self.mErrorCode = None
+			self.mErrorDescription = None
 
 			# Use GET parameters for uploading files/containers (src parameter).
 			if Premiumize.MethodGet or httpData:

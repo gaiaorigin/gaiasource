@@ -1,3 +1,0 @@
-Git Bash replace:
-
-find ./ -type f -exec sed -i -e 's/import pytz/from resources.lib.externals import pytz/g' {} \;
