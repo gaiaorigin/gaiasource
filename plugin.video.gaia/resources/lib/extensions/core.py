@@ -288,7 +288,8 @@ class Core:
 
 			if new:
 				if not self.silent and self.navigationCinema: self.navigationCinemaTrailer.cinemaStart(type = self.type)
-				tools.Logger.log('Initializing Scraping ...', name = 'CORE', level = tools.Logger.TypeNotice)
+				label = tools.Media.titleUniversal(metadata = metadata, title = title if tvshowtitle is None else tvshowtitle, year = year, season = season, episode = episode)
+				tools.Logger.log('Initializing Scraping [' + label + '] ...', name = 'CORE', level = tools.Logger.TypeNotice)
 				start = tools.Time.timestamp()
 				result = self.scrapeItem(title = title, year = year, imdb = imdb, tvdb = tvdb, season = season, episode = episode, tvshowtitle = tvshowtitle, premiered = premiered, metadata = metadata, preset = preset, seasoncount = seasoncount, exact = exact, autoplay = autoplay, cache = cache)
 				if result == None or self.progressCanceled(): # Avoid the no-streams notification right after the unavailable notification

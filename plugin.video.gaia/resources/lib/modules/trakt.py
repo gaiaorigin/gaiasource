@@ -238,7 +238,8 @@ def getTraktAddonEpisodeInfo():
 	if scrobble == 'true' and ExcludeHTTP == 'false' and not authorization == '': return True
 	else: return False
 
-def watch(type, imdb = None, tmdb = None, tvdb = None, season = None, episode = None, refresh = True, notification = False):
+def watch(type = None, imdb = None, tmdb = None, tvdb = None, season = None, episode = None, refresh = True, notification = False):
+	if type is None: type = tools.Media.TypeMovie if season is None else tools.Media.TypeEpisode
 	if tools.Media.typeTelevision(type):
 		if not episode == None:
 			markEpisodeAsWatched(imdb = imdb, tvdb = tvdb, season = season, episode = episode)
@@ -262,7 +263,8 @@ def watch(type, imdb = None, tmdb = None, tvdb = None, season = None, episode = 
 	except:
 		tools.Logger.error()
 
-def unwatch(type, imdb = None, tmdb = None, tvdb = None, season = None, episode = None, refresh = True, notification = False):
+def unwatch(type = None, imdb = None, tmdb = None, tvdb = None, season = None, episode = None, refresh = True, notification = False):
+	if type is None: type = tools.Media.TypeMovie if season is None else tools.Media.TypeEpisode
 	if tools.Media.typeTelevision(type):
 		if not episode == None:
 			markEpisodeAsNotWatched(imdb = imdb, tvdb = tvdb, season = season, episode = episode)
@@ -705,7 +707,7 @@ def unrate(imdb = None, tvdb = None, season = None, episode = None):
 
 def rateManual(imdb = None, tvdb = None, season = None, episode = None):
 	if tools.Settings.getInteger('accounts.informants.trakt.rating') == 1:
-		manualRate(imdb = imdb, tvdb = tvdb, season = season, episode = episode)
+		rate(imdb = imdb, tvdb = tvdb, season = season, episode = episode)
 
 def _rate(action, imdb = None, tvdb = None, season = None, episode = None):
 	try:
