@@ -755,7 +755,9 @@ class navigator:
 	def accountsNavigator(self):
 		from resources.lib.extensions import orionoid
 		orion = orionoid.Orionoid()
-		if orion.accountValid(): self.addDirectoryItem(35400, 'orionAccount', 'accountorion.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
+		try:
+			if orion.accountValid(): self.addDirectoryItem(35400, 'orionAccount', 'accountorion.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
+		except: pass
 		self.addDirectoryItem(33566, 'premiumizeAccount', 'accountpremiumize.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.addDirectoryItem(35200, 'offcloudAccount', 'accountoffcloud.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.addDirectoryItem(33567, 'realdebridAccount', 'accountrealdebrid.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
@@ -877,11 +879,14 @@ class navigator:
 		from resources.lib.extensions import orionoid
 		orion = orionoid.Orionoid()
 		self.addDirectoryItem(33256, 'orionLaunch', 'orionlaunch.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		if orion.accountAnonymousEnabled(): self.addDirectoryItem(35428, self.parameterize('orionAnonymous'), 'orion.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		if orion.accountValid(): self.addDirectoryItem(33339, 'orionAccount', 'orionaccount.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		if orion.accountFree(): self.addDirectoryItem(33768, 'orionWebsite', 'orionpremium.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
+		try:
+			if orion.accountAnonymousEnabled(): self.addDirectoryItem(35428, self.parameterize('orionAnonymous'), 'orion.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
+			if orion.accountValid(): self.addDirectoryItem(33339, 'orionAccount', 'orionaccount.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
+			if orion.accountFree(): self.addDirectoryItem(33768, 'orionWebsite', 'orionpremium.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
+		except: pass
 		self.addDirectoryItem(33011, 'orionSettings', 'orionsettings.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.addDirectoryItem(33354, 'orionWebsite', 'orionweb.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
+		self.addDirectoryItem(35636, 'orionUninstall', 'orionuninstall.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.endDirectory()
 
 	def premiumizeNavigator(self):

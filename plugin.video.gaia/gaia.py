@@ -1816,6 +1816,12 @@ elif action.startswith('orion'):
 			orionoid.Orionoid().addonLaunch()
 		except: pass
 
+	elif action == 'orionUninstall':
+		try:
+			from resources.lib.extensions import orionoid
+			orionoid.Orionoid.uninstall()
+		except: pass
+
 	elif action == 'orionWebsite':
 		try:
 			from resources.lib.extensions import orionoid

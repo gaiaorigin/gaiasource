@@ -612,22 +612,26 @@ class Hash(object):
 	@classmethod
 	def sha1(self, data):
 		import hashlib
-		return hashlib.sha1(data.encode('utf-8')).hexdigest().upper()
+		try: return hashlib.sha1(data.encode('utf-8')).hexdigest().upper()
+		except: return hashlib.sha1(data).hexdigest().upper() # If data contains non-encoable characters, like YggTorrent containers.
 
 	@classmethod
 	def sha256(self, data):
 		import hashlib
-		return hashlib.sha256(data.encode('utf-8')).hexdigest().upper()
+		try: return hashlib.sha256(data.encode('utf-8')).hexdigest().upper()
+		except: return hashlib.sha256(data).hexdigest().upper() # If data contains non-encoable characters, like YggTorrent containers.
 
 	@classmethod
 	def sha512(self, data):
 		import hashlib
-		return hashlib.sha512(data.encode('utf-8')).hexdigest().upper()
+		try: return hashlib.sha512(data.encode('utf-8')).hexdigest().upper()
+		except: return hashlib.sha512(data).hexdigest().upper() # If data contains non-encoable characters, like YggTorrent containers.
 
 	@classmethod
 	def md5(self, data):
 		import hashlib
-		return hashlib.md5(data.encode('utf-8')).hexdigest().upper()
+		try: return hashlib.md5(data.encode('utf-8')).hexdigest().upper()
+		except: return hashlib.md5(data).hexdigest().upper() # If data contains non-encoable characters, like YggTorrent containers.
 
 	@classmethod
 	def file(self, path):
@@ -1766,19 +1770,6 @@ class System(object):
 
 			# Splash
 			interface.Splash.popup(major = versionChangeMajor, wait = versionChangeMajor or not interface.Legal.initialized())
-
-			# gaiaremove
-			# Can be removed in later versions.
-			if versionOld < 400 and versionNew >= 400:
-				interface.Dialog.confirm(title = 'New Version', message = 'Many databases, settings, filters, and accounts have changed in Gaia 4. Using settings from Gaia 3 will break certain features and slow down the addon. All existing settings and data will be cleared now.')
-				interface.Loader.show()
-				from resources.lib.indexers import navigator
-				navigator.navigator().clearAll(force = True)
-				Backup.automaticClear()
-				Settings.clear()
-				Settings.set('internal.version', self.version())
-				File.deleteDirectory(File.joinPath(System.profile(), 'Scrapers'))
-				interface.Loader.hide()
 
 			# gaiaremove
 			# Can be removed in later versions.

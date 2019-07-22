@@ -8867,3 +8867,19 @@ msgstr ""
 msgctxt "#35632"
 msgid "Loader"
 msgstr ""
+
+msgctxt "#35633"
+msgid "Due to import limitations in Kodi, Orion is installed with Gaia by default. This feature will remove Orion and replace it with empty code. Orion will show up as [I]Orion Dummy 9.9.9[/I], but will not contain any of Orion's code. If you want to use Orion in the future, you will have to manually install it. Do you want to continue uninstalling Orion?"
+msgstr ""
+
+msgctxt "#35634"
+msgid "Orion is already uninstalled and running the dummy version that does not contain any code."
+msgstr ""
+
+msgctxt "#35635"
+msgid "Orion Uninstalled Successfully"
+msgstr ""
+
+msgctxt "#35636"
+msgid "Uninstall"
+msgstr ""

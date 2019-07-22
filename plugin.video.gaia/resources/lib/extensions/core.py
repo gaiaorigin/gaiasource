@@ -2544,7 +2544,8 @@ class Core:
 								except: link = pro.resolve(link)
 								if link:
 									if container:
-										hash = network.Container(link = link, download = True).hash()
+										container = network.Container(link = link, download = True)
+										hash = container.hash()
 										if hash: self.tProcessed = True
 									else:
 										self.tProcessed = True

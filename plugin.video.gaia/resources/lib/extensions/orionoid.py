@@ -77,6 +77,27 @@ try:
 			self.mHashLock = threading.Lock()
 
 		##############################################################################
+		# UNINSTALL
+		##############################################################################
+
+		@classmethod
+		def uninstall(self):
+			if interface.Dialog.option(title = 35400, message = 35633):
+				directory = tools.System.path(id = Orionoid.Id)
+				path = tools.File.joinPath(directory, 'addon.xml')
+				data = tools.File.readNow(path)
+				data = re.sub('id="' + Orionoid.Id + '"\s*version="(.*?)"', 'id="' + Orionoid.Id + '" version="9.9.9"', data, flags = re.S)
+				data = re.sub('\sname="Orion"', ' name="Orion Dummy"', data, flags = re.S)
+				data = re.sub('<extension\s*point="xbmc\.python\.pluginsource".*?<\/extension>', '', data, flags = re.S)
+				data = re.sub('<extension\s*point="xbmc\.python\.module".*?\/>', '', data, flags = re.S)
+				data = re.sub('<extension\s*point="xbmc\.service".*?\/>', '', data, flags = re.S)
+				tools.File.writeNow(path, data)
+				directories, files = tools.File.listDirectory(directory, absolute = True)
+				for i in directories:
+					tools.File.deleteDirectory(i)
+				interface.Dialog.notification(title = 35400, message = 35635, icon = interface.Dialog.IconSuccess)
+
+		##############################################################################
 		# LINK
 		##############################################################################
 
@@ -480,6 +501,14 @@ except ImportError:
 		Id = 'orion'
 		Name = 'Orion'
 		Scraper = 'oriscrapers'
+
+		##############################################################################
+		# UNINSTALL
+		##############################################################################
+
+		@classmethod
+		def uninstall(self):
+			interface.Dialog.confirm(title = 35400, message = 35634)
 
 	from resources.lib.extensions import tools
 	tools.Logger.error('Orion addon not installed or disabled')
