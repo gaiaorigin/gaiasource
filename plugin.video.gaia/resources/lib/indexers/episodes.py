@@ -373,10 +373,12 @@ class episodes:
 				if not 'show' in item or not 'episode' in item:
 					raise Exception()
 
-				title = item['episode']['title'].encode('utf-8')
+				try: title = item['episode']['title'].encode('utf-8')
+				except: title = item['episode']['title']
 				if title == None or title == '': raise Exception()
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				season = item['episode']['season']
 				season = re.sub('[^0-9]', '', '%01d' % int(season))
@@ -388,10 +390,12 @@ class episodes:
 				if episode == '0': raise Exception()
 				episode = episode.encode('utf-8')
 
-				tvshowtitle = item['show']['title'].encode('utf-8')
+				try: tvshowtitle = item['show']['title'].encode('utf-8')
+				except: tvshowtitle = item['show']['title']
 				if tvshowtitle == None or tvshowtitle == '': raise Exception()
 				tvshowtitle = client.replaceHTMLCodes(tvshowtitle)
-				tvshowtitle = tvshowtitle.encode('utf-8')
+				try: tvshowtitle = tvshowtitle.encode('utf-8')
+				except: pass
 
 				year = item['show']['year']
 				year = re.sub('[^0-9]', '', str(year))
@@ -537,7 +541,8 @@ class episodes:
 				tvshowtitle = item['show']['title']
 				if tvshowtitle == None or tvshowtitle == '': raise Exception()
 				tvshowtitle = client.replaceHTMLCodes(tvshowtitle)
-				tvshowtitle = tvshowtitle.encode('utf-8')
+				try: tvshowtitle = tvshowtitle.encode('utf-8')
+				except: pass
 
 				year = item['show']['year']
 				year = re.sub('[^0-9]', '', str(year))
@@ -629,7 +634,8 @@ class episodes:
 				title = client.parseDOM(item, 'EpisodeName')[0]
 				if title == '': title = '0'
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				season = client.parseDOM(item, 'SeasonNumber')[0]
 				season = '%01d' % int(season)
@@ -833,7 +839,8 @@ class episodes:
 				title = client.parseDOM(item, 'EpisodeName')[0]
 				if title == '': title = '0'
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				season = client.parseDOM(item, 'SeasonNumber')[0]
 				season = '%01d' % int(season)
@@ -1056,7 +1063,8 @@ class episodes:
 				title = item['name']
 				if title == None or title == '': raise Exception()
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				season = item['season']
 				season = re.sub('[^0-9]', '', '%01d' % int(season))
@@ -1075,7 +1083,8 @@ class episodes:
 				tvshowtitle = item['show']['name']
 				if tvshowtitle == None or tvshowtitle == '': raise Exception()
 				tvshowtitle = client.replaceHTMLCodes(tvshowtitle)
-				tvshowtitle = tvshowtitle.encode('utf-8')
+				try: tvshowtitle = tvshowtitle.encode('utf-8')
+				except: pass
 
 				try: tvshowyear = item['show']['year']
 				except: tvshowyear = year

@@ -37,7 +37,7 @@ class source:
 		self.download_link = '/engine/download_torrent?id='
 		self.login_link = '/user/login'
 		self.category_video = 2145
-		self.subcategory_any = "all"
+		self.subcategory_any = 'all'
 		self.subcategories_show = {'Série TV': '2184'}
 		self.subcategories_movie = {'Film': '2183', 'Animation': '2178'}
 
@@ -134,8 +134,8 @@ class source:
 			data = dict([(i, data[i][0]) if data[i] else (i, '') for i in data])
 
 			show = 'tvshowtitle' in data
-			title = data['tvshowtitle'] if show else data['title']
-			titleYear = '%s S%02dE%02d' % (data['tvshowtitle'], int(data['season']), int(data['episode'])) if show else '%s (%s)' % (data['title'], data['year'])
+			if show: subcategory = self.subcategories_show.values()[0] if len(self.subcategories_show) == 1 else self.subcategory_any
+			else: subcategory = self.subcategories_movie.values()[0] if len(self.subcategories_movie) == 1 else self.subcategory_any
 
 			if 'exact' in data and data['exact']:
 				query = title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
@@ -145,15 +145,12 @@ class source:
 				pack = False
 				packCount = None
 			else:
+				title = data['tvshowtitle'] if show else data['title']
 				year = int(data['year']) if 'year' in data and not data['year'] == None else None
 				season = int(data['season']) if 'season' in data and not data['season'] == None else None
 				episode = int(data['episode']) if 'episode' in data and not data['episode'] == None else None
 				pack = data['pack'] if 'pack' in data else False
 				packCount = data['packcount'] if 'packcount' in data else None
-
-				if show: subcategory = self.subcategories_show.values()[0] if len(self.subcategories_show) == 1 else self.subcategory_any
-				else: subcategory = self.subcategories_movie.values()[0] if len(self.subcategories_movie) == 1 else self.subcategory_any
-
 				if show:
 					# Search special episodes by name. All special episodes are added to season 0 by Trakt and TVDb. Hence, do not search by filename (eg: S02E00), since the season is not known.
 					if (season == 0 or episode == 0) and ('title' in data and not data['title'] == None and not data['title'] == ''):

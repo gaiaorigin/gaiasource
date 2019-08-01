@@ -681,10 +681,12 @@ class tvshows:
 
 		for item in items:
 			try:
-				title = item['title'].encode('utf-8')
+				try: title = item['title'].encode('utf-8')
+				except: title = item['title']
 				title = re.sub('\s(|[(])(UK|US|AU|\d{4})(|[)])$', '', title)
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				year = item['year']
 				year = re.sub('[^0-9]', '', str(year))
@@ -762,6 +764,7 @@ class tvshows:
 
 				list.append({'title': title, 'originaltitle': title, 'year': year, 'premiered': premiered, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'plot': plot, 'imdb': imdb, 'tvdb': tvdb, 'poster': '0', 'next': next})
 			except:
+				tools.Logger.error()
 				pass
 
 		return list
@@ -891,7 +894,8 @@ class tvshows:
 
 				title = client.parseDOM(item, 'a')[1]
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				year = client.parseDOM(item, 'span', attrs = {'class': 'lister-item-year.+?'})
 				year += client.parseDOM(item, 'span', attrs = {'class': 'year_type'})
@@ -1164,7 +1168,8 @@ class tvshows:
 				title = item['name']
 				title = re.sub('\s(|[(])(UK|US|AU|\d{4})(|[)])$', '', title)
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				year = item['premiered']
 				year = re.findall('(\d{4})', year)[0]
@@ -1355,7 +1360,8 @@ class tvshows:
 			except: title = ''
 			if title == '': title = '0'
 			title = client.replaceHTMLCodes(title)
-			title = title.encode('utf-8')
+			try: title = title.encode('utf-8')
+			except: pass
 
 			try: year = client.parseDOM(item, 'FirstAired')[0]
 			except: year = ''

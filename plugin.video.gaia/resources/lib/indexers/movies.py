@@ -772,9 +772,11 @@ class movies:
 
 		for item in items:
 			try:
-				title = item['title'].encode('utf-8')
+				try: title = item['title'].encode('utf-8')
+				except: title = item['title']
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				year = item['year']
 				year = re.sub('[^0-9]', '', str(year))
@@ -967,7 +969,8 @@ class movies:
 
 				title = client.parseDOM(item, 'a')[1]
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				year = client.parseDOM(item, 'span', attrs = {'class': 'lister-item-year.+?'})
 				year = re.findall('(\d{4})', year[0])[0]

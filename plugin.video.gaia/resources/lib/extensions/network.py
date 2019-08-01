@@ -592,7 +592,7 @@ class Networker(object):
 
 		if None in [globalIpAddress, globalIpName, globalIpType, globalProvider, globalOrganisation, globalSystem, globalContinentName, globalContinentCode, globalCountryName, globalCountryCode, globalRegionName, globalRegionCode, globalCityName, globalCityCode, globalLatitude, globalLongitude] or '' in [globalIpAddress, globalIpName, globalIpType, globalProvider, globalOrganisation, globalSystem, globalContinentName, globalContinentCode, globalCountryName, globalCountryCode, globalRegionName, globalRegionCode, globalCityName, globalCityCode, globalLatitude, globalLongitude]:
 			try:
-				result = tools.Converter.jsonFrom(urllib2.urlopen('https://tools.keycdn.com/geo.json'))['data']['geo']
+				result = tools.Converter.jsonFrom(urllib2.urlopen('https://tools.keycdn.com/geo.json').read())['data']['geo']
 				if 'ip' in result and globalIpAddress in [None, '']: globalIpAddress = result['ip']
 				if 'rdns' in result and globalIpName in [None, '']: globalIpName = result['rdns']
 				if 'continent_code' in result and globalContinentCode in [None, '']: globalContinentCode = result['continent_code']
@@ -606,7 +606,7 @@ class Networker(object):
 
 		if None in [globalIpAddress, globalIpName, globalIpType, globalProvider, globalOrganisation, globalSystem, globalContinentName, globalContinentCode, globalCountryName, globalCountryCode, globalRegionName, globalRegionCode, globalCityName, globalCityCode, globalLatitude, globalLongitude] or '' in [globalIpAddress, globalIpName, globalIpType, globalProvider, globalOrganisation, globalSystem, globalContinentName, globalContinentCode, globalCountryName, globalCountryCode, globalRegionName, globalRegionCode, globalCityName, globalCityCode, globalLatitude, globalLongitude]:
 			try:
-				result = tools.Converter.jsonFrom(urllib2.urlopen('http://extreme-ip-lookup.com/json/'))
+				result = tools.Converter.jsonFrom(urllib2.urlopen('http://extreme-ip-lookup.com/json/').read())
 				if 'query' in result and globalIpAddress in [None, '']: globalIpAddress = result['query']
 				if 'ipName' in result and globalIpName in [None, '']: globalIpName = result['ipName']
 				if 'ipType' in result and globalIpType in [None, '']: globalIpType = result['ipType']
@@ -623,7 +623,7 @@ class Networker(object):
 
 		if None in [globalIpAddress, globalIpName, globalIpType, globalProvider, globalOrganisation, globalSystem, globalContinentName, globalContinentCode, globalCountryName, globalCountryCode, globalRegionName, globalRegionCode, globalCityName, globalCityCode, globalLatitude, globalLongitude] or '' in [globalIpAddress, globalIpName, globalIpType, globalProvider, globalOrganisation, globalSystem, globalContinentName, globalContinentCode, globalCountryName, globalCountryCode, globalRegionName, globalRegionCode, globalCityName, globalCityCode, globalLatitude, globalLongitude]:
 			try:
-				result = tools.Converter.jsonFrom(urllib2.urlopen('http://ip-api.com/json'))
+				result = tools.Converter.jsonFrom(urllib2.urlopen('http://ip-api.com/json').read())
 				if 'query' in result and globalIpAddress in [None, '']: globalIpAddress = result['query']
 				if 'isp' in result and globalProvider in [None, '']: globalProvider = result['isp']
 				if 'org' in result and globalOrganisation in [None, '']: globalOrganisation = result['org']
@@ -640,7 +640,7 @@ class Networker(object):
 
 		if None in [globalIpAddress, globalIpName, globalIpType, globalProvider, globalOrganisation, globalSystem, globalContinentName, globalContinentCode, globalCountryName, globalCountryCode, globalRegionName, globalRegionCode, globalCityName, globalCityCode, globalLatitude, globalLongitude] or '' in [globalIpAddress, globalIpName, globalIpType, globalProvider, globalOrganisation, globalSystem, globalContinentName, globalContinentCode, globalCountryName, globalCountryCode, globalRegionName, globalRegionCode, globalCityName, globalCityCode, globalLatitude, globalLongitude]:
 			try:
-				result = tools.Converter.jsonFrom(urllib2.urlopen('http://freegeoip.net/json/'))
+				result = tools.Converter.jsonFrom(urllib2.urlopen('http://freegeoip.net/json/').read())
 				if 'ip' in result and globalIpAddress in [None, '']: globalIpAddress = result['ip']
 				if 'country_name' in result and globalCountryName in [None, '']: globalCountryName = result['country_name']
 				if 'country_code' in result and globalCountryCode in [None, '']: globalCountryCode = result['country_name']

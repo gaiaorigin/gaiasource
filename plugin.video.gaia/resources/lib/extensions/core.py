@@ -301,8 +301,9 @@ class Core:
 							try: background = metadata['fanart3']
 							except: background = None
 					self.navigationCinemaTrailer.cinemaStart(type = self.type, background = background)
-				label = tools.Media.titleUniversal(metadata = metadata, title = title if tvshowtitle is None else tvshowtitle, year = year, season = season, episode = episode)
-				tools.Logger.log('Initializing Scraping [' + label + '] ...', name = 'CORE', level = tools.Logger.TypeNotice)
+				if exact: label = title if title else tvshowtitle
+				else: label = tools.Media.titleUniversal(metadata = metadata, title = title if tvshowtitle is None else tvshowtitle, year = year, season = season, episode = episode)
+				tools.Logger.log('Initializing Scraping [' + label.encode('utf8') + '] ...', name = 'CORE', level = tools.Logger.TypeNotice)
 				start = tools.Time.timestamp()
 				result = self.scrapeItem(title = title, year = year, imdb = imdb, tvdb = tvdb, season = season, episode = episode, tvshowtitle = tvshowtitle, premiered = premiered, metadata = metadata, preset = preset, seasoncount = seasoncount, exact = exact, autoplay = autoplay, cache = cache)
 				if result == None or self.progressCanceled(): # Avoid the no-streams notification right after the unavailable notification

@@ -263,6 +263,8 @@
 		<setting id="interface.sort.documentaries.order" type="enum" label="33679" lvalues="33649|33650" default="0" subsetting="true" />
 		<setting id="interface.sort.shorts.type" type="enum" label="35193" lvalues="33564|33039|35187|35188|35391|35392|35393" default="0" />
 		<setting id="interface.sort.shorts.order" type="enum" label="33679" lvalues="33649|33650" default="0" subsetting="true" />
+		<setting id="interface.sort.shows.type" type="enum" label="35191" lvalues="33564|33039|35187|35188|35391|35392|35393" default="0" />
+		<setting id="interface.sort.shows.order" type="enum" label="33679" lvalues="33649|33650" default="0" subsetting="true" />
 		<setting id="interface.sort.progress.type" type="enum" label="35572" lvalues="33564|33039|35187|35188|35391|35392|35393" default="6" />
 		<setting id="interface.sort.progress.order" type="enum" label="33679" lvalues="33649|33650" default="1" subsetting="true" />
 		<setting id="interface.sort.calendar.type" type="enum" label="35573" lvalues="33564|33039|35187|35188|35391|35392|35393" default="4" />

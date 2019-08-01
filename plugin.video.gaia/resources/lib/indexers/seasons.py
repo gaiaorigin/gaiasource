@@ -474,7 +474,8 @@ class seasons:
 				title = client.parseDOM(item, 'EpisodeName')[0]
 				if title == '': title = '0'
 				title = client.replaceHTMLCodes(title)
-				title = title.encode('utf-8')
+				try: title = title.encode('utf-8')
+				except: pass
 
 				try: thumb = client.parseDOM(item, 'filename')[0]
 				except: thumb = ''
