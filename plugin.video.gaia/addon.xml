@@ -10,7 +10,7 @@
 		<import addon="script.gaia.skins" version="9.9.9" optional="true" />
 		<import addon="repository.gaia" version="9.9.9" optional="true" />
 
-		<import addon="script.module.orion" version="2.0.0" />
+		<import addon="script.module.orion" version="3.0.0" />
 		<import addon="script.module.resolveurl" version="5.0.06" />
 		<import addon="script.module.urlresolver" version="3.0.29" />
 		<import addon="script.module.metahandler" version="2.9.0" />

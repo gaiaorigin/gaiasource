@@ -1749,10 +1749,10 @@ class Metadata(object):
 		value = re.sub(r'[^\w]', '', value)
 		return cleantitle.get(value).lower()
 
-	def __match(self):
+	def __match(self, season = True):
 		# Match the parts of the title with the name, since self.__match() is not enough. Eg Detective Conan (anime) S19E01 gets True Detective episodes.
 		try:
-			if not self.__containsEpisode():
+			if not self.__containsEpisode(season = season):
 				return False
 			if not self.__containsTitle():
 				return False
@@ -1828,9 +1828,10 @@ class Metadata(object):
 				return True
 		return False
 
-	def __containsEpisode(self):
+	# season: ingore the season number (for season packs on YggTorrent).
+	def __containsEpisode(self, season = True):
 		# Must always match the episode number.
-		if self.mSeason == None or self.mEpisode == None: # Eg: movie, does not contain season/episode.
+		if not season or self.mSeason == None or self.mEpisode == None: # Eg: movie, does not contain season/episode.
 			return True
 
 		# Special seasons and episodes.
@@ -1885,9 +1886,9 @@ class Metadata(object):
 		else:
 			return percentage >= self.mIgnoreContains and not skip
 
-	def ignore(self, size = True, seeds = True):
+	def ignore(self, size = True, seeds = True, season = True):
 		# Ignore if the title and name do not correspond.
-		if not self.__match():
+		if not self.__match(season = season):
 			return True
 
 		for value in Metadata.DictionaryIgnore.itervalues():

@@ -2567,6 +2567,7 @@ class Media(object):
 	TypeSeason = 'season'
 	TypeEpisode = 'episode'
 
+	NameSeasonSpecial = xbmcaddon.Addon(System.GaiaAddon).getLocalizedString(35637).encode('utf-8')
 	NameSeasonLong = xbmcaddon.Addon(System.GaiaAddon).getLocalizedString(32055).encode('utf-8')
 	NameSeasonShort = NameSeasonLong[0].upper()
 	NameEpisodeLong = xbmcaddon.Addon(System.GaiaAddon).getLocalizedString(33028).encode('utf-8')
@@ -2655,7 +2656,7 @@ class Media(object):
 	Formats = None
 
 	@classmethod
-	def _format(self, format, title = None, year = None, season = None, episode = None):
+	def _format(self, format, title = None, year = None, season = None, episode = None, special = False):
 		order = format[0]
 		format = format[1]
 		if order == Media.OrderTitle:
@@ -2665,7 +2666,8 @@ class Media(object):
 		elif order == Media.OrderYearTitle:
 			return format % (year, title)
 		elif order == Media.OrderSeason:
-			return format % (season)
+			if season == 0 and special: return Media.NameSeasonSpecial
+			else: return format % (season)
 		elif order == Media.OrderEpisode:
 			return format % (episode)
 		elif order == Media.OrderSeasonEpisode:
@@ -2745,7 +2747,7 @@ class Media(object):
 			Media.Formats[Media.TypeEpisode] = Media.FormatsEpisode[setting]
 
 	@classmethod
-	def title(self, type = TypeNone, metadata = None, title = None, year = None, season = None, episode = None, encode = False, pack = False):
+	def title(self, type = TypeNone, metadata = None, title = None, year = None, season = None, episode = None, encode = False, pack = False, special = False):
 		if not metadata == None: title, year, season, episode, packs = self._extract(metadata = metadata, encode = encode)
 		title, year, season, episode = self._data(title = title, year = year, season = season, episode = episode, encode = encode)
 
@@ -2760,7 +2762,7 @@ class Media(object):
 
 		self._initialize()
 		format = Media.Formats[type]
-		return self._format(format = format, title = title, year = year, season = season, episode = episode)
+		return self._format(format = format, title = title, year = year, season = season, episode = episode, special = special)
 
 	# Raw title to search on the web/scrapers.
 	@classmethod

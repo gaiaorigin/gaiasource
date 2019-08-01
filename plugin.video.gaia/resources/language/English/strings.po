@@ -8883,3 +8883,7 @@ msgstr ""
 msgctxt "#35636"
 msgid "Uninstall"
 msgstr ""
+
+msgctxt "#35637"
+msgid "Specials"
+msgstr ""

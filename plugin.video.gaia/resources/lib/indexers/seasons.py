@@ -672,7 +672,7 @@ class seasons:
 				imdb, tvdb, year, season = i['imdb'], i['tvdb'], i['year'], i['season']
 				title = i['tvshowtitle']
 				label = None
-				try: label = media.title(tools.Media.TypeSeason, season = season)
+				try: label = media.title(tools.Media.TypeSeason, season = season, special = True)
 				except: pass
 				if label == None: label = season
 				if multi == True and not label in title and not title in label: label = '%s - %s' % (title, label)
