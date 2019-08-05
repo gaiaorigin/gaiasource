@@ -163,7 +163,7 @@
 		<setting id="interface.navigation.cinema.progress" type="bool" label="35568" default="true" subsetting="true" visible="eq(-4,true)" />
 		<setting id="interface.navigation.cinema.interrupt" type="bool" label="35569" default="false" subsetting="true" visible="eq(-5,true)" />
 		<setting id="interface.navigation.scrape" type="enum" label="32335" lvalues="33105|32332|32336" default="0" />
-		<setting id="interface.navigation.scrape.providers" type="bool" label="32345" default="false" subsetting="true" visible="!eq(-1,2)" />
+		<setting id="interface.navigation.scrape.providers" type="bool" label="32345" default="true" subsetting="true" visible="!eq(-1,2)" />
 		<setting id="interface.navigation.scrape.background" type="enum" label="32337" subsetting="true" lvalues="33112|33248|35463|35260" default="1" visible="eq(-2,0)" />
 		<setting id="interface.navigation.streams" type="enum" label="33224" lvalues="33105|32333|32332" default="0" />
 		<setting id="interface.navigation.streams.reload" type="enum" label="35545" subsetting="true" lvalues="33107|33109|35546" default="1" visible="eq(-1,0)" />
