@@ -27,7 +27,6 @@ from resources.lib.modules import debrid
 from resources.lib.modules import workers
 from resources.lib.modules import trakt
 from resources.lib.modules import tvmaze
-from resources.lib.extensions import cache
 from resources.lib.extensions import network
 from resources.lib.extensions import interface
 from resources.lib.extensions import window
@@ -40,6 +39,7 @@ from resources.lib.extensions import provider
 from resources.lib.extensions import orionoid
 from resources.lib.extensions import debrid as debridx
 from resources.lib.extensions import metadata as metadatax
+from resources.lib.extensions import cache as cachex
 from resources.lib.externals.beautifulsoup import BeautifulSoup
 
 try: from sqlite3 import dbapi2 as database
@@ -414,17 +414,17 @@ class Core:
 				# Remove years in brackets from titles.
 				# Do not remove years that are not between brackets, since it might be part of the title. Eg: 2001 A Space Oddesy
 				# Eg: Heartland (CA) (2007) -> Heartland (CA)
-				value = re.sub('\([0-9]{4}\)', '', value)
-				value = re.sub('\[[0-9]{4}\]', '', value)
-				value = re.sub('\{[0-9]{4}\}', '', value)
+				value = re.sub('\([0-9]{4}\)', '', value, re.UNICODE)
+				value = re.sub('\[[0-9]{4}\]', '', value, re.UNICODE)
+				value = re.sub('\{[0-9]{4}\}', '', value, re.UNICODE)
 
 				# Remove symbols.
 				# Eg: Heartland (CA) -> Heartland CA
 				# Replace with space: Brooklyn Nine-Nine -> Brooklyn Nine Nine
-				value = re.sub('[^A-Za-z0-9\s]', ' ', value)
+				value = re.sub('\s{2,}', ' ', re.sub('[-!$%^&*()_+|~=`{}\[\];\'<>?,.;\/]', ' ', value, re.UNICODE))
 
 				# Replace extra spaces.
-				value = re.sub('\s\s+', ' ', value)
+				value = re.sub('\s\s+', ' ', value, re.UNICODE)
 				value = value.strip()
 
 				return value
@@ -501,7 +501,6 @@ class Core:
 
 			def additionalInformation(title, tvshowtitle, imdb, tvdb):
 				threadsInformation = []
-
 				threadsInformation.append(workers.Thread(additionalInformationTitle, title, tvshowtitle, imdb, tvdb))
 
 				if not tvshowtitle == None: title = tvshowtitle
@@ -512,16 +511,7 @@ class Core:
 				[thread.join() for thread in threadsInformation]
 
 				# Title for the foreign language in the settings.
-				if self.titleLocal:
-					local = tools.Converter.unicode(self.titleLocal)
-					if not local == tools.Converter.unicode(title):
-						found = False
-						for value in self.titleAlternatives.itervalues():
-							if tools.Converter.unicode(value) == local:
-								found = True
-								break
-						if not found:
-							self.titleAlternatives['local'] = self.titleLocal
+				if self.titleLocal: self.titleAlternatives['local'] = self.titleLocal
 
 			def additionalInformationCharacters(title, imdb, tvdb):
 				try:
@@ -532,17 +522,28 @@ class Core:
 					tmdbApi = tools.Settings.getString('accounts.informants.tmdb.api') if tools.Settings.getBoolean('accounts.informants.tmdb.enabled') else ''
 					if tmdbApi == '': tmdbApi = tools.System.obfuscate(tools.Settings.getString('internal.tmdb.api', raw = True))
 					if not tmdbApi == '':
-						result = cache.Cache().cacheLong(client.request, 'http://api.themoviedb.org/3/find/%s?api_key=%s&external_source=imdb_id' % (imdb, tmdbApi))
+						result = cachex.Cache().cacheLong(client.request, 'http://api.themoviedb.org/3/find/%s?api_key=%s&external_source=imdb_id' % (imdb, tmdbApi))
 						self.progressInformationCharacters = 25
 						result = json.loads(result)
-						if 'original_title' in result: # Movies
-							self.titleOriginal = result['original_title']
-						elif 'original_name' in result: # Shows
-							self.titleOriginal = result['original_name']
+						if not isinstance(result, list): result = [result]
+						for i in result:
+							for j in i:
+								for key, value in i.iteritems():
+									if not isinstance(value, list): value = [value]
+									for k in value:
+										if 'original_title' in k: # Movies
+											self.titleOriginal = k['original_title']
+											break
+										elif 'original_name' in k: # Shows
+											self.titleOriginal = k['original_name']
+											break
+									if self.titleOriginal: break
+								if self.titleOriginal: break
+							if self.titleOriginal: break
 
 					if not self.titleOriginal:
 						self.progressInformationCharacters = 50
-						result = cache.Cache().cacheLong(client.request, 'http://www.imdb.com/title/%s' % imdb)
+						result = cachex.Cache().cacheLong(client.request, 'http://www.imdb.com/title/%s' % imdb)
 						self.progressInformationCharacters = 75
 						result = BeautifulSoup(result)
 						resultTitle = result.find_all('div', class_ = 'originalTitle')
@@ -603,22 +604,21 @@ class Core:
 
 					self.progressInformationCharacters = 100
 				except:
-					pass
+					tools.Logger.error()
 
 			def additionalInformationTitle(title, tvshowtitle, imdb, tvdb):
 				self.progressInformationLanguage = 25
 				if tvshowtitle == None:
 					content = 'movie'
-					title = cleantitle.normalize(title)
 					self.titleLocal = self.getLocalTitle(title, imdb, tvdb, content)
 					self.progressInformationLanguage = 50
 					self.titleAliases = self.getAliasTitles(imdb, self.titleLocal, content)
 				else:
 					content = 'tvshow'
-					tvshowtitle = cleantitle.normalize(tvshowtitle)
 					self.titleLocal = self.getLocalTitle(tvshowtitle, imdb, tvdb, content)
 					self.progressInformationLanguage = 50
 					self.titleAliases = self.getAliasTitles(imdb, self.titleLocal, content)
+				self.titleAliases = list(set(self.titleAliases))
 				self.progressInformationLanguage = 100
 
 			def initializeProviders(movie, preset, imdb, tvdb, excludes):
@@ -639,10 +639,29 @@ class Core:
 			tools.Logger.log('Starting Scraping ...', name = 'CORE', level = tools.Logger.TypeNotice)
 
 			threads = []
+			movie = tvshowtitle == None if self.type == None else (self.type == tools.Media.TypeMovie or self.type == self.type == tools.Media.TypeDocumentary or self.type == self.type == tools.Media.TypeShort)
+
+			self.titleLanguages = {}
+			self.titleAlternatives = {}
+			self.titleLocal = None
+			self.titleAliases = []
+			self.titleOriginal = None
+			self.titleAbbreviation = None
+			self.titleForeign1 = None
+			self.titleForeign2 = None
+			self.titleUmlaut1 = None
+			self.titleUmlaut2 = None
 
 			title = titleClean(title)
 			tvshowtitle = titleClean(tvshowtitle)
-			movie = tvshowtitle == None if self.type == None else (self.type == tools.Media.TypeMovie or self.type == self.type == tools.Media.TypeDocumentary or self.type == self.type == tools.Media.TypeShort)
+
+			# With non-ASCII characters.
+			self.titleAlternatives['raw'] = title if movie else tvshowtitle
+
+			# Replace accents with ASCII characters.
+			# Eg: é -> e
+			title = cleantitle.normalize(title)
+			tvshowtitle = cleantitle.normalize(tvshowtitle)
 
 			self.streamsTotal = 0
 			self.streamsHdUltra = 0
@@ -808,17 +827,6 @@ class Core:
 			control.makeFile(control.dataPath)
 			self.sourceFile = control.providercacheFile
 
-			self.titleLanguages = {}
-			self.titleAlternatives = {}
-			self.titleLocal = None
-			self.titleAliases = []
-			self.titleOriginal = None
-			self.titleAbbreviation = None
-			self.titleForeign1 = None
-			self.titleForeign2 = None
-			self.titleUmlaut1 = None
-			self.titleUmlaut2 = None
-
 			self.enabledProviders = tools.Settings.getBoolean('interface.navigation.scrape.providers')
 			self.enabledDevelopers = tools.System.developers()
 			self.enabledForeign = tools.Settings.getBoolean('scraping.foreign.enabled')
@@ -893,12 +901,8 @@ class Core:
 						if providerOrion and providerOrion['selected']:
 							tools.Logger.log('Scraping Orion', name = 'CORE', level = tools.Logger.TypeNotice)
 							threadOrion = None
-							if movie:
-								title = cleantitle.normalize(title)
-								threadOrion = workers.Thread(self.scrapeMovie, title, self.titleLocal, self.titleAliases, year, imdb, providerOrion, exact, cache)
-							else:
-								tvshowtitle = cleantitle.normalize(tvshowtitle)
-								threadOrion = workers.Thread(self.scrapeEpisode, title, self.titleLocal, self.titleAliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, providerOrion, exact, cache)
+							if movie: threadOrion = workers.Thread(self.scrapeMovie, title, self.titleLocal, self.titleAliases, year, imdb, providerOrion, exact, cache)
+							else: threadOrion = workers.Thread(self.scrapeEpisode, title, self.titleLocal, self.titleAliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, providerOrion, exact, cache)
 
 							threadOrion.start()
 							timerSingle.start()
@@ -980,15 +984,26 @@ class Core:
 						time.sleep(0.3) # Ensure the time thread (0.2 interval) is stopped.
 						return None
 
-				self.titleAlternatives = {key : value for key, value in self.titleAlternatives.iteritems() if not titleClean(value) == title} # Only if the title is differnt to main title.
-				self.titleAlternatives = {key : list(set(value)) for key, value in self.titleAlternatives.iteritems()} # Remove duplicates.
+				if self.enabledForeign:
+					# Add aliases in case scraping.foreign.characters is disabled.
+					for i in range(len(self.titleAliases)):
+						self.titleAlternatives['alias' + str(i + 1)] = self.titleAliases[i]
+
+				# Remove duplicates.
+				seen = set([title, tvshowtitle])
+				for key in self.titleAlternatives.keys():
+					try: unicode = self.titleAlternatives[key].encode('utf-8')
+					except: unicode = None
+					if self.titleAlternatives[key] in seen or (unicode and unicode in seen):
+						del self.titleAlternatives[key]
+					else:
+						seen.add(self.titleAlternatives[key])
+						if unicode: seen.add(unicode)
 
 				if movie:
-					title = cleantitle.normalize(title)
 					for source in self.providers:
 						threads.append(workers.Thread(self.scrapeMovieAlternatives, self.titleAlternatives, title, self.titleLocal, self.titleAliases, year, imdb, source, exact, cache)) # Only language title for the first thread.
 				else:
-					tvshowtitle = cleantitle.normalize(tvshowtitle)
 					for source in self.providers:
 						threads.append(workers.Thread(self.scrapeEpisodeAlternatives, self.titleAlternatives, title, self.titleLocal, self.titleAliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, source, exact, cache)) # Only language title for the first thread.
 
@@ -1304,30 +1319,30 @@ class Core:
 
 	def scrapeMovieAlternatives(self, alternativetitles, title, localtitle, aliases, year, imdb, source, exact, cache):
 		threads = []
-		threads.append(workers.Thread(self.scrapeMovie, title, localtitle, aliases, year, imdb, source, exact, cache))
+		threads.append(workers.Thread(self.scrapeMovie, title, alternativetitles, localtitle, aliases, year, imdb, source, exact, cache))
 		if not source['id'] == 'oriscrapers': # Do not scrape alternative titles for Orion.
 			for key, value in alternativetitles.iteritems():
-				threads.append(workers.Thread(self.scrapeMovie, value, localtitle, aliases, year, imdb, source, exact, cache, key))
+				sourceNew = provider.Provider.copy(source) # Copy, since the object is used in multiple threads with alternative titles.
+				threads.append(workers.Thread(self.scrapeMovie, value, alternativetitles, localtitle, aliases, year, imdb, sourceNew, exact, cache, key))
 		[thread.start() for thread in threads]
 		[thread.join() for thread in threads]
 
-	def scrapeMovie(self, title, localtitle, aliases, year, imdb, source, exact, cache, mode = None):
+	def scrapeMovie(self, title, alternativetitles, localtitle, aliases, year, imdb, source, exact, cache, mode = None):
 		connection = None
-		try:
-			# Replace symbols with spaces. Eg: K.C. Undercover
-			try: title = re.sub('\s{2,}', ' ', re.sub('[^a-zA-Z\d\s:]', ' ', title)).strip()
-			except: pass
 
-			if localtitle == None: localtitle = title
-			if mode == None: mode = ''
-			sourceId = source['id']
-			sourceObject = source['object']
-			sourceType = source['type']
-			sourceName = source['name']
-			sourceLabel = source['label']
-			sourceAddon = source['addon']
-		except:
-			pass
+		# Replace symbols with spaces.
+		# Search for all symbols (except :), instead of non-alphanumeric characters, in order to keep unicode characters.
+		try: title = re.sub('\s{2,}', ' ', re.sub('[-!$%^&*()_+|~=`{}\[\];\'<>?,.;\/]', ' ', title, re.UNICODE)).strip()
+		except: pass
+
+		if localtitle == None: localtitle = title
+		if mode == None: mode = ''
+		sourceId = source['id']
+		sourceObject = source['object']
+		sourceType = source['type']
+		sourceName = source['name']
+		sourceLabel = source['label']
+		sourceAddon = source['addon']
 
 		try:
 			try:
@@ -1372,8 +1387,12 @@ class Core:
 
 		try:
 			if url == None:
-				try: url = sourceObject.movie(imdb, title, localtitle, year)
-				except: url = sourceObject.movie(imdb, title, localtitle, aliases, year)
+				try: url = sourceObject.movie(imdb = imdb, title = title, alternativetitles = alternativetitles, localtitle = localtitle, aliases = aliases, year = year)
+				except:
+					try: url = sourceObject.movie(imdb = imdb, title = title, alternativetitles = alternativetitles, localtitle = localtitle, year = year)
+					except:
+						try: url = sourceObject.movie(imdb, title, localtitle, year)
+						except: url = sourceObject.movie(imdb, title, localtitle, aliases, year)
 				if url == None: raise Exception()
 				if exact:
 					try: url += '&exact=1'
@@ -1481,32 +1500,32 @@ class Core:
 
 	def scrapeEpisodeAlternatives(self, alternativetitles, title, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, source, exact, cache):
 		threads = []
-		threads.append(workers.Thread(self.scrapeEpisode, title, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, source, exact, cache))
+		threads.append(workers.Thread(self.scrapeEpisode, title, alternativetitles, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, source, exact, cache))
 		if not source['id'] == 'oriscrapers': # Do not scrape alternative titles for Orion.
 			for key, value in alternativetitles.iteritems():
-				threads.append(workers.Thread(self.scrapeEpisode, title, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, value, premiered, source, exact, cache, key))
+				sourceNew = provider.Provider.copy(source) # Copy, since the object is used in multiple threads with alternative titles.
+				threads.append(workers.Thread(self.scrapeEpisode, title, alternativetitles, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, value, premiered, sourceNew, exact, cache, key))
 		[thread.start() for thread in threads]
 		[thread.join() for thread in threads]
 
-	def scrapeEpisode(self, title, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, source, exact, cache, mode = None):
+	def scrapeEpisode(self, title, alternativetitles, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, source, exact, cache, mode = None):
 		connection = None
-		try:
-			# Replace symbols with spaces. Eg: K.C. Undercover
-			try: title = re.sub('\s{2,}', ' ', re.sub('[^a-zA-Z\d\s:]', ' ', title)).strip()
-			except: pass
-			try: tvshowtitle = re.sub('\s{2,}', ' ', re.sub('[^a-zA-Z\d\s:]', ' ', tvshowtitle)).strip()
-			except: pass
 
-			if localtitle == None: localtitle = title
-			if mode == None: mode = ''
-			sourceId = source['id']
-			sourceObject = source['object']
-			sourceType = source['type']
-			sourceName = source['name']
-			sourceLabel = source['label']
-			sourceAddon = source['addon']
-		except:
-			pass
+		# Replace symbols with spaces. Eg: K.C. Undercover
+		# Search for all symbols (except :), instead of non-alphanumeric characters, in order to keep unicode characters.
+		try: title = re.sub('\s{2,}', ' ', re.sub('[-!$%^&*()_+|~=`{}\[\];\'<>?,.;\/]', ' ', title, re.UNICODE)).strip()
+		except: pass
+		try: tvshowtitle = re.sub('\s{2,}', ' ', re.sub('[-!$%^&*()_+|~=`{}\[\];\'<>?,.;\/]', ' ', tvshowtitle, re.UNICODE)).strip()
+		except: pass
+
+		if localtitle == None: localtitle = title
+		if mode == None: mode = ''
+		sourceId = source['id']
+		sourceObject = source['object']
+		sourceType = source['type']
+		sourceName = source['name']
+		sourceLabel = source['label']
+		sourceAddon = source['addon']
 
 		try:
 			try:
@@ -1551,8 +1570,13 @@ class Core:
 
 		try:
 			if url == None:
-				try: url = sourceObject.tvshow(imdb, tvdb, tvshowtitle, localtitle, year)
-				except: url = sourceObject.tvshow(imdb, tvdb, tvshowtitle, localtitle, aliases, year)
+				try: url = sourceObject.tvshow(imdb = imdb, tvdb = tvdb, tvshowtitle = tvshowtitle, alternativetitles = alternativetitles, localtitle = localtitle, aliases = aliases, year = year)
+				except:
+					try: url = sourceObject.tvshow(imdb = imdb, tvdb = tvdb, tvshowtitle = tvshowtitle, alternativetitles = alternativetitles, localtitle = localtitle, year = year)
+					except:
+						try: url = sourceObject.tvshow(imdb, tvdb, tvshowtitle, localtitle, year)
+						except: url = sourceObject.tvshow(imdb, tvdb, tvshowtitle, localtitle, aliases, year)
+
 				if url == None: raise Exception()
 				if exact:
 					try: url += '&exact=1'
@@ -1584,7 +1608,6 @@ class Core:
 			if self.silent:
 				try: sourceObject.silent()
 				except: pass
-
 			if ep_url == None: ep_url = sourceObject.episode(url, imdb, tvdb, title, premiered, season, episode)
 			if ep_url == None: return
 			try:
@@ -1606,7 +1629,7 @@ class Core:
 			pass
 
 		try:
-			def _scrapeEpisode(url, mode, sourceId, sourceObject, sourceName, tvshowtitle, season, episode, imdb, currentSources, pack, packcount, exact):
+			def _scrapeEpisode(url, mode, sourceId, sourceObject, sourceName, tvshowtitle, season, episode, imdb, pack, packcount, exact):
 				try:
 					sources = []
 					sources = sourceObject.sources(url, self.hostDict, self.hostprDict)
@@ -1711,19 +1734,32 @@ class Core:
 					new_url = ep_url
 				new_url_encoded = urllib.urlencode(new_url)
 
+			threads = []
+
+			seasonObject = None
+			seasonPack = tools.Settings.getBoolean('scraping.packs.enabled') and source['pack'] and not source['external'] and not season == 0 and not episode == 0
+			if seasonPack: # Must be created here and not after the normal thread started. Otherwise there are issues with threading and lock objects that have to be copied.
+				try: seasonObject = provider.Provider.copy(source)['object'] # Copy, since the object is used in multiple threads with alternative titles.
+				except: pass
+
 			# Get normal episodes
-			currentSources = []
-			currentSources += _scrapeEpisode(new_url_encoded, mode, sourceId, sourceObject, sourceName, tvshowtitle, season, episode, imdb, currentSources, False, seasoncount, exact)
+			thread = threading.Thread(target = _scrapeEpisode, args = (new_url_encoded, mode, sourceId, sourceObject, sourceName, tvshowtitle, season, episode, imdb, False, seasoncount, exact))
+			threads.append(thread)
+			thread.start()
 
 			# Get season packs
 			# Do not get season packs for special episodes.
-			if tools.Settings.getBoolean('scraping.packs.enabled') and source['pack'] and not source['external'] and not season == 0 and not episode == 0:
+			if seasonPack:
 				try:
 					new_url['pack'] = True
 					new_url_encoded = urllib.urlencode(new_url)
-					_scrapeEpisode(new_url_encoded, mode, sourceId, sourceObject, sourceName, tvshowtitle, season, episode, imdb, currentSources, True, seasoncount, exact)
+					thread = threading.Thread(target = _scrapeEpisode, args = (new_url_encoded, mode, sourceId, seasonObject, sourceName, tvshowtitle, season, episode, imdb, True, seasoncount, exact))
+					threads.append(thread)
+					thread.start()
 				except:
 					tools.Logger.error()
+
+			[thread.join() for thread in threads]
 		except:
 			tools.Logger.error()
 
@@ -2125,7 +2161,7 @@ class Core:
 						try: tvdb = metadata['tvdb']
 						except: tvdb = None
 
-						extra = interface.Format.font(title + ' ' + tools.Media.title(metadata = None, title = '', year = year, season = season, episode = episode).strip(), bold = True, color = interface.Format.colorOrion())
+						extra = interface.Format.font(title + ' ' + tools.Media.title(metadata = None, title = '', year = year, season = season, episode = episode, skin = False).strip(), bold = True)
 						if not self.navigationStreamsSpecial: extra += interface.Format.separator()
 
 						try: poster = metadata['poster'] if 'poster' in metadata else metadata['poster2'] if 'poster2' in metadata else metadata['poster3'] if 'poster3' in metadata else None

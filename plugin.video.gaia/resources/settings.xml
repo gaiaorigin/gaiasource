@@ -524,6 +524,14 @@
 		<setting id="providers.general.premium.member.easynews" type="bool" label="EasyNews" subsetting="true" default="true" visible="eq(-4,true)" />
 		<setting id="providers.general.premium.member.emby" type="bool" label="35551" default="false" subsetting="true" visible="eq(-5,true)" />
 
+		<!-- HOSTER -->
+		<setting type="lsep" label="[UPPERCASE][B]$ADDON[plugin.video.gaia 33263][/B][/UPPERCASE]" />
+		<setting type="sep" />
+
+		<!-- HOSTER - UNIVERSAL OPEN -->
+		<setting id="providers.hoster.universal.open.enabled" type="bool" label="33046" default="false" />
+		<setting id="providers.hoster.universal.open.youtube" type="bool" label="YouTube" subsetting="true" default="true" visible="eq(-1,true)" />
+
 		<!-- EXTERNAL -->
 		<setting type="lsep" label="[UPPERCASE][B]$ADDON[plugin.video.gaia 33045][/B][/UPPERCASE]" />
 		<setting type="sep" />
@@ -569,29 +577,13 @@
 		<setting id="providers.external.universal.open.uniscrapersx.providers.label" type="action" label="32345" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=uniscrapersProviders)" subsetting="true" visible="eq(-4,true) + eq(-3,true)" />
 			<setting id="providers.external.universal.open.uniscrapersx.providers" type="text" visible="false" />
 
-		<!-- EXTERNAL - YODSCRAPERS -->
-		<setting id="providers.external.universal.open.yodscrapersx" type="bool" label="35456" default="false" />
-		<setting id="providers.external.universal.open.yodscrapersx.installed" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.yodscrapersx.installation" type="action" label="33474" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=yodscrapersInstall)" subsetting="true" visible="eq(-2,true) + eq(-1,false)" />
-		<setting id="providers.external.universal.open.yodscrapersx.settings" type="action" label="33011" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=yodscrapersSettings)" subsetting="true" visible="eq(-3,true) + eq(-2,true)" />
-		<setting id="providers.external.universal.open.yodscrapersx.providers.label" type="action" label="32345" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=yodscrapersProviders)" subsetting="true" visible="eq(-4,true) + eq(-3,true)" />
-			<setting id="providers.external.universal.open.yodscrapersx.providers" type="text" visible="false" />
-
-		<!-- EXTERNAL - INCSCRAPERS -->
-		<setting id="providers.external.universal.open.incscrapersx" type="bool" label="35334" default="false" />
-		<setting id="providers.external.universal.open.incscrapersx.installed" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.incscrapersx.installation" type="action" label="33474" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=incscrapersInstall)" subsetting="true" visible="eq(-2,true) + eq(-1,false)" />
-		<setting id="providers.external.universal.open.incscrapersx.settings" type="action" label="33011" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=incscrapersSettings)" subsetting="true" visible="eq(-3,true) + eq(-2,true)" />
-		<setting id="providers.external.universal.open.incscrapersx.providers.label" type="action" label="32345" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=incscrapersProviders)" subsetting="true" visible="eq(-4,true) + eq(-3,true)" />
-			<setting id="providers.external.universal.open.incscrapersx.providers" type="text" visible="false" />
-
-		<!-- EXTERNAL - PLASCRAPERS -->
-		<setting id="providers.external.universal.open.plascrapersx" type="bool" label="35333" default="false" />
-		<setting id="providers.external.universal.open.plascrapersx.installed" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.plascrapersx.installation" type="action" label="33474" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=plascrapersInstall)" subsetting="true" visible="eq(-2,true) + eq(-1,false)" />
-		<setting id="providers.external.universal.open.plascrapersx.settings" type="action" label="33011" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=plascrapersSettings)" subsetting="true" visible="eq(-3,true) + eq(-2,true)" />
-		<setting id="providers.external.universal.open.plascrapersx.providers.label" type="action" label="32345" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=plascrapersProviders)" subsetting="true" visible="eq(-4,true) + eq(-3,true)" />
-			<setting id="providers.external.universal.open.plascrapersx.providers" type="text" visible="false" />
+		<!-- EXTERNAL - NANSCRAPERS -->
+		<setting id="providers.external.universal.open.nanscrapersx" type="bool" label="35332" default="false" />
+		<setting id="providers.external.universal.open.nanscrapersx.installed" type="bool" default="false" visible="false" />
+		<setting id="providers.external.universal.open.nanscrapersx.installation" type="action" label="33474" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=nanscrapersInstall)" subsetting="true" visible="eq(-2,true) + eq(-1,false)" />
+		<setting id="providers.external.universal.open.nanscrapersx.settings" type="action" label="33011" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=nanscrapersSettings)" subsetting="true" visible="eq(-3,true) + eq(-2,true)" />
+		<setting id="providers.external.universal.open.nanscrapersx.providers.label" type="action" label="32345" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=nanscrapersProviders)" subsetting="true" visible="eq(-4,true) + eq(-3,true)" />
+			<setting id="providers.external.universal.open.nanscrapersx.providers" type="text" visible="false" />
 
 		<setting type="sep" />
 		<setting type="bool" visible="false" /> <!-- Ensures that a separator is drawn at the bottom. -->
@@ -709,14 +701,6 @@
 		<setting id="providers.usenet.universal.open.nzbserver" type="bool" label="NzbServer" subsetting="true" default="true" visible="eq(-5,true)" />
 		<setting id="providers.usenet.universal.open.nzbfriends" type="bool" label="NzbFriends" subsetting="true" default="true" visible="eq(-6,true)" />
 		<setting id="providers.usenet.universal.open.findnzb" type="bool" label="FindNzb" subsetting="true" default="true" visible="eq(-7,true)" />
-
-		<!-- HOSTER -->
-		<setting type="lsep" label="[UPPERCASE][B]$ADDON[plugin.video.gaia 33263][/B][/UPPERCASE]" />
-		<setting type="sep" />
-
-		<!-- HOSTER - UNIVERSAL OPEN -->
-		<setting id="providers.hoster.universal.open.enabled" type="bool" label="33046" default="false" />
-		<setting id="providers.hoster.universal.open.youtube" type="bool" label="YouTube" subsetting="true" default="true" visible="eq(-1,true)" />
 
 		<setting type="sep" />
 		<setting type="bool" visible="false" /> <!-- Ensures that a separator is drawn at the bottom. -->

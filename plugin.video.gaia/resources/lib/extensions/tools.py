@@ -1114,7 +1114,11 @@ class File(object):
 
 	@classmethod
 	def joinPath(self, path, *paths):
-		return os.path.join(path, *paths)
+		parts = []
+		for p in paths:
+			if isinstance(p, (list, tuple)): parts.extend(p)
+			else: parts.append(p)
+		return os.path.join(path, *parts)
 
 	@classmethod
 	def exists(self, path): # Directory must end with slash
@@ -1852,9 +1856,6 @@ class System(object):
 			GloScrapers.check()
 			UniScrapers.check()
 			NanScrapers.check()
-			IncScrapers.check()
-			PlaScrapers.check()
-			YodScrapers.check()
 
 			# Intialize Premiumize
 			debrid.Premiumize().initialize()
@@ -2653,7 +2654,8 @@ class Media(object):
 		(OrderSeasonEpisode,		NameSeasonShort + '%02d' + NameEpisodeShort + '%02d'),
 	]
 
-	Formats = None
+	FormatsSkin = None
+	FormatsDefault = None
 
 	@classmethod
 	def _format(self, format, title = None, year = None, season = None, episode = None, special = False):
@@ -2698,56 +2700,49 @@ class Media(object):
 		return (title, year, season, episode)
 
 	@classmethod
-	def _initialize(self):
-		if Media.Formats == None:
+	def _initialize(self, skin = True):
+		data = Media.FormatsSkin if skin else Media.FormatsDefault
+		if data == None:
 			from resources.lib.extensions import interface
-			aeonNox = interface.Skin.isGaiaAeonNox()
-			Media.Formats = {}
+			aeonNox = interface.Skin.isGaiaAeonNox() if skin else False
+			data = {}
 
 			setting = Settings.getInteger('interface.title.movies')
-			if setting == Media.Default:
-				setting = Media.DefaultAeonNoxMovie if aeonNox else Media.DefaultMovie
-			else:
-				setting -= 1
-			Media.Formats[Media.TypeMovie] = Media.FormatsTitle[setting]
+			if setting == Media.Default: setting = Media.DefaultAeonNoxMovie if aeonNox else Media.DefaultMovie
+			else: setting -= 1
+			data[Media.TypeMovie] = Media.FormatsTitle[setting]
 
 			setting = Settings.getInteger('interface.title.documentaries')
-			if setting == Media.Default:
-				setting = Media.DefaultAeonNoxDocumentary if aeonNox else Media.DefaultDocumentary
-			else:
-				setting -= 1
-			Media.Formats[Media.TypeDocumentary] = Media.FormatsTitle[setting]
+			if setting == Media.Default: setting = Media.DefaultAeonNoxDocumentary if aeonNox else Media.DefaultDocumentary
+			else: setting -= 1
+			data[Media.TypeDocumentary] = Media.FormatsTitle[setting]
 
 			setting = Settings.getInteger('interface.title.shorts')
-			if setting == Media.Default:
-				setting = Media.DefaultAeonNoxShort if aeonNox else Media.DefaultShort
-			else:
-				setting -= 1
-			Media.Formats[Media.TypeShort] = Media.FormatsTitle[setting]
+			if setting == Media.Default: setting = Media.DefaultAeonNoxShort if aeonNox else Media.DefaultShort
+			else: setting -= 1
+			data[Media.TypeShort] = Media.FormatsTitle[setting]
 
 			setting = Settings.getInteger('interface.title.shows')
-			if setting == Media.Default:
-				setting = Media.DefaultAeonNoxShow if aeonNox else Media.DefaultShow
-			else:
-				setting -= 1
-			Media.Formats[Media.TypeShow] = Media.FormatsTitle[setting]
+			if setting == Media.Default: setting = Media.DefaultAeonNoxShow if aeonNox else Media.DefaultShow
+			else: setting -= 1
+			data[Media.TypeShow] = Media.FormatsTitle[setting]
 
 			setting = Settings.getInteger('interface.title.seasons')
-			if setting == Media.Default:
-				setting = Media.DefaultAeonNoxSeason if aeonNox else Media.DefaultSeason
-			else:
-				setting -= 1
-			Media.Formats[Media.TypeSeason] = Media.FormatsSeason[setting]
+			if setting == Media.Default: setting = Media.DefaultAeonNoxSeason if aeonNox else Media.DefaultSeason
+			else: setting -= 1
+			data[Media.TypeSeason] = Media.FormatsSeason[setting]
 
 			setting = Settings.getInteger('interface.title.episodes')
-			if setting == Media.Default:
-				setting = Media.DefaultAeonNoxEpisode if aeonNox else Media.DefaultEpisode
-			else:
-				setting -= 1
-			Media.Formats[Media.TypeEpisode] = Media.FormatsEpisode[setting]
+			if setting == Media.Default: setting = Media.DefaultAeonNoxEpisode if aeonNox else Media.DefaultEpisode
+			else: setting -= 1
+			data[Media.TypeEpisode] = Media.FormatsEpisode[setting]
+
+			if skin: Media.FormatsSkin = data
+			else: Media.FormatsDefault = data
+		return data
 
 	@classmethod
-	def title(self, type = TypeNone, metadata = None, title = None, year = None, season = None, episode = None, encode = False, pack = False, special = False):
+	def title(self, type = TypeNone, metadata = None, title = None, year = None, season = None, episode = None, encode = False, pack = False, special = False, skin = True):
 		if not metadata == None: title, year, season, episode, packs = self._extract(metadata = metadata, encode = encode)
 		title, year, season, episode = self._data(title = title, year = year, season = season, episode = episode, encode = encode)
 
@@ -2760,8 +2755,8 @@ class Media(object):
 			else:
 				type = Media.TypeMovie
 
-		self._initialize()
-		format = Media.Formats[type]
+		formats = self._initialize(skin = skin)
+		format = formats[type]
 		return self._format(format = format, title = title, year = year, season = season, episode = episode, special = special)
 
 	# Raw title to search on the web/scrapers.
@@ -3625,12 +3620,6 @@ class Extensions(object):
 	IdGloScrapers = 'script.module.globalscrapers'
 	IdUniScrapers = 'script.module.universalscrapers'
 	IdNanScrapers = 'script.module.nanscrapers'
-	IdIncursion = 'plugin.video.incursion'
-	IdIncScrapers = 'script.module.incursion'
-	IdPlacenta = 'plugin.video.placenta'
-	IdPlaScrapers = 'script.module.placenta'
-	IdYoda = 'plugin.video.yoda'
-	IdYodScrapers = 'script.module.yoda'
 	IdMetaHandler = 'script.module.metahandler'
 	IdTrakt = 'script.trakt'
 	IdElementum = 'plugin.video.elementum'
@@ -3801,27 +3790,6 @@ class Extensions(object):
 				'icon' : 'extensionsnanscrapers.png',
 			},
 			{
-				'id' : Extensions.IdIncursion,
-				'name' : 'Incursion Scrapers',
-				'type' : Extensions.TypeOptional,
-				'description' : 33963,
-				'icon' : 'extensionsincscrapers.png',
-			},
-			{
-				'id' : Extensions.IdPlacenta,
-				'name' : 'Placenta Scrapers',
-				'type' : Extensions.TypeOptional,
-				'description' : 33963,
-				'icon' : 'extensionsplascrapers.png',
-			},
-			{
-				'id' : Extensions.IdYoda,
-				'name' : 'Yoda Scrapers',
-				'type' : Extensions.TypeOptional,
-				'description' : 33963,
-				'icon' : 'extensionsyodscrapers.png',
-			},
-			{
 				'id' : Extensions.IdMetaHandler,
 				'name' : 'MetaHandler',
 				'type' : Extensions.TypeOptional,
@@ -3920,9 +3888,6 @@ class Extensions(object):
 					GloScrapers.check()
 					UniScrapers.check()
 					NanScrapers.check()
-					IncScrapers.check()
-					PlaScrapers.check()
-					YodScrapers.check()
 
 				return True
 		return False
@@ -4387,141 +4352,6 @@ class NanScrapers(object):
 	@classmethod
 	def disable(self, refresh = False):
 		result = Extensions.disable(id = NanScrapers.Id, refresh = refresh)
-		self.check()
-		return result
-
-###################################################################
-# INCSCRAPERS
-###################################################################
-
-class IncScrapers(object):
-
-	Id = Extensions.IdIncScrapers
-	IdMain = Extensions.IdIncursion
-
-	@classmethod
-	def settings(self):
-		if Extensions.installed(id = IncScrapers.IdMain):
-			Extensions.settings(id = IncScrapers.IdMain)
-		else:
-			from resources.lib.extensions import interface
-			name = 'Incursion'
-			interface.Dialog.confirm(title = 33391, message = (interface.Translation.string(35336) % (name, name)))
-
-	@classmethod
-	def providers(self, settings = True):
-		from resources.lib.providers.external.universal.open import incscrapersx
-		incscrapersx.source.instancesSettings()
-		if settings: Settings.launch(Settings.CategoryProviders)
-
-	@classmethod
-	def check(self):
-		Settings.set('providers.external.universal.open.incscrapersx.installed', self.installed())
-
-	@classmethod
-	def installed(self, full = False):
-		if full: return Extensions.installed(id = IncScrapers.IdMain)
-		else: return Extensions.installed(id = IncScrapers.Id)
-
-	@classmethod
-	def enable(self, refresh = False):
-		result = Extensions.enable(id = IncScrapers.Id, refresh = refresh)
-		self.check()
-		return result
-
-	@classmethod
-	def disable(self, refresh = False):
-		result = Extensions.disable(id = IncScrapers.Id, refresh = refresh)
-		self.check()
-		return result
-
-###################################################################
-# PLASCRAPERS
-###################################################################
-
-class PlaScrapers(object):
-
-	Id = Extensions.IdPlaScrapers
-	IdMain = Extensions.IdPlacenta
-
-	@classmethod
-	def settings(self):
-		if Extensions.installed(id = PlaScrapers.IdMain):
-			Extensions.settings(id = PlaScrapers.IdMain)
-		else:
-			from resources.lib.extensions import interface
-			name = 'Placenta'
-			interface.Dialog.confirm(title = 33391, message = (interface.Translation.string(35336) % (name, name)))
-
-	@classmethod
-	def providers(self, settings = True):
-		from resources.lib.providers.external.universal.open import plascrapersx
-		plascrapersx.source.instancesSettings()
-		if settings: Settings.launch(Settings.CategoryProviders)
-
-	@classmethod
-	def check(self):
-		Settings.set('providers.external.universal.open.plascrapersx.installed', self.installed())
-
-	@classmethod
-	def installed(self, full = False):
-		if full: return Extensions.installed(id = PlaScrapers.IdMain)
-		else: return Extensions.installed(id = PlaScrapers.Id)
-
-	@classmethod
-	def enable(self, refresh = False):
-		result = Extensions.enable(id = PlaScrapers.Id, refresh = refresh)
-		self.check()
-		return result
-
-	@classmethod
-	def disable(self, refresh = False):
-		result = Extensions.disable(id = PlaScrapers.Id, refresh = refresh)
-		self.check()
-		return result
-
-###################################################################
-# YODSCRAPERS
-###################################################################
-
-class YodScrapers(object):
-
-	Id = Extensions.IdYodScrapers
-	IdMain = Extensions.IdYoda
-
-	@classmethod
-	def settings(self):
-		if Extensions.installed(id = YodScrapers.IdMain):
-			Extensions.settings(id = YodScrapers.IdMain)
-		else:
-			from resources.lib.extensions import interface
-			name = 'Yoda'
-			interface.Dialog.confirm(title = 33391, message = (interface.Translation.string(35336) % (name, name)))
-
-	@classmethod
-	def providers(self, settings = True):
-		from resources.lib.providers.external.universal.open import yodscrapersx
-		yodscrapersx.source.instancesSettings()
-		if settings: Settings.launch(Settings.CategoryProviders)
-
-	@classmethod
-	def check(self):
-		Settings.set('providers.external.universal.open.yodscrapersx.installed', self.installed())
-
-	@classmethod
-	def installed(self, full = False):
-		if full: return Extensions.installed(id = YodScrapers.IdMain)
-		else: return Extensions.installed(id = YodScrapers.Id)
-
-	@classmethod
-	def enable(self, refresh = False):
-		result = Extensions.enable(id = YodScrapers.Id, refresh = refresh)
-		self.check()
-		return result
-
-	@classmethod
-	def disable(self, refresh = False):
-		result = Extensions.disable(id = YodScrapers.Id, refresh = refresh)
 		self.check()
 		return result
 

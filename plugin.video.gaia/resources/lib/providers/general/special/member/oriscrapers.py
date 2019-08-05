@@ -18,17 +18,18 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urlparse
-import urllib
+from resources.lib.extensions import provider
 from resources.lib.extensions import metadata
 from resources.lib.extensions import tools
 from resources.lib.extensions import network
 from resources.lib.extensions import orionoid
 from resources.lib.extensions import debrid
 
-class source:
+class source(provider.ProviderBase):
 
 	def __init__(self):
+		provider.ProviderBase.__init__(self, supportMovies = True, supportShows = True)
+
 		self.orion = orionoid.Orionoid()
 
 		self.pack = False # Checked by provider.py
@@ -56,44 +57,13 @@ class source:
 	def silent(self, silent = True):
 		self.orion = orionoid.Orionoid(silent = silent)
 
-	def movie(self, imdb, title, localtitle, year):
-		try:
-			url = {'imdb': imdb, 'title': title, 'year': year}
-			url = urllib.urlencode(url)
-			return url
-		except:
-			return
-
-	def tvshow(self, imdb, tvdb, tvshowtitle, localtitle, year):
-		try:
-			url = {'imdb': imdb, 'tvdb': tvdb, 'tvshowtitle': tvshowtitle, 'year': year}
-			url = urllib.urlencode(url)
-			return url
-		except:
-			return
-
-	def episode(self, url, imdb, tvdb, title, premiered, season, episode):
-		try:
-			if url == None: return
-			url = urlparse.parse_qs(url)
-			url = dict([(i, url[i][0]) if url[i] else (i, '') for i in url])
-			url['title'], url['premiered'], url['season'], url['episode'] = title, premiered, season, episode
-			url = urllib.urlencode(url)
-			return url
-		except:
-			return
-
 	def sources(self, url, hostDict, hostprDict):
 		sources = []
 		try:
-			if url == None:
-				raise Exception()
+			if url == None: raise Exception()
+			if not self.orion.accountEnabled(): raise Exception()
 
-			if not self.orion.accountEnabled():
-				raise Exception()
-
-			data = urlparse.parse_qs(url)
-			data = dict([(i, data[i][0]) if data[i] else (i, '') for i in data])
+			data = self._decode(url)
 
 			type = orionoid.Orionoid.TypeShow if 'tvshowtitle' in data else orionoid.Orionoid.TypeMovie
 			imdb = data['imdb'] if 'imdb' in data else None
@@ -258,6 +228,3 @@ class source:
 		except:
 			tools.Logger.error()
 			return sources
-
-	def resolve(self, url):
-		return url

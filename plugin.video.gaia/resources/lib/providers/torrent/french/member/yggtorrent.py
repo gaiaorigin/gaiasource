@@ -20,14 +20,17 @@
 
 import re, urllib, urlparse, json, threading
 from resources.lib.modules import client
+from resources.lib.extensions import provider
 from resources.lib.extensions import metadata
 from resources.lib.extensions import tools
 from resources.lib.extensions import network
 from resources.lib.externals.beautifulsoup import BeautifulSoup
 
-class source:
+class source(provider.ProviderBase):
 
 	def __init__(self):
+		provider.ProviderBase.__init__(self, supportMovies = True, supportShows = True)
+
 		self.pack = True # Checked by provider.py
 		self.priority = 0
 		self.language = ['fr']
@@ -80,33 +83,6 @@ class source:
 		domain = network.Networker.linkDomain(link, subdomain = False, topdomain = True).lower()
 		return domain in self.domains
 
-	def movie(self, imdb, title, localtitle, year):
-		try:
-			url = {'imdb': imdb, 'title': title, 'year': year}
-			url = urllib.urlencode(url)
-			return url
-		except:
-			return
-
-	def tvshow(self, imdb, tvdb, tvshowtitle, localtitle, year):
-		try:
-			url = {'imdb': imdb, 'tvdb': tvdb, 'tvshowtitle': tvshowtitle, 'year': year}
-			url = urllib.urlencode(url)
-			return url
-		except:
-			return
-
-	def episode(self, url, imdb, tvdb, title, premiered, season, episode):
-		try:
-			if url == None: return
-			url = urlparse.parse_qs(url)
-			url = dict([(i, url[i][0]) if url[i] else (i, '') for i in url])
-			url['title'], url['premiered'], url['season'], url['episode'] = title, premiered, season, episode
-			url = urllib.urlencode(url)
-			return url
-		except:
-			return
-
 	def _hash(self, url, index):
 		try:
 			htmlSingle = BeautifulSoup(client.request(url))
@@ -120,7 +96,7 @@ class source:
 			try: self.tLock.release()
 			except: pass
 
-	def _search(self, url, query, subcategory, show, title, year, season, episode, pack, packCount, packException, ignoreContains):
+	def _search(self, url, query, subcategory, show, title, titles, year, season, episode, pack, packCount, packException, ignoreContains):
 		pageLimit = tools.Settings.getInteger('scraping.providers.pages')
 		pageCounter = 0
 		page = 0
@@ -143,7 +119,6 @@ class source:
 					htmlTable = htmlTables[0]
 					htmlTbody = htmlTable.find_all('tbody')[0]
 					htmlRows = htmlTbody.find_all('tr', recursive = False)
-
 					for i in range(len(htmlRows)):
 						htmlRow = htmlRows[i]
 
@@ -171,7 +146,7 @@ class source:
 						htmlSeeds = int(htmlRow.find_all('td')[7].getText())
 
 						# Metadata
-						meta = metadata.Metadata(name = htmlName, title = title, year = year, season = season, episode = episode, pack = pack, packCount = packCount, link = htmlLink, size = htmlSize, seeds = htmlSeeds)
+						meta = metadata.Metadata(name = htmlName, title = title, titles = titles, year = year, season = season, episode = episode, pack = pack, packCount = packCount, link = htmlLink, size = htmlSize, seeds = htmlSeeds)
 
 						# Ignore
 						meta.ignoreAdjust(contains = ignoreContains)
@@ -186,8 +161,8 @@ class source:
 						# Hash
 						if self.inspection:
 							htmlHash = urllib.quote(str(htmlInfo.get('href').encode('utf-8')), ':/+')
-							thread = threading.Thread(target = self._hash, args = (htmlHash, len(self.tSources) - 1))
 							self.tLock.acquire()
+							thread = threading.Thread(target = self._hash, args = (htmlHash, len(self.tSources) - 1))
 							self.tThreadsHashes.append(thread)
 							self.tLock.release()
 							thread.start()
@@ -210,8 +185,7 @@ class source:
 				raise Exception()
 
 			ignoreContains = None
-			data = urlparse.parse_qs(url)
-			data = dict([(i, data[i][0]) if data[i] else (i, '') for i in data])
+			data = self._decode(url)
 
 			show = 'tvshowtitle' in data
 			if show: subcategory = self.subcategories_show.values()[0] if len(self.subcategories_show) == 1 else self.subcategory_any
@@ -219,6 +193,7 @@ class source:
 
 			if 'exact' in data and data['exact']:
 				title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
+				titles = None
 				queries = [title]
 				year = None
 				season = None
@@ -228,6 +203,7 @@ class source:
 				packExceptions = None
 			else:
 				title = data['tvshowtitle'] if show else data['title']
+				titles = data['alternatives'] if 'alternatives' in data else None
 				year = int(data['year']) if 'year' in data and not data['year'] == None else None
 				season = int(data['season']) if 'season' in data and not data['season'] == None else None
 				episode = int(data['episode']) if 'episode' in data and not data['episode'] == None else None
@@ -264,14 +240,13 @@ class source:
 			for q in range(len(queries)):
 				query = queries[q]
 				packException = True if packExceptions and q in packExceptions else False
-				thread = threading.Thread(target = self._search, args = (url, query, subcategory, show, title, year, season, episode, pack, packCount, packException, ignoreContains))
+				thread = threading.Thread(target = self._search, args = (url, query, subcategory, show, title, titles, year, season, episode, pack, packCount, packException, ignoreContains))
 				self.tThreadsSearches.append(thread)
 				thread.start()
-			[thread.join() for thread in self.tThreadsSearches]
 
 			while True:
 				if timer.elapsed() > timerTimeout: break
-				if not any([thread.is_alive() for thread in self.tThreadsSearches]): break
+				if not any([t.is_alive() for t in self.tThreadsSearches]): break
 				tools.Time.sleep(0.5)
 
 			# First filter out all non-related links before doing the hash lookup.
@@ -279,7 +254,7 @@ class source:
 				timerTimeout -= 2
 				while True:
 					if timer.elapsed() > timerTimeout: break
-					if not any([thread.is_alive() for thread in self.tThreadsHashes]): break
+					if not any([t.is_alive() for t in self.tThreadsHashes]): break
 					tools.Time.sleep(0.5)
 
 			try: self.tLock.release()

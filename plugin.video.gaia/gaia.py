@@ -1226,63 +1226,6 @@ elif action.startswith('nanscrapers'):
 		tools.NanScrapers.enable(refresh = True)
 
 ####################################################
-# INCSCRAPERS
-####################################################
-
-elif action.startswith('incscrapers'):
-
-	if action == 'incscrapersNavigator':
-		from resources.lib.indexers import navigator
-		navigator.navigator(type = type, kids = kids).incscrapersNavigator()
-
-	elif action == 'incscrapersSettings':
-		tools.IncScrapers.settings()
-
-	elif action == 'incscrapersProviders':
-		tools.IncScrapers.providers()
-
-	elif action == 'incscrapersInstall':
-		tools.IncScrapers.enable(refresh = True)
-
-####################################################
-# PLASCRAPERS
-####################################################
-
-elif action.startswith('plascrapers'):
-
-	if action == 'plascrapersNavigator':
-		from resources.lib.indexers import navigator
-		navigator.navigator(type = type, kids = kids).plascrapersNavigator()
-
-	elif action == 'plascrapersSettings':
-		tools.PlaScrapers.settings()
-
-	elif action == 'plascrapersProviders':
-		tools.PlaScrapers.providers()
-
-	elif action == 'plascrapersInstall':
-		tools.PlaScrapers.enable(refresh = True)
-
-####################################################
-# YODSCRAPERS
-####################################################
-
-elif action.startswith('yodscrapers'):
-
-	if action == 'yodscrapersNavigator':
-		from resources.lib.indexers import navigator
-		navigator.navigator(type = type, kids = kids).yodscrapersNavigator()
-
-	elif action == 'yodscrapersSettings':
-		tools.YodScrapers.settings()
-
-	elif action == 'yodscrapersProviders':
-		tools.YodScrapers.providers()
-
-	elif action == 'yodscrapersInstall':
-		tools.YodScrapers.enable(refresh = True)
-
-####################################################
 # EXTENDEDINFO
 ####################################################
 

@@ -488,6 +488,7 @@ class player(xbmc.Player):
 					except: pass
 				self.bingeDelay = 30 if self.bingeDelay == 0 else int(self.bingeDelay / 60.0)
 				if tools.Binge.dialogFull(): self.bingeDelay = int(self.bingeDelay / 3.0)
+				self.bingeDelay = min(90, self.bingeDelay)
 		return self.bingeDelay
 
 	def _bingeCheck(self):
@@ -515,7 +516,8 @@ class player(xbmc.Player):
 			from resources.lib.extensions import core
 			from resources.lib.indexers import episodes
 			self.bingeMetadata = episodes.episodes().next(tvshowtitle = self.metadata['tvshowtitle'], year = self.metadata['year'], imdb = self.metadata['imdb'], tvdb = self.metadata['tvdb'], season = self.metadata['season'], episode = self.metadata['episode'])
-			self.bingeItems = core.Core(type = self.type, kids = self.kids, silent = True).scrape(title = self.bingeMetadata['title'], year = self.bingeMetadata['year'], imdb = self.bingeMetadata['imdb'], tvdb = self.bingeMetadata['tvdb'], season = self.bingeMetadata['season'], episode = self.bingeMetadata['episode'], tvshowtitle = self.bingeMetadata['tvshowtitle'], metadata = self.bingeMetadata)
+			if self.bingeMetadata: self.bingeItems = core.Core(type = self.type, kids = self.kids, silent = True).scrape(title = self.bingeMetadata['title'], year = self.bingeMetadata['year'], imdb = self.bingeMetadata['imdb'], tvdb = self.bingeMetadata['tvdb'], season = self.bingeMetadata['season'], episode = self.bingeMetadata['episode'], tvshowtitle = self.bingeMetadata['tvshowtitle'], metadata = self.bingeMetadata)
+			elif not self.bingeSuppress: interface.Dialog.notification(title = 35580, message = 35587, icon = interface.Dialog.IconInformation)
 		except:
 			tools.Logger.error()
 

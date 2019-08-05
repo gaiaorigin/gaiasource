@@ -666,7 +666,7 @@ class Metadata(object):
 		('Sample' , ['sample', 'samples', 'preview', 'previews']),
 	])
 
-	def __init__(self, name = None, title = None, year = None, season = None, episode = None, pack = None, packCount = None, link = None, quality = None, size = None, languageAudio = None, seeds = None, age = None, popularity = None, source = None):
+	def __init__(self, name = None, title = None, titles = None, year = None, season = None, episode = None, pack = None, packCount = None, link = None, quality = None, size = None, languageAudio = None, seeds = None, age = None, popularity = None, source = None):
 		# So that they can be overwritten by providers
 		self.mIgnoreDifference = Metadata.IgnoreDifference
 		self.mIgnoreContains = Metadata.IgnoreContains
@@ -683,6 +683,10 @@ class Metadata(object):
 		self.mTitle = None
 		self.mTitleProcessed = None
 		self.mTitleSplit = None
+
+		self.mTitles = None
+		self.mTitlesProcessed = None
+		self.mTitlesSplit = None
 
 		self.mYear = None
 		self.mSeason = None
@@ -724,7 +728,7 @@ class Metadata(object):
 		self.mAge = None
 		self.mPopularity = None
 
-		self.load(name = name, title = title, year = year, season = season, episode = episode, pack = pack, packCount = packCount, link = link, quality = quality, size = size, languageAudio = languageAudio, seeds = seeds, age = age, popularity = popularity, source = source)
+		self.load(name = name, title = title, titles = titles, year = year, season = season, episode = episode, pack = pack, packCount = packCount, link = link, quality = quality, size = size, languageAudio = languageAudio, seeds = seeds, age = age, popularity = popularity, source = source)
 
 	@classmethod
 	def serialize(self, metadata):
@@ -1766,6 +1770,7 @@ class Metadata(object):
 			return False
 
 	def __matchTitle(self):
+		# NB: If this function is used again, add alterntive titles (self.mTitlesProcessed).
 		value1 = self.__matchClean(self.mNameProcessed)
 		value2 = self.__matchClean(self.mTitleProcessed)
 		if SequenceMatcher(None, value1, value2).ratio() >= self.mIgnoreDifference:
@@ -1841,12 +1846,20 @@ class Metadata(object):
 		splitName = self.mNameSplit
 		joinedName = ' '.join(splitName)
 
+		processed = self.mTitlesProcessed
+		processed.append(self.mTitleProcessed)
+
 		# Ignore for season packs:
 		if self.mPack:
 			for i in Metadata.Seasons:
 				seasonValue = i % self.mSeason
-				if self.__matchSequential(joinedName, seasonValue) and not re.search(Metadata.SeasonsExclude, self.mTitleProcessed):
-					return True
+				if self.__matchSequential(joinedName, seasonValue):
+					contains = False
+					for process in processed:
+						if re.search(Metadata.SeasonsExclude, process):
+							contains = True
+							break
+					if not contains: return True
 		else:
 			for i in Metadata.Episodes:
 				try: name = i % (self.mSeason, self.mEpisode)
@@ -1858,33 +1871,41 @@ class Metadata(object):
 		return False
 
 	def __containsTitle(self):
-		total = len(self.mTitleSplit)
-		split = copy.deepcopy(self.mNameSplit)
-		count = 0
+		splits = self.mTitlesSplit
+		splits.append(self.mTitleSplit)
 
-		# Check if the file name does not contain too many words.
-		# Otherwise "Wonder 2017" will mostly detect "Wonder Woman 2017" links.
-		# Only check until the year, ignore everything after the year (eg: uploader, metadata, etc).
-		skip = False
-		if self.mSeason == None and self.mEpisode == None:
-			try: index = split.index(str(self.mYear))
-			except: index = -1
-			if index > 0: skip = index > total * self.mIgnoreLength
+		for split in splits:
+			total = len(split)
+			split = copy.deepcopy(self.mNameSplit)
+			count = 0
 
-		setting = tools.Settings.getInteger('scraping.providers.filename')
-		for i in self.mTitleSplit:
-			try:
-				index = split.index(i)
-				count += 1
-				if setting == 1: split.remove(i)
-				elif setting == 2: split = split[index + 1:]
-			except: pass
-		percentage = count / float(total)
+			# Check if the file name does not contain too many words.
+			# Otherwise "Wonder 2017" will mostly detect "Wonder Woman 2017" links.
+			# Only check until the year, ignore everything after the year (eg: uploader, metadata, etc).
+			skip = False
+			if self.mSeason == None and self.mEpisode == None:
+				try: index = split.index(str(self.mYear))
+				except: index = -1
+				if index > 0: skip = index > total * self.mIgnoreLength
 
-		if total <= 2: # Short titles
-			return percentage >= (self.mIgnoreContains * 1.25) and not skip
-		else:
-			return percentage >= self.mIgnoreContains and not skip
+			setting = tools.Settings.getInteger('scraping.providers.filename')
+			for i in split:
+				try:
+					index = split.index(i)
+					count += 1
+					if setting == 1: split.remove(i)
+					elif setting == 2: split = split[index + 1:]
+				except: pass
+			percentage = count / float(total)
+
+			if total <= 2: # Short titles
+				if percentage >= (self.mIgnoreContains * 1.25) and not skip:
+					return True
+			else:
+				if percentage >= self.mIgnoreContains and not skip:
+					return True
+
+		return False
 
 	def ignore(self, size = True, seeds = True, season = True):
 		# Ignore if the title and name do not correspond.
@@ -1905,7 +1926,7 @@ class Metadata(object):
 
 		return False
 
-	def load(self, name = None, title = None, year = None, season = None, episode = None, pack = None, packCount = None, link = None, quality = None, size = None, languageAudio = None, seeds = None, age = None, popularity = None, source = None):
+	def load(self, name = None, title = None, titles = None, year = None, season = None, episode = None, pack = None, packCount = None, link = None, quality = None, size = None, languageAudio = None, seeds = None, age = None, popularity = None, source = None):
 		try:
 			if source:
 
@@ -1914,15 +1935,37 @@ class Metadata(object):
 				if isinstance(source, dict) and 'url' in source:
 					self.setLink(source['url'])
 					if name == None or name == '':
-						self.mName = self.mLink.rsplit('/', 1)[-1]
-						if not '.' in self.mName or re.match('^[a-zA-Z0-9]*$', self.mName) or re.match('^[a-zA-Z0-9]{16,}$', self.mName) or re.match('^[0-9]{6,}$', self.mName): # Links that end with a hash or random strings should not be used.
-							self.mName = None
+						from resources.lib.extensions import network
+						container = network.Container(self.mLink)
+						if container.torrentIsMagnet():
+							self.mName = container.torrentName()
+						else:
+							self.mName = self.mLink.rsplit('|')[0].rsplit('/', 1)[-1].rsplit('?')[0]
+
+							# Links without an extension
+							if not '.' in self.mName:
+								self.mName = None
+
+							elif re.match('^[a-zA-Z0-9]*$', self.mName) or re.match('^[a-zA-Z0-9]{16,}$', self.mName) or re.match('^[0-9]{6,}$', self.mName):
+								self.mName = None
+
+							# For links with a lot of remaining parameters. Like googlevideos links that are incorrectly split on the last /, since it contains the mime (eg: video/mp4).
+							# https://redirector.googlevideo.com/videoplayback?id=77d2a520f352e14e&itag=22&source=picasa&begin=0&requiressl=yes&mm=30&mn=sn-4g5e6nsz&ms=nxu&mv=u&mvi=1&pl=24&sc=yes&ei=WqVGXb3jCayS8gP_lpHoBQ&susc=ph&app=fife&mime=video/mp4&cnr=14&dur=7329.982&lmt=1564884531604866&mt=1564910760&ipbits=0&cms_redirect=yes&keepalive=yes&ratebypass=yes&ip=116.202.109.242&expire=1564918138&sparams=ip,ipbits,expire,id,itag,source,requiressl,mm,mn,ms,mv,mvi,pl,sc,ei,susc,app,mime,cnr,dur,lmt&signature=BEC2A56CFB94CF190DD5EBE580DD5994BDBD1679859F8E2D45A8C1514992C656.705016C2F34F23F9E0DD8F28971099926E48127219A7DCB473FABC85CC1739E0&key=us0
+							elif self.mName.count('&') > 3:
+								self.mName = None
+
+							# https://www.fembed.com/v/dk05nuxn3e8kqn3.html
+							elif re.match('^[a-zA-Z0-9-]{15}\.html$', self.mName):
+								self.mName = None
+
 				if not self.mName: self.mName = ''
 				self.setName(self.mName)
 
 				self.mTitle = title
 				if not self.mTitle:
 					self.mTitle = ''
+
+				self.mTitles = titles
 
 				if 'year' in source:
 					self.mYear = int(source['year'])
@@ -2015,6 +2058,7 @@ class Metadata(object):
 				self.setName(self.mName)
 				self.mTitle = title
 				if not self.mTitle: self.mTitle = ''
+				self.mTitles = titles
 
 				self.mYear = None if year == None else int(year)
 				self.mSeason = None if season == None else int(season)
@@ -2110,6 +2154,18 @@ class Metadata(object):
 
 			if 'quality' in source:
 				self.mVideoQuality = self.videoQualityConvert(source['quality'].replace(' ', '').lower())
+
+			# External hoster links.
+			if 'info' in source:
+				try:
+					infos = source['info']
+					if not isinstance(infos, (list, tuple)): infos = [infos]
+					for info in infos:
+						size = re.search('(\d+\.*\d*\s*[mMgGtT][bB])', info).group(0)
+						if size:
+							self.setSize(size)
+							break
+				except: pass
 
 			if self.mName == None:
 				if 'file' in source:
@@ -2227,19 +2283,34 @@ class Metadata(object):
 			pass
 
 	def __loadValues(self):
-		self.mNameProcessed, self.mNameSplit = self.__loadValue(self.mName)
-		self.mTitleProcessed, self.mTitleSplit = self.__loadValue(self.mTitle)
+		try:
+			self.mNameProcessed, self.mNameSplit = self.__loadValue(self.mName)
+			self.mTitleProcessed, self.mTitleSplit = self.__loadValue(self.mTitle)
 
-		# This is needed, otherwise the audio channels are detected as 8CH in a string link "S10E07 1080p".
-		self.mNameReduced = ' '.join(self.mNameSplit)
-		for split in self.mTitleSplit:
-			self.mNameReduced = self.mNameReduced.replace(split, '')
-		if not self.mSeason == None or not self.mEpisode == None:
-			self.mNameReduced = re.sub('[sS]\d{1,5}[eE]\d{1,5}|[sS]\d{1,5}', '', self.mNameReduced)
+			self.mTitlesProcessed = []
+			self.mTitlesSplit = []
+			if self.mTitles:
+				for title in self.mTitles:
+					processed, split = self.__loadValue(title)
+					self.mTitlesProcessed.append(processed)
+					self.mTitlesSplit.append(split)
+
+			# This is needed, otherwise the audio channels are detected as 8CH in a string link "S10E07 1080p".
+			self.mNameReduced = ' '.join(self.mNameSplit)
+			for split in self.mTitleSplit:
+				self.mNameReduced = self.mNameReduced.replace(split, '')
+			for title in self.mTitlesSplit:
+				for split in title:
+					self.mNameReduced = self.mNameReduced.replace(split, '')
+			if not self.mSeason == None or not self.mEpisode == None:
+				self.mNameReduced = re.sub('[sS]\d{1,5}[eE]\d{1,5}|[sS]\d{1,5}', '', self.mNameReduced)
+		except:
+			tools.Logger.error()
 
 	def __loadValue(self, value, splitAll = True):
 		if value:
-			value = value.encode('utf-8').lower()
+			try: value = value.encode('utf-8').lower()
+			except: value = value.lower()
 			value = client.replaceHTMLCodes(value)
 			value = value.replace("\n", '') # Double quotes with escape characters.
 			if splitAll: split = [item for item in re.split('\.|\,|\(|\)|\[|\]|\s|\-|\_|\+|\/|\\\'|\"', value) if not item == '']
@@ -2353,6 +2424,14 @@ class Metadata(object):
 					if not value == split:
 						result.append(value)
 				values = result
+		if self.mTitlesSplit:
+			for title in self.mTitlesSplit:
+				for split in title:
+					result = []
+					for value in values:
+						if not value == split:
+							result.append(value)
+					values = result
 		return values
 
 	def __searchLanguages(self, language = None):
@@ -2373,6 +2452,11 @@ class Metadata(object):
 							if l == t:
 								titleContains = True
 								break
+						for title in self.mTitlesSplit:
+							for t in title:
+								if l == t:
+									titleContains = True
+									break
 						if titleContains: break
 
 					if not titleContains:

@@ -1732,7 +1732,8 @@ class WindowBingeOverlay(WindowBinge):
 		else: return [0, 0]
 
 	def _dimensionButton(self, text = None, icon = None):
-		return [self._scaleWidth(WindowBingeOverlay.ButtonWidth), self._scaleHeight(WindowBingeOverlay.ButtonHeight)]
+		width = len(self._buttonText(text = text, icon = icon)) * 10
+		return [max(width, self._scaleWidth(WindowBingeOverlay.ButtonWidth)), self._scaleHeight(WindowBingeOverlay.ButtonHeight)]
 
 	def _dimensionPoster(self, text = None, icon = None):
 		return [self._scaleWidth(WindowBingeOverlay.PosterWidth), self._scaleHeight(WindowBingeOverlay.PosterHeight)]
@@ -1763,8 +1764,12 @@ class WindowBingeOverlay(WindowBinge):
 		return control, dimension
 
 	def _addControls(self):
-		x = self.mWidth - WindowBingeOverlay.ButtonWidth - WindowBingeOverlay.Padding
+		dimensionContinue = self._dimensionButton(text = 33821, icon = 'play')
+		dimensionCancel = self._dimensionButton(text = 33821, icon = 'play')
+		width = max(dimensionContinue[0], dimensionCancel[0])
+		height = max(dimensionContinue[1], dimensionCancel[1])
+		x = self.mWidth - width - WindowBingeOverlay.Padding
 		y = WindowBingeOverlay.Padding
-		self.mControlContinue = self._addButton(text = 33821, x = x, y = y, callback = self._actionContinue, icon = 'play', size = Window.FontMedium)
-		y += self._dimensionButton()[1] + WindowBingeOverlay.Padding
-		self.mControlCancel = self._addButton(text = 33743, x = x, y = y, callback = self._actionCancel, icon = 'error', size = Window.FontMedium)
+		self.mControlContinue = self._addButton(text = 33821, x = x, y = y, width = width, height = height, callback = self._actionContinue, icon = 'play', size = Window.FontMedium)
+		y += height + WindowBingeOverlay.Padding
+		self.mControlCancel = self._addButton(text = 33743, x = x, y = y, width = width, height = height, callback = self._actionCancel, icon = 'error', size = Window.FontMedium)

@@ -1010,9 +1010,9 @@
 		<setting id="providers.torrent.french.open.lientorrent" type="bool" label="LienTorrent" subsetting="true" default="true" visible="eq(-4,true)" />
 			<setting id="link.providers.torrent.french.open.lientorrent" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33381][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [I]lien-torrent.com[/I]" action="RunPlugin(plugin://plugin.video.gaia/?action=linkOpen&link=http://www.lien-torrent.com)" visible="eq(-5,true) + eq(-6,true)" />
 		<setting id="providers.torrent.french.open.torrent9" type="bool" label="Torrent9" subsetting="true" default="true" visible="eq(-6,true)" />
-			<setting id="link.providers.torrent.french.open.torrent9" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33381][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [I]torrent9.uno[/I]" action="RunPlugin(plugin://plugin.video.gaia/?action=linkOpen&link=http://www.torrent9.uno)" visible="eq(-7,true) + eq(-8,true)" />
+			<setting id="link.providers.torrent.french.open.torrent9" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33381][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [I]torrent9.cz[/I]" action="RunPlugin(plugin://plugin.video.gaia/?action=linkOpen&link=https://www.torrent9.cz)" visible="eq(-7,true) + eq(-8,true)" />
 		<setting id="providers.torrent.french.open.cpabien" type="bool" label="Cpabien" subsetting="true" default="true" visible="eq(-8,true)" />
-			<setting id="link.providers.torrent.french.open.cpabien" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33381][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [I]cpabien.xyz[/I]" action="RunPlugin(plugin://plugin.video.gaia/?action=linkOpen&link=http://ww1.cpabien.xyz)" visible="eq(-9,true) + eq(-10,true)" />
+			<setting id="link.providers.torrent.french.open.cpabien" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33381][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [I]cpasbiens.co[/I]" action="RunPlugin(plugin://plugin.video.gaia/?action=linkOpen&link=https://ww6.cpasbiens.co)" visible="eq(-9,true) + eq(-10,true)" />
 
 		<!-- TORRENT - RUSSIAN OPEN -->
 			<setting id="help.providers.torrent.russian.open" type="bool" default="false" visible="false" />
@@ -1177,50 +1177,6 @@
 		<setting id="providers.external.universal.open.nanscrapersx.providers.label" type="action" label="32345" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=nanscrapersProviders)" subsetting="true" visible="eq(-7,true) + eq(-5,true)" />
 			<setting id="providers.external.universal.open.nanscrapersx.providers" type="text" visible="false" />
 			<setting id="helper.providers.external.universal.open.nanscrapersx.providers.label" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34359]  [/LIGHT]" visible="eq(-9,true) + eq(-7,true) + eq(-10,true)" />
-
-		<!-- EXTERNAL - YODSCRAPERS -->
-			<setting id="help.providers.external.universal.open.yodscrapersx" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.yodscrapersx" type="bool" label="35456" default="false" />
-			<setting id="helper.providers.external.universal.open.yodscrapersx" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34364]  [/LIGHT]" visible="eq(-2,true)" />
-		<setting id="providers.external.universal.open.yodscrapersx.installed" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.yodscrapersx.installation" type="action" label="33474" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=yodscrapersInstall)" subsetting="true" visible="eq(-3,true) + eq(-1,false)" />
-			<setting id="helper.providers.external.universal.open.yodscrapersx.installation" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34365]  [/LIGHT]" visible="eq(-4,true) + eq(-2,false) + eq(-5,true)" />
-		<setting id="providers.external.universal.open.yodscrapersx.settings" type="action" label="33011" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=yodscrapersSettings)" subsetting="true" visible="eq(-5,true) + eq(-3,true)" />
-			<setting id="helper.providers.external.universal.open.yodscrapersx.settings" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34366]  [/LIGHT]" visible="eq(-6,true) + eq(-4,true) + eq(-7,true)" />
-		<setting id="providers.external.universal.open.yodscrapersx.providers.label" type="action" label="32345" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=yodscrapersProviders)" subsetting="true" visible="eq(-7,true) + eq(-5,true)" />
-			<setting id="providers.external.universal.open.yodscrapersx.providers" type="text" visible="false" />
-			<setting id="helper.providers.external.universal.open.yodscrapersx.providers.label" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34367]  [/LIGHT]" visible="eq(-9,true) + eq(-7,true) + eq(-10,true)" />
-
-		<!-- EXTERNAL - INCSCRAPERS -->
-			<setting id="help.providers.external.universal.open.incscrapersx" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.incscrapersx" type="bool" label="35334" default="false" />
-			<setting id="helper.providers.external.universal.open.incscrapersx" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34328]  [/LIGHT]" visible="eq(-2,true)" />
-		<setting id="providers.external.universal.open.incscrapersx.installed" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.incscrapersx.installation" type="action" label="33474" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=incscrapersInstall)" subsetting="true" visible="eq(-3,true) + eq(-1,false)" />
-			<setting id="helper.providers.external.universal.open.incscrapersx.installation" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34329]  [/LIGHT]" visible="eq(-4,true) + eq(-2,false) + eq(-5,true)" />
-		<setting id="providers.external.universal.open.incscrapersx.settings" type="action" label="33011" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=incscrapersSettings)" subsetting="true" visible="eq(-5,true) + eq(-3,true)" />
-			<setting id="helper.providers.external.universal.open.incscrapersx.settings" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34330]  [/LIGHT]" visible="eq(-6,true) + eq(-4,true) + eq(-7,true)" />
-		<setting id="providers.external.universal.open.incscrapersx.providers.label" type="action" label="32345" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=incscrapersProviders)" subsetting="true" visible="eq(-7,true) + eq(-5,true)" />
-			<setting id="providers.external.universal.open.incscrapersx.providers" type="text" visible="false" />
-			<setting id="helper.providers.external.universal.open.incscrapersx.providers.label" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34355]  [/LIGHT]" visible="eq(-9,true) + eq(-7,true) + eq(-10,true)" />
-
-		<!-- EXTERNAL - PLASCRAPERS -->
-			<setting id="help.providers.external.universal.open.plascrapersx" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.plascrapersx" type="bool" label="35333" default="false" />
-			<setting id="helper.providers.external.universal.open.plascrapersx" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34325]  [/LIGHT]" visible="eq(-2,true)" />
-		<setting id="providers.external.universal.open.plascrapersx.installed" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.plascrapersx.installation" type="action" label="33474" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=plascrapersInstall)" subsetting="true" visible="eq(-3,true) + eq(-1,false)" />
-			<setting id="helper.providers.external.universal.open.plascrapersx.installation" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34326]  [/LIGHT]" visible="eq(-4,true) + eq(-2,false) + eq(-5,true)" />
-		<setting id="providers.external.universal.open.plascrapersx.settings" type="action" label="33011" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=plascrapersSettings)" subsetting="true" visible="eq(-5,true) + eq(-3,true)" />
-			<setting id="helper.providers.external.universal.open.plascrapersx.settings" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34327]  [/LIGHT]" visible="eq(-6,true) + eq(-4,true) + eq(-7,true)" />
-		<setting id="providers.external.universal.open.plascrapersx.providers.label" type="action" label="32345" option="close" action="RunPlugin(plugin://plugin.video.gaia/?action=plascrapersProviders)" subsetting="true" visible="eq(-7,true) + eq(-5,true)" />
-			<setting id="providers.external.universal.open.plascrapersx.providers" type="text" visible="false" />
-			<setting id="helper.providers.external.universal.open.plascrapersx.providers.label" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34356]  [/LIGHT]" visible="eq(-9,true) + eq(-7,true) + eq(-10,true)" />
-
-		<!-- EXTERNAL - VIDEOSCRAPER -->
-			<setting id="help.providers.external.universal.open.videoscraper" type="bool" default="false" visible="false" />
-		<setting id="providers.external.universal.open.videoscraper" type="bool" label="35335" default="false" />
-			<setting id="helper.providers.external.universal.open.videoscraper" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34331]  [/LIGHT]" visible="eq(-2,true)" />
 
 		<setting type="sep" />
 		<setting type="bool" visible="false" /> <!-- Ensures that a separator is drawn at the bottom. -->

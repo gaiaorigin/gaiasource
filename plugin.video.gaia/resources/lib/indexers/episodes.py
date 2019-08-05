@@ -185,14 +185,13 @@ class episodes:
 				interface.Loader.hide()
 				if self.notifications: interface.Dialog.notification(title = 32326, message = 33049, icon = interface.Dialog.IconInformation)
 
-	def next(self, tvshowtitle, year, imdb, tvdb, season, episode, notification = True):
+	def next(self, tvshowtitle, year, imdb, tvdb, season, episode):
 		try:
 			result = self.get(tvshowtitle = tvshowtitle, year = year, imdb = imdb, tvdb = tvdb, season = int(season), episode = int(episode) + 1, idx = False)
 			if not result: result = self.get(tvshowtitle = tvshowtitle, year = year, imdb = imdb, tvdb = tvdb, season = int(season) + 1, episode = 1, idx = False)
 			result = result[0]
 			if int(re.sub('[^0-9]', '', str(result['premiered']))) < int(re.sub('[^0-9]', '', str(self.today_date))): return result
 		except: pass
-		if notification: interface.Dialog.notification(title = 35580, message = 35587, icon = interface.Dialog.IconInformation)
 		return None
 
 	def unfinished(self):

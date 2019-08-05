@@ -642,11 +642,6 @@ class Wizard(object):
 		choices.append('externalnanscrapers')
 		items.append(interface.Format.fontBold(external + interface.Translation.string(35350) + ': ' + (enabled if tools.Settings.getBoolean('providers.external.universal.open.nanscrapersx') else disabled)))
 		choices.append('externalincscrapers')
-		items.append(interface.Format.fontBold(external + interface.Translation.string(35352) + ': ' + (enabled if tools.Settings.getBoolean('providers.external.universal.open.incscrapersx') else disabled)))
-		choices.append('externalplascrapers')
-		items.append(interface.Format.fontBold(external + interface.Translation.string(35351) + ': ' + (enabled if tools.Settings.getBoolean('providers.external.universal.open.plascrapersx') else disabled)))
-		choices.append('externalyodscrapers')
-		items.append(interface.Format.fontBold(external + interface.Translation.string(35533) + ': ' + (enabled if tools.Settings.getBoolean('providers.external.universal.open.yodscrapersx') else disabled)))
 
 		choice = interface.Dialog.options(title = 33014, items = items)
 		if choice < 0: return self._cancel()
@@ -746,15 +741,6 @@ class Wizard(object):
 		elif choice == 'externalnanscrapers':
 			active = self._option(interface.Translation.string(33907) % interface.Translation.string(35360), 33737, 33192) == Wizard.ChoiceRight
 			tools.Settings.set('providers.external.universal.open.nanscrapersx', active)
-		elif choice == 'externalincscrapers':
-			active = self._option(interface.Translation.string(33907) % interface.Translation.string(35362), 33737, 33192) == Wizard.ChoiceRight
-			tools.Settings.set('providers.external.universal.open.incscrapersx', active)
-		elif choice == 'externalplascrapers':
-			active = self._option(interface.Translation.string(33907) % interface.Translation.string(35361), 33737, 33192) == Wizard.ChoiceRight
-			tools.Settings.set('providers.external.universal.open.plascrapersx', active)
-		elif choice == 'externalyodscrapers':
-			active = self._option(interface.Translation.string(33907) % interface.Translation.string(35535), 33737, 33192) == Wizard.ChoiceRight
-			tools.Settings.set('providers.external.universal.open.yodscrapersx', active)
 
 		return self._showProviders(first = False)
 

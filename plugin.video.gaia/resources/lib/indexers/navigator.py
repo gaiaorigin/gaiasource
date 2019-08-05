@@ -853,9 +853,6 @@ class navigator:
 		self.addDirectoryItem(35460, 'gloscrapersNavigator', 'gloscrapers.png', 'DefaultAddonProgram.png')
 		self.addDirectoryItem(35331, 'uniscrapersNavigator', 'uniscrapers.png', 'DefaultAddonProgram.png')
 		self.addDirectoryItem(35332, 'nanscrapersNavigator', 'nanscrapers.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(35334, 'incscrapersNavigator', 'incscrapers.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(35333, 'plascrapersNavigator', 'plascrapers.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(35456, 'yodscrapersNavigator', 'yodscrapers.png', 'DefaultAddonProgram.png')
 		self.endDirectory()
 
 	def servicesResolverNavigator(self):
@@ -1062,27 +1059,6 @@ class navigator:
 			self.addDirectoryItem(33011, 'nanscrapersSettings', 'nanscraperssettings.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		else:
 			self.addDirectoryItem(33474, 'nanscrapersInstall', 'nanscrapersinstall.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		self.endDirectory()
-
-	def incscrapersNavigator(self):
-		if tools.IncScrapers.installed():
-			self.addDirectoryItem(33011, 'incscrapersSettings', 'incscraperssettings.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		else:
-			self.addDirectoryItem(33474, 'incscrapersInstall', 'incscrapersinstall.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		self.endDirectory()
-
-	def plascrapersNavigator(self):
-		if tools.PlaScrapers.installed():
-			self.addDirectoryItem(33011, 'plascrapersSettings', 'plascraperssettings.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		else:
-			self.addDirectoryItem(33474, 'plascrapersInstall', 'plascrapersinstall.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		self.endDirectory()
-
-	def yodscrapersNavigator(self):
-		if tools.YodScrapers.installed():
-			self.addDirectoryItem(33011, 'yodscrapersSettings', 'yodscraperssettings.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		else:
-			self.addDirectoryItem(33474, 'yodscrapersInstall', 'yodscrapersinstall.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.endDirectory()
 
 	def extendedinfoNavigator(self):
