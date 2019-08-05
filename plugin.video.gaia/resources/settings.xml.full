@@ -233,7 +233,7 @@
 			<setting id="helper.interface.navigation.cinema.interrupt" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34412]  [/LIGHT]" visible="eq(-11,true) + eq(-14,true)" />
 		<setting id="interface.navigation.scrape" type="enum" label="32335" lvalues="33105|32332|32336" default="0" />
 			<setting id="helper.interface.navigation.scrape" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34004]  [/LIGHT]" visible="eq(-16,true)" />
-		<setting id="interface.navigation.scrape.providers" type="bool" label="32345" default="false" subsetting="true" visible="!eq(-2,2)" />
+		<setting id="interface.navigation.scrape.providers" type="bool" label="32345" default="true" subsetting="true" visible="!eq(-2,2)" />
 			<setting id="helper.interface.navigation.scrape.providers" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34401]  [/LIGHT]" visible="!eq(-3,2) + eq(-18,true)" />
 		<setting id="interface.navigation.scrape.background" type="enum" label="32337" subsetting="true" lvalues="33112|33248|35463|35260" default="1" visible="eq(-4,0)" />
 			<setting id="helper.interface.navigation.scrape.background" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34373]  [/LIGHT]" visible="eq(-5,0) + eq(-20,true)" />

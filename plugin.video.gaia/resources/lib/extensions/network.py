@@ -238,17 +238,23 @@ class Networker(object):
 		return self.mResponse
 
 	def cookies(self, link = None, parameters = None, headers = None, timeout = 30, range = None, force = False, addon = False, flare = True, form = None, json = None, method = None, raw = False):
-		import urllib2
-		import cookielib
-		jar = cookielib.LWPCookieJar()
-		handlers = [urllib2.HTTPHandler(), urllib2.HTTPSHandler(), urllib2.HTTPCookieProcessor(jar)]
-		opener = urllib2.build_opener(*handlers)
-		opener = urllib2.install_opener(opener)
-		self.request(link = link, parameters = parameters, headers = headers, timeout = timeout, range = range, force = force, addon = addon, flare = flare, form = form, method = method)
-		cookies = {cookie.name : cookie.value for cookie in jar}
-		if self.mCookies: cookies.update({cookie.name : cookie.value for cookie in self.mCookies}) # CloudFlare cookies.
-		if raw: cookies = '; '.join(['%s=%s' % (key, value) for key, value in cookies.iteritems()])
-		return cookies
+		try:
+			import urllib2
+			import cookielib
+
+			jar = cookielib.LWPCookieJar()
+			handlers = [urllib2.HTTPHandler(), urllib2.HTTPSHandler(), urllib2.HTTPCookieProcessor(jar)]
+			opener = urllib2.build_opener(*handlers)
+			urllib2.install_opener(opener)
+			self.request(link = link, parameters = parameters, headers = headers, timeout = timeout, range = range, force = force, addon = addon, flare = flare, form = form, method = method)
+
+			cookies = {cookie.name : cookie.value for cookie in jar}
+			if self.mCookies: cookies.update({cookie.name : cookie.value for cookie in self.mCookies}) # CloudFlare cookies.
+			if raw: cookies = '; '.join(['%s=%s' % (key, value) for key, value in cookies.iteritems()])
+			return cookies
+		except:
+			tools.Logger.error()
+			return None
 
 	def download(self, path, timeout = 30, range = None, flare = True):
 		data = self.retrieve(timeout = timeout, range = range, force = False, flare = flare)
@@ -278,6 +284,7 @@ class Networker(object):
 				self.mResponse.close()
 				return self.mData
 		except:
+			tools.Logger.error()
 			return None
 
 	def retrieveJson(self, link = None, parameters = None, headers = None, timeout = 30, range = None, force = False, addon = False, flare = True, form = None, json = None, method = None):
@@ -296,6 +303,7 @@ class Networker(object):
 				self.mErrorCode = None
 				self.mResponse = None
 				self.mData = None
+
 				if link is None: link = self.mLink
 				if method: method = method.upper()
 				if link:
@@ -373,12 +381,20 @@ class Networker(object):
 						request.add_header(key, value)
 
 					if method: request.get_method = lambda: method
-					try:
+
+					# The cookies() function does not work if the security context is set. Try first without.
+					'''try:
 						secureContext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 						self.mResponse = urllib2.urlopen(request, context = secureContext, timeout = timeout)
 					except:
 						# SPMC (Python < 2.7.8) does not support TLS. Try to do it wihout SSL/TLS, otherwise bad luck.
+						self.mResponse = urllib2.urlopen(request, timeout = timeout)'''
+					try:
 						self.mResponse = urllib2.urlopen(request, timeout = timeout)
+					except:
+						secureContext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+						self.mResponse = urllib2.urlopen(request, context = secureContext, timeout = timeout)
+
 			return self.mResponse
 		except urllib2.HTTPError as error: # HTTP error.
 			if flare and error.code in [301, 307, 308, 503] and 'cloudflare' in str(error.info()).lower():

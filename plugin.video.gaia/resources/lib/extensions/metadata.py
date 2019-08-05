@@ -1874,8 +1874,8 @@ class Metadata(object):
 		splits = self.mTitlesSplit
 		splits.append(self.mTitleSplit)
 
-		for split in splits:
-			total = len(split)
+		for s in splits:
+			total = len(s)
 			split = copy.deepcopy(self.mNameSplit)
 			count = 0
 
@@ -1889,7 +1889,7 @@ class Metadata(object):
 				if index > 0: skip = index > total * self.mIgnoreLength
 
 			setting = tools.Settings.getInteger('scraping.providers.filename')
-			for i in split:
+			for i in s:
 				try:
 					index = split.index(i)
 					count += 1

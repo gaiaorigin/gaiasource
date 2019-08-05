@@ -23,6 +23,7 @@ from resources.lib.modules import client
 from resources.lib.extensions import provider
 from resources.lib.extensions import metadata
 from resources.lib.extensions import tools
+from resources.lib.extensions import network
 
 class source(provider.ProviderBase):
 
@@ -37,6 +38,19 @@ class source(provider.ProviderBase):
 		self.search_link = '/get_list'
 		self.category_movies = 3
 		self.category_tvshows = 4
+
+	def _headers(self):
+		try:
+			networker = network.Networker()
+			data = networker.retrieve(self.base_link)
+			id = re.findall('token\s*:\s*(.*)', data, re.I)[-1].strip()
+			token = re.findall(id + '\s*=\s*[\'"](.*?)[;\'"]', data, re.I)[-1].strip()
+			token += ''.join(re.findall(id + '\s*\+=\s*[\'"](.*?)[;\'"]', data, re.I))
+			headers = {'X-Request-Token' : token}
+			return headers, networker
+		except:
+			tools.Logger.error()
+			return None, None
 
 	def sources(self, url, hostDict, hostprDict):
 		sources = []
@@ -79,16 +93,21 @@ class source(provider.ProviderBase):
 			url = urlparse.urljoin(self.base_link, self.search_link)
 			category = self.category_tvshows if ('tvshowtitle' in data and not data['tvshowtitle'] == None and not data['tvshowtitle'] == '') else self.category_movies
 
-			torrents = json.loads(client.request(url, post = {
+			headers, networker = self._headers()
+			if not headers: raise Exception()
+
+			# Use same networker to take over cookies.
+			torrents = networker.retrieveJson(link = url, force = True, headers = headers, parameters = {
 				'query' : urllib.quote_plus(query),
 				'filters[category]' : str(category),
 				'filters[adult]' : 'false',
+				'filters[risky]' : 'false',
 				'filters[field]' : 'seeds',
 				'filters[sort]' : 'desc',
 				'filters[time]' : '4',
 				'limit' : '1000',
 				'offset' : '0',
-			}))['content']
+			})['content']
 
 			for torrent in torrents:
 				jsonName = torrent['name']
