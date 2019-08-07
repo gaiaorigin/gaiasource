@@ -2298,10 +2298,12 @@ class Metadata(object):
 			# This is needed, otherwise the audio channels are detected as 8CH in a string link "S10E07 1080p".
 			self.mNameReduced = ' '.join(self.mNameSplit)
 			for split in self.mTitleSplit:
-				self.mNameReduced = self.mNameReduced.replace(split, '')
+				try: self.mNameReduced = self.mNameReduced.replace(split, '')
+				except: self.mNameReduced = self.mNameReduced.encode('utf-8').replace(split, '')
 			for title in self.mTitlesSplit:
 				for split in title:
-					self.mNameReduced = self.mNameReduced.replace(split, '')
+					try: self.mNameReduced = self.mNameReduced.replace(split, '')
+					except: self.mNameReduced = self.mNameReduced.encode('utf-8').replace(split, '')
 			if not self.mSeason == None or not self.mEpisode == None:
 				self.mNameReduced = re.sub('[sS]\d{1,5}[eE]\d{1,5}|[sS]\d{1,5}', '', self.mNameReduced)
 		except:

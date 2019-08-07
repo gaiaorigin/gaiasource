@@ -40,7 +40,7 @@ class NewzNab(provider.ProviderBase):
 	ParameterType = 't'
 	ParameterOutput = 'o'
 	ParameterId = 'id'
-	ParameterQuery = 'query'
+	ParameterQuery = 'q'
 	ParameterImdb = 'imdbid'
 	ParameterTvdb = 'tvdbid'
 	ParameterSeason = 'season'
@@ -108,8 +108,8 @@ class NewzNab(provider.ProviderBase):
 		parameters.append([NewzNab.ParameterType, type])
 		if not id is None: parameters.append([NewzNab.ParameterId, self._id(id)])
 		if not query is None: parameters.append([NewzNab.ParameterQuery, query])
-		if not imdb is None: parameters.append([NewzNab.ParameterImdb, imdb.replace('tt', '')])
 		if not tvdb is None: parameters.append([NewzNab.ParameterTvdb, tvdb])
+		elif not imdb is None: parameters.append([NewzNab.ParameterImdb, imdb.replace('tt', '')]) # Do not attach an IMDb ID if there is already one for TVDb, otherwise no results are returned.
 		if not season is None: parameters.append([NewzNab.ParameterSeason, season])
 		if not episode is None: parameters.append([NewzNab.ParameterEpisode, episode])
 
@@ -168,10 +168,10 @@ class NewzNab(provider.ProviderBase):
 						# Search special episodes by name. All special episodes are added to season 0 by Trakt and TVDb. Hence, do not search by filename (eg: S02E00), since the season is not known.
 						if (season == 0 or episode == 0) and ('title' in data and not data['title'] == None and not data['title'] == ''):
 							title = '%s %s' % (data['tvshowtitle'], data['title']) # Change the title for metadata filtering.
-							link = self._link(type = NewzNab.TypeSearch, query = title)
+							link = self._link(type = NewzNab.TypeShow, query = title)
 							ignoreContains = len(data['title']) / float(len(title)) # Increase the required ignore ration, since otherwise individual episodes and season packs are found as well.
 						else:
-							if pack: link = self._link(type = NewzNab.TypeSearch, query = '%s %d' % (title, season))
+							if pack: link = self._link(type = NewzNab.TypeShow, query = '%s %d' % (title, season)) # Do not use geenral search, but TV search instead.
 							else: link = self._link(type = NewzNab.TypeShow, imdb = imdb, tvdb = tvdb, season = season, episode = episode)
 					else:
 						link = self._link(type = NewzNab.TypeMovie, imdb = imdb)
@@ -197,7 +197,7 @@ class NewzNab(provider.ProviderBase):
 					try:
 						# Name
 						jsonName = item['title']
-
+						
 						# Link
 						# Do not use the default item['link'], since it is a non-API link requiring the user ID besides the user API key.
 						try: jsonLink = item['guid']['text']
