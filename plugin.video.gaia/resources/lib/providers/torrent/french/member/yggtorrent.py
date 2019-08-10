@@ -124,7 +124,7 @@ class source(provider.ProviderBase):
 
 						# Name
 						htmlInfo = htmlRows[i].find_all('a', href = True)[1]
-						htmlName = htmlInfo.getText()
+						htmlName = htmlInfo.getText().strip()
 
 						# Category
 						if subcategory is self.subcategory_any:

@@ -597,7 +597,10 @@ class Core:
 					# Also search titles that contain abbrviations (consecutive capital letters).
 					# Eg: "K.C. Undercover" is retrieved as "KC Undercover" by informants. Most providers have it as "K C Undercover".
 					self.titleAbbreviation = self.titleOriginal
-					abbreviations = re.findall('[A-Z]{2,}', self.titleAbbreviation)
+					if not self.titleAbbreviation == None:
+						abbreviations = re.findall('[A-Z]{2,}', self.titleAbbreviation)
+						for abbreviation in abbreviations:
+							self.titleAbbreviation = self.titleAbbreviation.replace(abbreviation, ' '.join(list(abbreviation)))
 
 					if not self.titleAbbreviation == self.titleOriginal:
 						self.titleAlternatives['abbreviation'] = self.titleAbbreviation
@@ -5012,8 +5015,11 @@ class Core:
 	def getLocalTitle(self, title, imdb, tvdb, content):
 		language = self.getLanguage()
 		if not language: return title
-		if content.startswith('movie'): titleForeign = trakt.getMovieTranslation(imdb, language)
-		else: titleForeign = tvmaze.tvMaze().getTVShowTranslation(tvdb, language)
+		if content.startswith('movie'):
+			titleForeign = trakt.getMovieTranslation(imdb, language)
+		else:
+			titleForeign = tvmaze.tvMaze().getTVShowTranslation(tvdb, language)
+			if titleForeign == None: titleForeign = trakt.getMovieTranslation(imdb, language)
 		return titleForeign or title
 
 	def getAliasTitles(self, imdb, localtitle, content):

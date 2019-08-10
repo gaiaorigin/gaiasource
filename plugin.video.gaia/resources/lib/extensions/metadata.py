@@ -1829,8 +1829,12 @@ class Metadata(object):
 			try: name = i % (season, episode)
 			except: name = i % episode
 			processedEpisode, splitEpisode = self.__loadValue(name, splitAll = False)
-			if self.__matchSequential(joinedTitle, splitEpisode):
+
+			# This returns True for S18E01 for file "South.Park.S18E10.720p.BluRay.x264-REWARD.mkv", because if will say that S18E1 is in the title and ignore the 0 affterwards.
+			#if self.__matchSequential(joinedTitle, splitEpisode):
+			if all(x in splitTitle for x in splitEpisode):
 				return True
+
 		return False
 
 	# season: ingore the season number (for season packs on YggTorrent).
