@@ -167,6 +167,11 @@ class Metadata(object):
 		'ep %d',
 		'ep %02d',
 	]
+	EpisodesExtra = [
+		'%03d',
+		'%02d',
+		'%d',
+	]
 
 	# Must be in order, so that eg DVD Rip comes before DVD.
 	# Do not add space to end of values. otherwise detects it everywhere.
@@ -1819,22 +1824,28 @@ class Metadata(object):
 				except: episodes[i] = episodes[i] % episode
 		return episodes
 
-	def episodeContains(self, title, season, episode):
-		if season == None or episode == None: return True # For movies
+	def episodeContains(self, title, season, episode, extra = False):
+		if episode == None: return True # For movies
 		processedTitle, splitTitle = self.__loadValue(title)
 		joinedTitle = ' '.join(splitTitle)
-		season = int(season)
+		if not season is None: season = int(season)
 		episode = int(episode)
-		for i in Metadata.Episodes:
-			try: name = i % (season, episode)
-			except: name = i % episode
-			processedEpisode, splitEpisode = self.__loadValue(name, splitAll = False)
+		formats = Metadata.Episodes
+		if extra: formats.extend(Metadata.EpisodesExtra)
+		for i in formats:
+			try:
+				if season is None:
+					name = i % episode
+				else:
+					try: name = i % (season, episode)
+					except: name = i % episode
+				processedEpisode, splitEpisode = self.__loadValue(name, splitAll = False)
 
-			# This returns True for S18E01 for file "South.Park.S18E10.720p.BluRay.x264-REWARD.mkv", because if will say that S18E1 is in the title and ignore the 0 affterwards.
-			#if self.__matchSequential(joinedTitle, splitEpisode):
-			if all(x in splitTitle for x in splitEpisode):
-				return True
-
+				# This returns True for S18E01 for file "South.Park.S18E10.720p.BluRay.x264-REWARD.mkv", because if will say that S18E1 is in the title and ignore the 0 affterwards.
+				#if self.__matchSequential(joinedTitle, splitEpisode):
+				if all(x in splitTitle for x in splitEpisode):
+					return True
+			except: pass
 		return False
 
 	# season: ingore the season number (for season packs on YggTorrent).

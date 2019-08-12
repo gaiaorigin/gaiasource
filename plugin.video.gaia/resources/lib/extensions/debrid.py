@@ -1531,30 +1531,36 @@ class Premiumize(Debrid):
 		except:
 			tools.Logger.error()
 
+	def _itemLargestFind(self, files, season = None, episode = None, valid = True, extra = False):
+		largest = None
+		meta = metadata.Metadata()
+		for file in files:
+			# Somtimes the parent folder name contains part of the name and the actual file the other part.
+			# Eg: Folder = "Better Call Saul Season 1", File "Part 1 - Episode Name"
+			try: name = file['parent']['name'] + ' ' + file['name']
+			except:
+				try: name = file['name']
+				except: name = file['path'].replace('/', ' ')
+
+			if meta.episodeContains(title = name, season = season, episode = episode, extra = extra):
+				try: sizeCurrent = file['size']['bytes']
+				except: sizeCurrent = file['size']
+				try: sizeLargest = largest['size']['bytes']
+				except:
+					try: sizeLargest = largest['size']
+					except: sizeLargest = 0
+				try: streamIs = file['stream']
+				except: streamIs = 'stream_link' in file and (file['stream_link'] or not valid)
+				if streamIs and (largest == None or sizeCurrent > sizeLargest):
+					largest = file
+		return largest
+
 	def _itemLargest(self, files, season = None, episode = None, valid = True):
 		largest = None
 		try:
 			if not season == None and not episode == None:
-				meta = metadata.Metadata()
-				for file in files:
-					# Somtimes the parent folder name contains part of the name and the actual file the other part.
-					# Eg: Folder = "Better Call Saul Season 1", File "Part 1 - Episode Name"
-					try: name = file['parent']['name'] + ' ' + file['name']
-					except:
-						try: name = file['name']
-						except: name = file['path'].replace('/', ' ')
-
-					if meta.episodeContains(title = name, season = season, episode = episode):
-						try: sizeCurrent = file['size']['bytes']
-						except: sizeCurrent = file['size']
-						try: sizeLargest = largest['size']['bytes']
-						except:
-							try: sizeLargest = largest['size']
-							except: sizeLargest = 0
-						try: streamIs = file['stream']
-						except: streamIs = 'stream_link' in file and (file['stream_link'] or not valid)
-						if streamIs and (largest == None or sizeCurrent > sizeLargest):
-							largest = file
+				largest = self._itemLargestFind(files = files, season = season, episode = episode, valid = valid)
+				if largest == None: largest = self._itemLargestFind(files = files, season = None, episode = episode, valid = valid, extra = True)
 
 			if largest == None:
 				for file in files:
@@ -3625,9 +3631,15 @@ class OffCloud(Debrid):
 						# Eg: Folder = "Better Call Saul Season 1", File "Part 1 - Episode Name"
 						try: fullName = name + ' ' + i['name']
 						except: fullName = i['name']
+						if meta.episodeContains(title = fullName, season = season, episode = episode): video = i
+					if video == None:
+						for i in filesSelection:
+							# Somtimes the parent folder name contains part of the name and the actual file the other part.
+							# Eg: Folder = "Better Call Saul Season 1", File "Part 1 - Episode Name"
+							try: fullName = name + ' ' + i['name']
+							except: fullName = i['name']
+							if meta.episodeContains(title = fullName, season = None, episode = episode, extra = True): video = i
 
-						if meta.episodeContains(title = fullName, season = season, episode = episode):
-							video = i
 				if video == None:
 					if len(filesMain) > 0: video = filesMain[0]
 					elif len(filesVideo) > 0: video = filesVideo[0]
@@ -5277,6 +5289,11 @@ class RealDebrid(Debrid):
 							if meta.episodeContains(title = file['path'], season = season, episode = episode):
 								if largest == None or file['size']['bytes'] > largest['size']['bytes']:
 									largest = file
+						if largest == None:
+							for file in item['files']:
+								if meta.episodeContains(title = file['path'], season = None, episode = episode, extra = True):
+									if largest == None or file['size']['bytes'] > largest['size']['bytes']:
+										largest = file
 					if largest == None:
 						return result
 					else:
@@ -5578,6 +5595,13 @@ class RealDebrid(Debrid):
 					# Force to download again, if the episode does not match, that is a different episode is selected from the season pack.
 					if meta.episodeContains(title = item['name'], season = season, episode = episode):
 						return item
+			for item in items:
+				if item['hash'].lower() == hash:
+					# Also check for the season/episode for season packs.
+					# Otherwise RealDebrid will always return the first ever episode downloaded in the pack, since the hash for the torrent is the same.
+					# Force to download again, if the episode does not match, that is a different episode is selected from the season pack.
+					if meta.episodeContains(title = item['name'], season = None, episode = episode, extra = True):
+						return item
 		except:
 			pass
 		return None
@@ -5698,6 +5722,13 @@ class RealDebrid(Debrid):
 								if largest == None or file['bytes'] > largest['bytes']:
 									largest = file
 									index = i
+						if index == None:
+							for i in range(len(files)):
+								file = files[i]
+								if file['selected'] and meta.episodeContains(title = file['path'], season = None, episode = episode, extra = True):
+									if largest == None or file['bytes'] > largest['bytes']:
+										largest = file
+										index = i
 					if index == None:
 						for i in range(len(files)):
 							file = files[i]
