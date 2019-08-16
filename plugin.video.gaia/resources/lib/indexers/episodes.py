@@ -225,8 +225,10 @@ class episodes:
 		except:
 			tools.Logger.error()
 
-	def calendar(self, url, idx = True, direct = False):
+	def calendar(self, url, idx = True, direct = None):
 		try:
+			if direct is None: direct = tools.Settings.getBoolean('interface.tvshows.direct')
+
 			multi = False
 			try: url = getattr(self, url + '_link')
 			except: pass
@@ -251,10 +253,10 @@ class episodes:
 				urls = [i['url'] for i in self.calendars(idx = False)][:5]
 				self.list = []
 				for url in urls:
-					self.list += cache.Cache().cacheLong(self.tvmaze_list, url, True, direct)
+					self.list += cache.Cache().cacheLong(self.tvmaze_list, url, True, True, direct)
 
 			elif self.tvmaze_link in url:
-				self.list = cache.Cache().cacheShort(self.tvmaze_list, url, False, direct)
+				self.list = cache.Cache().cacheShort(self.tvmaze_list, url, False, True, direct)
 
 			if self.kidsOnly():
 				self.list = [i for i in self.list if 'mpaa' in i and tools.Kids.allowed(i['mpaa'])]
@@ -281,7 +283,7 @@ class episodes:
 	def home(self, idx = True, direct = False):
 		date = self.datetime - datetime.timedelta(days = 1)
 		url = self.calendar_link % date.strftime('%Y-%m-%d')
-		self.list = cache.Cache().cacheShort(self.tvmaze_list, url, False, direct)
+		self.list = cache.Cache().cacheShort(self.tvmaze_list, url, False, True, direct)
 		if idx: self.episodeDirectory(self.list)
 		return self.list
 

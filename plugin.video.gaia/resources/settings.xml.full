@@ -509,8 +509,8 @@
 		<setting id="playback.binge.action.none" type="enum" label="35625" lvalues="33821|33743" default="0" subsetting="true" visible="eq(-8,true) + !eq(-6,0) + !eq(-6,3)" />
 			<setting id="helper.playback.binge.action.none" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34426]  [/LIGHT]" visible="eq(-9,true) + !eq(-7,0) + !eq(-7,3) + eq(-10,true)" />
 		<setting id="playback.binge.action.continue" type="enum" label="35626" lvalues="35628|35627" default="0" subsetting="true" visible="eq(-10,true) + !eq(-8,0) + !eq(-8,1)" />
-			<setting id="helper.playback.binge.action.continu" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34427]  [/LIGHT]" visible="eq(-11,true) + !eq(-9,0) + !eq(-9,1) + eq(-12,true)" />
-		<setting id="playback.binge.action.cancel" type="enum" label="35105" lvalues="35628|35627" default="0" subsetting="true" visible="eq(-12,true) + eq(-10,2)" />
+			<setting id="helper.playback.binge.action.continue" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34427]  [/LIGHT]" visible="eq(-11,true) + !eq(-9,0) + !eq(-9,1) + eq(-12,true)" />
+		<setting id="playback.binge.action.cancel" type="enum" label="35105" lvalues="35628|35627" default="1" subsetting="true" visible="eq(-12,true) + eq(-10,2)" />
 			<setting id="helper.playback.binge.action.cancel" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34428]  [/LIGHT]" visible="eq(-13,true) + eq(-11,2) + eq(-14,true)" />
 
 		<setting type="sep" />

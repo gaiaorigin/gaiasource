@@ -6181,7 +6181,7 @@ msgid "Enables the use of distributed universal torrent providers. Distributed p
 msgstr ""
 
 msgctxt "#34393"
-msgid "Immediately start scraping an episode from the Trakt list instead of showing a list of all unwatched episodes."
+msgid "Immediately start scraping an episode from the Trakt progress list or show calendar instead of showing a list of all unwatched episodes."
 msgstr ""
 
 msgctxt "#34394"
@@ -8301,7 +8301,7 @@ msgid "Minimum Popularity"
 msgstr ""
 
 msgctxt "#35492"
-msgid "Direct Progress"
+msgid "Direct Scraping"
 msgstr ""
 
 msgctxt "#35493"

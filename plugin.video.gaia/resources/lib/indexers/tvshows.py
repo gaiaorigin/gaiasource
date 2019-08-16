@@ -237,7 +237,7 @@ class tvshows:
 				if idx == True: self.worker()
 
 			elif u in self.tvmaze_link:
-				self.list = cache.Cache().cacheLong(self.tvmaze_list, url, full)
+				self.list = cache.Cache().cacheLong(self.tvmaze_list, url)
 				if idx == True: self.worker()
 
 			if self.list == None: self.list = []
