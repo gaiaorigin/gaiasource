@@ -904,8 +904,8 @@ class Core:
 						if providerOrion and providerOrion['selected']:
 							tools.Logger.log('Scraping Orion', name = 'CORE', level = tools.Logger.TypeNotice)
 							threadOrion = None
-							if movie: threadOrion = workers.Thread(self.scrapeMovie, title, self.titleLocal, self.titleAliases, year, imdb, providerOrion, exact, cache)
-							else: threadOrion = workers.Thread(self.scrapeEpisode, title, self.titleLocal, self.titleAliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, providerOrion, exact, cache)
+							if movie: threadOrion = workers.Thread(self.scrapeMovie, title, None, self.titleLocal, self.titleAliases, year, imdb, providerOrion, exact, cache)
+							else: threadOrion = workers.Thread(self.scrapeEpisode, title, None, self.titleLocal, self.titleAliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, providerOrion, exact, cache)
 
 							threadOrion.start()
 							timerSingle.start()

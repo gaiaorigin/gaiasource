@@ -323,7 +323,7 @@
 		<setting id="playback.binge.delay" type="slider" label="35581" range="0,180" option="int" default="0" subsetting="true" visible="eq(-3,true) + !eq(-2,0) + !eq(-2,3)" />
 		<setting id="playback.binge.action.none" type="enum" label="35625" lvalues="33821|33743" default="0" subsetting="true" visible="eq(-4,true) + !eq(-3,0) + !eq(-3,3)" />
 		<setting id="playback.binge.action.continue" type="enum" label="35626" lvalues="35628|35627" default="0" subsetting="true" visible="eq(-5,true) + !eq(-4,0) + !eq(-4,1)" />
-		<setting id="playback.binge.action.cancel" type="enum" label="35105" lvalues="35628|35627" default="0" subsetting="true" visible="eq(-6,true) + eq(-5,2)" />
+		<setting id="playback.binge.action.cancel" type="enum" label="35105" lvalues="35628|35627" default="1" subsetting="true" visible="eq(-6,true) + eq(-5,2)" />
 
 		<setting type="sep" />
 		<setting type="bool" visible="false" /> <!-- Ensures that a separator is drawn at the bottom. -->
