@@ -83,6 +83,8 @@ class source(provider.ProviderBase):
 					query = title # Do not include year, otherwise there are few results.
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
+			if not self._query(query): return sources
+
 			url = urlparse.urljoin(self.base_link, self.search_link)
 
 			pageLimit = tools.Settings.getInteger('scraping.providers.pages')

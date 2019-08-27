@@ -71,6 +71,7 @@ class source(provider.ProviderBase):
 					query = '%s %d' % (title, year)
 
 			query = urllib.quote_plus(query)
+			if not self._query(query): return sources
 
 			# The returned website is different to the normal website.
 			# Probably a mobile version.

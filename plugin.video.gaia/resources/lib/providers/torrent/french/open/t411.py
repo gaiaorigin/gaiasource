@@ -90,6 +90,8 @@ class source(provider.ProviderBase):
 					query = title # Do not include year, otherwise there are few results.
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
+			if not self._query(query): return sources
+
 			url = self.base_link + self.search_link % urllib.quote_plus(query)
 			html = BeautifulSoup(client.request(url))
 

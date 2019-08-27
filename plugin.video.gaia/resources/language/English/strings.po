@@ -5961,11 +5961,11 @@ msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 msgstr ""
 
 msgctxt "#34330"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Shows the name of the addon the stream originated from. The full name, or a short or mini abbreviation can be displayed."
 msgstr ""
 
 msgctxt "#34331"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "The maximum number of alternative titles to search for. More titles mean longer scraping times, but can increase the chances of finding foreign titles."
 msgstr ""
 
 msgctxt "#34332"
@@ -7665,15 +7665,15 @@ msgid "NaN Scrapers"
 msgstr ""
 
 msgctxt "#35333"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Prefix"
 msgstr ""
 
 msgctxt "#35334"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Tertiary"
 msgstr ""
 
 msgctxt "#35335"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Title Limit"
 msgstr ""
 
 msgctxt "#35336"
@@ -8886,4 +8886,8 @@ msgstr ""
 
 msgctxt "#35637"
 msgid "Specials"
+msgstr ""
+
+msgctxt "#35638"
+msgid "Scraping Terminated With Enough Streams"
 msgstr ""

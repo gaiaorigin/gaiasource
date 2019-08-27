@@ -176,6 +176,8 @@ class NewzNab(provider.ProviderBase):
 					else:
 						link = self._link(type = NewzNab.TypeMovie, imdb = imdb)
 
+				if not self._query(link): return sources
+
 				data = client.request(link, ignoreErrors = 429)
 				try:
 					result = tools.Converter.jsonFrom(data)
@@ -197,7 +199,7 @@ class NewzNab(provider.ProviderBase):
 					try:
 						# Name
 						jsonName = item['title']
-						
+
 						# Link
 						# Do not use the default item['link'], since it is a non-API link requiring the user ID besides the user API key.
 						try: jsonLink = item['guid']['text']

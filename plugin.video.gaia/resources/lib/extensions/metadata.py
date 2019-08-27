@@ -1459,16 +1459,6 @@ class Metadata(object):
 		if value: return value
 		else: return interface.Format.font(Metadata.Fill, bold = bold, color = color, translate = False)
 
-	def labelOrion(self, format = True, color = None, bold = True, uppercase = True):
-		if color is None: color = interface.Format.colorOrion()
-		label = None
-		if self.orion():
-			from resources.lib.extensions import orionoid
-			label = orionoid.Orionoid.Name
-			if format:
-				label = interface.Format.font(label, bold = bold, color = color, uppercase = uppercase)
-		return label
-
 	def labelType(self, format = True, color = None, bold = True, uppercase = True, setting = None):
 		if color is None: color = interface.Format.colorMain()
 		label = None

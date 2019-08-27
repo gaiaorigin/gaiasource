@@ -52,21 +52,23 @@ class source(provider.ProviderBase):
 			type = tools.Media.TypeShow if 'tvshowtitle' in data else tools.Media.TypeMovie
 			imdb = data['imdb'] if 'imdb' in data else None
 			if 'exact' in data and data['exact']:
-				query = data['tvshowtitle'] if type == tools.Media.TypeShow else data['title']
-				title = None
+				exact = True
+				title = data['tvshowtitle'] if type == tools.Media.TypeShow else data['title']
 				titles = None
 				year = None
 				season = None
 				episode = None
 			else:
-				query = None
+				exact = False
 				title = data['tvshowtitle'] if type == tools.Media.TypeShow else data['title']
 				titles = data['alternatives'] if 'alternatives' in data else None
 				year = int(data['year']) if 'year' in data and not data['year'] == None else None
 				season = int(data['season']) if 'season' in data and not data['season'] == None else None
 				episode = int(data['episode']) if 'episode' in data and not data['episode'] == None else None
 
-			streams = self.emby.search(type = type, title = title, year = year, season = season, episode = episode)
+			if not self._query(title, year, season, episode): return sources
+
+			streams = self.emby.search(type = type, title = title, year = year, season = season, episode = episode, exact = exact)
 			if not streams: return sources
 
 			for stream in streams:

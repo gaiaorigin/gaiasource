@@ -319,6 +319,7 @@ class source(provider.ProviderBase):
 				else:
 					required = str(year)
 
+			if not self._query(query): return sources
 			queryFull = self._query(query, True)
 			query = self._query(query, True, True)
 			required = self._query(required, False)

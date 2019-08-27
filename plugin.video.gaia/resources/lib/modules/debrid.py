@@ -148,7 +148,7 @@ def resolver(url, debrid, title = None, season = None, episode = None, close = T
 	try:
 		if not debrid == 'offcloud' and not debrid == True: raise Exception()
 		if not debridx.OffCloud().accountValid(): raise Exception()
-		return debridx.OffCloudInterface().add(link = url, title = title, season = season, episode = episode, pack = pack, close = close, source = source, cached = cached, select = select)
+		return debridx.OffCloudInterface().add(link = url, title = title, season = season, episode = episode, pack = pack, close = close, source = source, cached = cached, select = select, cloud = cloud)
 	except:
 		pass
 

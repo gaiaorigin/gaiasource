@@ -225,6 +225,11 @@ class Networker(object):
 		except: return None
 
 	@classmethod
+	def linkPath(self, link):
+		import urlparse
+		return urlparse.urlparse(link).path
+
+	@classmethod
 	def ipIs(self, link):
 		return isinstance(link, basestring) and bool(re.match('^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', link))
 

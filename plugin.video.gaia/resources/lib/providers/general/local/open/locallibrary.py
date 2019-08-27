@@ -100,6 +100,8 @@ class source(provider.ProviderBase):
 				title = cleantitle.get(data['title'])
 				ids = [data['imdb']]
 
+				if not self._query(ids): return sources
+
 				results = control.jsonrpc('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter":{"or": [{"field": "year", "operator": "is", "value": "%s"}, {"field": "year", "operator": "is", "value": "%s"}, {"field": "year", "operator": "is", "value": "%s"}]}, "properties": ["imdbnumber", "title", "originaltitle", "file"]}, "id": 1}' % years)
 				results = unicode(results, 'utf-8', errors='ignore')
 				results = json.loads(results)['result']['movies']
@@ -117,6 +119,8 @@ class source(provider.ProviderBase):
 				title = cleantitle.get(data['tvshowtitle'])
 				season, episode = data['season'], data['episode']
 				ids = [data['imdb'], data['tvdb']]
+
+				if not self._query(ids): return sources
 
 				results = control.jsonrpc('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShows", "params": {"filter":{"or": [{"field": "year", "operator": "is", "value": "%s"}, {"field": "year", "operator": "is", "value": "%s"}, {"field": "year", "operator": "is", "value": "%s"}]}, "properties": ["imdbnumber", "title"]}, "id": 1}' % years)
 				results = unicode(results, 'utf-8', errors='ignore')

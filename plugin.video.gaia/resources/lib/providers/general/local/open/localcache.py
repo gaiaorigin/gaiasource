@@ -108,6 +108,8 @@ class source(provider.ProviderBase):
 				title = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', title)
 				titles = data['alternatives'] if 'alternatives' in data else None
 
+			if not self._query(title): return sources
+
 			files = self._find(path, title)
 			if titles:
 				for t in titles:

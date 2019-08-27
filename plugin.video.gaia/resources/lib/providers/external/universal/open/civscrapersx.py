@@ -30,6 +30,6 @@ class source(provider.ProviderExternalUnstructured):
 
 	IdAddon = tools.Extensions.IdCivScrapers
 	IdLibrary = 'civitasscrapers'
-	IdGaia = 'opescrapersx'
+	IdGaia = 'civscrapersx'
 
 	Path = ['lib', IdLibrary, 'sources_civitasscrapers']

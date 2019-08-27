@@ -76,6 +76,8 @@ class source(provider.ProviderBase):
 					query = '%s %d' % (title, year)
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
+			if not self._query(query): return sources
+
 			urlSearch = self.base_link + self.search_link
 			urlDownload = self.base_link + self.download_link
 

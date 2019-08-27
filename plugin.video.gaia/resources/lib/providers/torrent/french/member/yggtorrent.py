@@ -178,11 +178,8 @@ class source(provider.ProviderBase):
 	def sources(self, url, hostDict, hostprDict):
 		self.tSources = []
 		try:
-			if url == None:
-				raise Exception()
-
-			if not self.enabled or self.username == '' or self.password == '':
-				raise Exception()
+			if url == None: raise Exception()
+			if not self.enabled or self.username == '' or self.password == '': raise Exception()
 
 			ignoreContains = None
 			data = self._decode(url)
@@ -225,6 +222,8 @@ class source(provider.ProviderBase):
 				else:
 					queries = ['%s %d' % (title, year)]
 				queries = [re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query) for query in queries]
+
+			if not self._query(queries): return self.tSources
 
 			url = urlparse.urljoin(self.base_link, self.search_link)
 			queries = [urllib.quote_plus(query) for query in queries]

@@ -82,6 +82,8 @@ class source(provider.ProviderBase):
 			query = query.replace(' ', '-') # Uses - not + to separate words.
 			query = query.lower() # Only lower case letters work.
 
+			if not self._query(query): return sources
+
 			url = urlparse.urljoin(self.base_link, self.search_link)
 
 			pageLimit = tools.Settings.getInteger('scraping.providers.pages')

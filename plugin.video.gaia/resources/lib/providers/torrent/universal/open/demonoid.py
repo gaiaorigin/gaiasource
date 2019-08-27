@@ -77,6 +77,8 @@ class source(provider.ProviderBase):
 				else:
 					query = '%s %d' % (title, year)
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
+
+			if not self._query(query): return sources
 			query = urllib.quote_plus(query)
 
 			category = self.category_shows if 'tvshowtitle' in data else self.category_movies

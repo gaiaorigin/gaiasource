@@ -92,6 +92,8 @@ class source(provider.ProviderBase):
 					query = '%s %d' % (title, year)
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
+			if not self._query(query): return sources
+
 			url = urlparse.urljoin(self.base_link, self.search_link)
 			category = self.category_tvshows if ('tvshowtitle' in data and not data['tvshowtitle'] == None and not data['tvshowtitle'] == '') else self.category_movies
 			url += category

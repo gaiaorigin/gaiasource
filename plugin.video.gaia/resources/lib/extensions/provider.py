@@ -37,6 +37,8 @@ ProviderAddon = None
 
 class ProviderBase(object):
 
+	Queries = []
+
 	def __init__(self, supportMovies = None, supportShows = True):
 		self.mSupportMovies = supportMovies
 		self.mSupportShows = supportShows
@@ -72,6 +74,23 @@ class ProviderBase(object):
 		except:
 			tools.Logger.error()
 			return None
+
+	def _query(self, *args):
+		# Check if query was already executed, in order to avoid duplicate queries for alternative titles.
+		# Use self.Queries and not ProviderBase.Queries, since there are different subclasses.
+		query = ''
+		for arg in args:
+			if not arg is None:
+				try: arg = str(arg)
+				except: pass
+				try: arg = arg.encode('utf-8')
+				except: pass
+				query += arg
+		try: query += self.instanceId()
+		except: pass
+		if query in self.Queries: return False
+		self.Queries.append(query)
+		return True
 
 	def movie(self, imdb, title, alternativetitles, localtitle, year):
 		try:
@@ -173,6 +192,9 @@ class ProviderExternal(ProviderBase):
 
 	def instanceAddon(self):
 		return self.addon
+
+	def instanceId(self):
+		return self.id
 
 	def instanceName(self):
 		return self.name
@@ -311,6 +333,7 @@ class ProviderExternalUnstructured(ProviderExternal):
 	def sources(self, url, hostDict, hostprDict):
 		sources = []
 		try:
+			if not self._query(url): return sources
 			result = self.instanceObject().sources(url, hostDict, hostprDict) # Don't use named parameters due to CMovies.
 			if result:
 				for item in result:
@@ -461,6 +484,8 @@ class ProviderExternalStructured(ProviderExternal):
 			episode = str(data['episode']) if 'episode' in data and not data['episode'] == None else ''
 			imdb = data['imdb'] if 'imdb' in data else ''
 			tvdb = data['tvdb'] if 'tvdb' in data else ''
+
+			if not self._query(title, year, season, episode, imdb, tvdb): return sources
 
 			scraper = self.instanceScrapers(name = self.name.lower())()
 			if self.base_link and not self.base_link == '': scraper.base_link = self.base_link
@@ -1321,7 +1346,7 @@ class Provider(object):
 	@classmethod
 	def language(self):
 		if tools.Language.customization():
-			language = tools.Settings.getString('scraping.foreign.language')
+			language = tools.Settings.getString('scraping.alternative.language')
 		else:
 			language = tools.Language.Alternative
 		return tools.Language.code(language)
@@ -1329,7 +1354,7 @@ class Provider(object):
 	@classmethod
 	def languageSelect(self):
 		from resources.lib.extensions import interface
-		id = 'scraping.foreign.language'
+		id = 'scraping.alternative.language'
 		items = tools.Settings.raw(id, 'values').split('|')
 		choice = interface.Dialog.select(title = 33787, items = items)
 		if choice >= 0: tools.Settings.set(id, items[choice])

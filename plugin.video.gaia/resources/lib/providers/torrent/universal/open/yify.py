@@ -62,6 +62,8 @@ class source(provider.ProviderBase):
 				episode = int(data['episode']) if 'episode' in data and not data['episode'] == None else None
 
 			query = data['imdb'] if 'imdb' in data and not data['imdb'] == None else title
+			if not self._query(query): return sources
+
 			url = urlparse.urljoin(self.base_link, self.search_link) % query
 			result = json.loads(client.request(url))
 

@@ -81,6 +81,8 @@ class source(provider.ProviderBase):
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
 			query = urllib.quote_plus(query)
+			if not self._query(query): return sources
+			
 			category = self.category_tvshows if ('tvshowtitle' in data and not data['tvshowtitle'] == None and not data['tvshowtitle'] == '') else self.category_movies
 
 			pageLimit = tools.Settings.getInteger('scraping.providers.pages')

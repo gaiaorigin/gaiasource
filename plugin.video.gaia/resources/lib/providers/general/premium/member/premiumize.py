@@ -79,6 +79,8 @@ class source(provider.ProviderBase):
 				episode = int(data['episode']) if 'episode' in data and not data['episode'] == None else None
 				pack = data['pack'] if 'pack' in data else False
 
+			if not self._query(title, year, season, episode, pack): return sources
+
 			timerEnd = tools.Settings.getInteger('scraping.providers.timeout') - 3
 			timer = tools.Time(start = True)
 
@@ -90,7 +92,7 @@ class source(provider.ProviderBase):
 				if not id in ids:
 					# The RSS feed directory returns the same episodes individually and as a pack. Only add it once.
 					meta = metadata.Metadata(name = item['name'], title = title, titles = titles, year = year, season = season, episode = episode)
-					if (not pack and item['name'] == source.FeedsName) or not pack and not meta.ignore(size = False):
+					if ((not pack and item['name'] == source.FeedsName) or not pack) and not meta.ignore(size = False):
 						if item['type'] == 'file':
 							item['video'] = item
 							self.items.append(item)

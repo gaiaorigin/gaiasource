@@ -172,6 +172,8 @@ class source(provider.ProviderBase):
 					queries = ['%s %d' % (title, year)]
 				queries = [re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query) for query in queries]
 
+			if not self._query(queries): return self.tSources
+
 			url = urlparse.urljoin(self.base_link, self.search_link)
 			queries = [urllib.quote(query) for query in queries] # quote_plus does not work.
 

@@ -54,7 +54,7 @@ class source(provider.ProviderBase):
 		except:
 			tools.Logger.error()
 
-	def _items(self, category, title, year, season, episode, pack):
+	def _items(self, category, title, titles, year, season, episode, pack):
 		try:
 			timerEnd = tools.Settings.getInteger('scraping.providers.timeout') - 3
 			timer = tools.Time(start = True)
@@ -117,13 +117,15 @@ class source(provider.ProviderBase):
 				pack = data['pack'] if 'pack' in data else False
 				packCount = data['packcount'] if 'packcount' in data else False
 
+			if not self._query(title, year, season, episode, pack): return sources
+
 			timerEnd = tools.Settings.getInteger('scraping.providers.timeout') - 3
 			timer = tools.Time(start = True)
 
 			threads = []
 			self.ids = []
-			threads.append(threading.Thread(target = self._items, args = (debrid.OffCloud.CategoryCloud, title, year, season, episode, pack)))
-			threads.append(threading.Thread(target = self._items, args = (debrid.OffCloud.CategoryInstant, title, year, season, episode, pack)))
+			threads.append(threading.Thread(target = self._items, args = (debrid.OffCloud.CategoryCloud, title, titles, year, season, episode, pack)))
+			threads.append(threading.Thread(target = self._items, args = (debrid.OffCloud.CategoryInstant, title, titles, year, season, episode, pack)))
 			[thread.start() for thread in threads]
 
 			while True:

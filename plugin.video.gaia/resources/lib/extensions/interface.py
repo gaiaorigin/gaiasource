@@ -236,7 +236,7 @@ class Format(object):
 	ColorNone = None
 	ColorPrimary = 'FFA0C12C'
 	ColorSecondary = 'FF3C7DBF'
-	ColorOrion = 'FF637385'
+	ColorTertiary = 'FF777777'
 	ColorMain = 'FF2396FF'
 	ColorAlternative = 'FF004F98'
 	ColorSpecial = 'FF6C3483'
@@ -348,7 +348,7 @@ class Format(object):
 			Format.ColorCustomize = tools.Settings.getBoolean('interface.color.enabled')
 			Format.ColorPrimary = self._colorSettings(Format.ColorCustomize, 'primary', Format.ColorPrimary)
 			Format.ColorSecondary = self._colorSettings(Format.ColorCustomize, 'secondary', Format.ColorSecondary)
-			Format.ColorOrion = self._colorSettings(Format.ColorCustomize, 'orion', Format.ColorOrion)
+			Format.ColorTertiary = self._colorSettings(Format.ColorCustomize, 'tertiary', Format.ColorTertiary)
 			Format.ColorMain = self._colorSettings(Format.ColorCustomize, 'main', Format.ColorMain)
 			Format.ColorAlternative = self._colorSettings(Format.ColorCustomize, 'alternative', Format.ColorAlternative)
 			Format.ColorSpecial = self._colorSettings(Format.ColorCustomize, 'special', Format.ColorSpecial)
@@ -370,9 +370,9 @@ class Format(object):
 		return Format.ColorSecondary
 
 	@classmethod
-	def colorOrion(self):
+	def colorTertiary(self):
 		self._colorIninitialize()
-		return Format.ColorOrion
+		return Format.ColorTertiary
 
 	@classmethod
 	def colorMain(self):

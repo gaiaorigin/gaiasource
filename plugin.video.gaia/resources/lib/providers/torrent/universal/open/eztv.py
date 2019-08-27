@@ -74,6 +74,8 @@ class source(provider.ProviderBase):
 
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
+			if not self._query(query): return sources
+
 			url = urlparse.urljoin(self.base_link, self.search_link) % urllib.quote_plus(query)
 			html = BeautifulSoup(client.request(url))
 

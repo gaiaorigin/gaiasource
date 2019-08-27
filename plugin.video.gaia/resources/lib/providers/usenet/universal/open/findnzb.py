@@ -77,6 +77,8 @@ class source(provider.ProviderBase):
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
 			query = urllib.quote_plus(query)
+			if not self._query(query): return sources
+			
 			url = urlparse.urljoin(self.base_link, self.search_link)
 
 			pageLimit = tools.Settings.getInteger('scraping.providers.pages')

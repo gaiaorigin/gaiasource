@@ -18,7 +18,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import re,urllib,urlparse,json
+import re,urllib,urlparse,json,threading
 from resources.lib.modules import client
 from resources.lib.extensions import provider
 from resources.lib.extensions import metadata
@@ -28,6 +28,9 @@ from resources.lib.extensions import network
 # https://torrentapi.org/apidocs_v2.txt
 
 class source(provider.ProviderBase):
+
+	Lock = None
+	Token = None
 
 	def __init__(self):
 		provider.ProviderBase.__init__(self, supportMovies = True, supportShows = True)
@@ -42,6 +45,7 @@ class source(provider.ProviderBase):
 		self.search_link = '&token=%s&mode=search&search_string=%s&category=%s&sort=seeders&ranked=0&format=json_extended&limit=100'
 		self.category_movies = 'movies'
 		self.category_shows = 'tv'
+		self.rate_limit = 2 # 2 secs - https://torrentapi.org/apidocs_v2.txt?app_id=gaia
 
 	def sources(self, url, hostDict, hostprDict):
 		sources = []
@@ -50,11 +54,6 @@ class source(provider.ProviderBase):
 
 			ignoreContains = None
 			data = self._decode(url)
-
-			# Get a token. Expires every 15 minutes, but just request the token on every search. The old token will be returned if the previous one did not yet expire.
-			url = self.base_link + self.api_link + self.token_link
-			result = json.loads(client.request(url))
-			token = result['token']
 
 			if 'exact' in data and data['exact']:
 				query = title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
@@ -86,10 +85,25 @@ class source(provider.ProviderBase):
 					query = '%s %d' % (title, year)
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
-			category = self.category_shows if 'tvshowtitle' in data else self.category_movies
-			url = (self.base_link + self.api_link + self.search_link) % (token, urllib.quote_plus(query), category)
-			result = json.loads(client.request(url))
+			if not self._query(query): return sources
 
+			# Ensure that only a single token is retrieved when searching for alternative titles.
+			# Otherwise a HTTP 429 error is thrown (too many requests).
+			if source.Lock is None:
+				# Get a token. Expires every 15 minutes, but just request the token on every search. The old token will be returned if the previous one did not yet expire.
+				source.Lock = threading.Lock()
+				source.Lock.acquire()
+				url = self.base_link + self.api_link + self.token_link
+				result = json.loads(client.request(url))
+				source.Token = result['token']
+			else:
+				source.Lock.acquire() # Let all other subsequent threads wait here until the first thread's token has been retrieved.
+				tools.Time.sleep(self.rate_limit * 1.1) # There is a 1req/2s limit.
+
+			category = self.category_shows if 'tvshowtitle' in data else self.category_movies
+			url = (self.base_link + self.api_link + self.search_link) % (source.Token, urllib.quote_plus(query), category)
+
+			result = json.loads(client.request(url))
 			torrents = result['torrent_results']
 
 			for torrent in torrents:
@@ -108,7 +122,8 @@ class source(provider.ProviderBase):
 
 				# Add
 				sources.append({'url' : jsonLink, 'debridonly' : False, 'direct' : False, 'source' : 'torrent', 'language' : self.language[0], 'quality':  meta.videoQuality(), 'metadata' : meta, 'file' : jsonName})
-
-			return sources
 		except:
-			return sources
+			pass
+
+		source.Lock.release()
+		return sources

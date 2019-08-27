@@ -75,6 +75,7 @@ class source(provider.ProviderBase):
 					query = '%s %d' % (title, year)
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
+			if not self._query(query): return sources
 			query = urllib.quote_plus(query)
 
 			pageLimit = tools.Settings.getInteger('scraping.providers.pages')

@@ -366,23 +366,38 @@ class Premiumize(Debrid):
 					hashes = {}
 					hashes[Premiumize.ParameterHashes] = parameters[Premiumize.ParameterHashes]
 					del parameters[Premiumize.ParameterHashes]
-					httpData = urllib.urlencode(parameters, doseq = True) + '&' + urllib.urlencode(hashes, doseq = True)
+					httpData = urllib.urlencode(hashes, doseq = True)
+					if len(parameters.keys()) > 0: httpData = urllib.urlencode(parameters, doseq = True) + '&' + httpData
 				elif Premiumize.ParameterCaches in parameters:
 					# If hashes are very long and if the customer ID and pin is appended to the end of the parameter string, Premiumize will ignore them and say there is no ID/pin.
 					# Manually move the hashes to the back.
 					links = {}
 					links[Premiumize.ParameterCaches] = parameters[Premiumize.ParameterCaches]
 					del parameters[Premiumize.ParameterCaches]
-					httpData = urllib.urlencode(parameters, doseq = True) + '&' + urllib.urlencode(links, doseq = True)
+					for key, value in links.iteritems():
+						if isinstance(value, (list, tuple)):
+							for i in range(len(value)):
+								try: value[i] = value[i].encode('utf-8')
+								except: pass
+						else:
+							try: links[key] = value.encode('utf-8')
+							except: pass
+					httpData = urllib.urlencode(links, doseq = True)
+					if len(parameters.keys()) > 0: httpData = urllib.urlencode(parameters, doseq = True) + '&' + httpData
 				else:
 					httpData = urllib.urlencode(parameters, doseq = True)
 
 			# If the link is too long, reduce the size. The maximum URL size is 2000.
 			# This occures if GET parameters are used instead of POST for checking a list of hashes.
-			# If the user disbaled Premiumize encryption, the parameters MUST be send via GET, since Premiumize will ignore POST parameters on HTTP connections.
+			# If the user disabled Premiumize encryption, the parameters MUST be send via GET, since Premiumize will ignore POST parameters on HTTP connections.
 			if 'hashes[]=' in link:
 				while len(link) > Premiumize.LimitLink:
 					start = link.find('hashes[]=')
+					end = link.find('&', start)
+					link = link[:start] + link[end + 1:]
+			elif 'items[]=' in link:
+				while len(link) > Premiumize.LimitLink:
+					start = link.find('items[]=')
 					end = link.find('&', start)
 					link = link[:start] + link[end + 1:]
 
@@ -1020,7 +1035,7 @@ class Premiumize(Debrid):
 	def addContainer(self, link, title = None, season = None, episode = None, pack = False):
 		try:
 			# https://github.com/tknorris/plugin.video.premiumize/blob/master/local_lib/premiumize_api.py
-			source = network.Container(link).information()
+			source = network.Container(link, download = True).information()
 			if source['path'] == None and source['data'] == None: # Sometimes the NZB cannot be download, such as 404 errors.
 				return self.addResult(error = Premiumize.ErrorInaccessible)
 
@@ -1054,8 +1069,8 @@ class Premiumize(Debrid):
 			return self.addResult(error = self._errorType())
 
 	def addHoster(self, link, season = None, episode = None, pack = False, cached = False, cloud = False):
-		if cloud: return self.addResult(error = Premiumize.ErrorUnsupported)
-		result = self._retrieve(category = Premiumize.CategoryTransfer, action = Premiumize.ActionDownload, source = link)
+		if cloud: result = self._retrieve(category = Premiumize.CategoryTransfer, action = Premiumize.ActionCreate, source = link)
+		else: result = self._retrieve(category = Premiumize.CategoryTransfer, action = Premiumize.ActionDownload, source = link)
 		if self.success(): return self._addLink(result = result, season = season, episode = episode, pack = pack)
 		else: return self.addResult(error = self._errorType())
 
@@ -1735,7 +1750,7 @@ class Premiumize(Debrid):
 
 	@classmethod
 	def cachedModes(self):
-		return {Debrid.ModeHoster, Debrid.ModeTorrent, Debrid.ModeUsenet}
+		return {Debrid.ModeHoster, Debrid.ModeTorrent}
 
 	# id: single hash or list of hashes.
 	def cachedIs(self, id, timeout = None):
@@ -2685,6 +2700,7 @@ class OffCloud(Debrid):
 	ParameterRemoteOptionId = 'remoteOptionId'
 	ParameterFolderId = 'folderId'
 	ParameterHashes = 'hashes[]'
+	ParameterMessages = 'messageIds[]'
 
 	# Statuses
 	StatusUnknown = 'unknown'
@@ -2713,6 +2729,7 @@ class OffCloud(Debrid):
 	ErrorLimitVideo = 'limitvideo'
 	ErrorPremium = 'premium'
 	ErrorSelection = 'selection' # No file selected from list of items.
+	ErrorInaccessible = 'inaccessible' # Eg: 404 error.
 
 	# Limits
 	LimitLink = 2000 # Maximum length of a URL.
@@ -2825,7 +2842,7 @@ class OffCloud(Debrid):
 			result = str(result) if len(str(result)) < 300 else 'Result too large to display'
 			tools.Logger.error(str(message) + (': Link [%s] Payload [%s] Result [%s]' % (link, payload, result)))
 
-	def _retrieve(self, mode, category, action = None, url = None, proxyId = None, requestId = None, hash = None, httpTimeout = None, httpData = None, httpHeaders = None):
+	def _retrieve(self, mode, category, action = None, url = None, proxyId = None, requestId = None, hash = None, segment = None, httpTimeout = None, httpData = None, httpHeaders = None):
 		if category == OffCloud.CategoryTorrent and action == OffCloud.ActionUpload:
 			# For some reason, this function is not under the API.
 			link = network.Networker.linkJoin(OffCloud.LinkMain, category, action)
@@ -2848,11 +2865,13 @@ class OffCloud(Debrid):
 		if not requestId == None: parameters[OffCloud.ParameterRequestId] = requestId
 		if not hash == None:
 			if isinstance(hash, basestring):
-				parameters[OffCloud.ParameterHash] = hash.lower()
+				parameters[OffCloud.ParameterHashes] = hash.lower()
 			else:
 				for i in range(len(hash)):
 					hash[i] = hash[i].lower()
 				parameters[OffCloud.ParameterHashes] = hash
+		if not segment == None:
+			parameters[OffCloud.ParameterMessages] = segment
 
 		return self._request(mode = mode, link = link, parameters = parameters, httpTimeout = httpTimeout, httpData = httpData, httpHeaders = httpHeaders)
 
@@ -3217,8 +3236,7 @@ class OffCloud(Debrid):
 	# If mode is not specified, tries to detect the file type automatically.
 	def addContainer(self, link, title = None, season = None, episode = None):
 		try:
-			# https://github.com/tknorris/plugin.video.premiumize/blob/master/local_lib/premiumize_api.py
-			source = network.Container(link).information()
+			source = network.Container(link, download = True).information()
 			if source['path'] == None and source['data'] == None: # Sometimes the NZB cannot be download, such as 404 errors.
 				return self.addResult(error = OffCloud.ErrorInaccessible)
 
@@ -3354,7 +3372,7 @@ class OffCloud(Debrid):
 
 	@classmethod
 	def cachedModes(self):
-		return {Debrid.ModeTorrent}
+		return {Debrid.ModeTorrent, Debrid.ModeUsenet}
 
 	# id: single hash or list of hashes.
 	def cachedIs(self, id, timeout = None):
@@ -3366,45 +3384,68 @@ class OffCloud(Debrid):
 	# id: single hash or list of hashes.
 	# NB: a URL has a maximum length. Hence, a list of hashes cannot be too long, otherwise the request will fail.
 	def cached(self, id, timeout = None, callback = None, sources = None):
-		single = isinstance(id, basestring)
-		if single: id = [id] # Must be passed in as a list.
+		try:
+			def segmentExtract(source):
+				segment = None
+				if segment is None:
+					try: segment = source['segment']['first']
+					except: pass
+				if segment is None:
+					try: segment = source['segment']['largest']
+					except: pass
+				if segment is None:
+					try: segment = source['segment']['list'][0]
+					except: pass
+				return segment
 
-		mode = OffCloud.ModePost # Post can send more at a time.
-		if mode == OffCloud.ModePost:
-			chunks = [id[i:i + OffCloud.LimitHashesPost] for i in xrange(0, len(id), OffCloud.LimitHashesPost)]
-		else:
-			chunks = [id[i:i + OffCloud.LimitHashesGet] for i in xrange(0, len(id), OffCloud.LimitHashesGet)]
+			single = isinstance(id, basestring)
+			if single: id = [id] # Must be passed in as a list.
 
-		self.tCacheLock = threading.Lock()
-		self.tCacheResult = []
+			mode = OffCloud.ModePost # Post can send more at a time.
+			if mode == OffCloud.ModePost:
+				chunks = [sources[i:i + OffCloud.LimitHashesPost] for i in xrange(0, len(sources), OffCloud.LimitHashesPost)]
+			else:
+				chunks = [sources[i:i + OffCloud.LimitHashesGet] for i in xrange(0, len(sources), OffCloud.LimitHashesGet)]
+			for chunk in chunks:
+				for c in range(len(chunk)):
+					chunk[c] = [chunk[c]['hash'], segmentExtract(chunk[c])]
 
-		def cachedChunk(callback, mode, hashes, timeout):
-			offcloud = OffCloud()
-			result = offcloud._retrieve(mode = mode, category = OffCloud.CategoryCache, hash = hashes, httpTimeout = timeout)
-			if offcloud.success():
-				result = result['cachedItems']
-				self.tCacheLock.acquire()
-				self.tCacheResult.extend(result)
-				self.tCacheLock.release()
-				if callback:
-					for hash in hashes:
-						try: callback(self.id(), hash, hash in result)
-						except: pass
+			self.tCacheLock = threading.Lock()
+			self.tCacheResult = []
 
-		threads = []
-		for chunk in chunks:
-			thread = threading.Thread(target = cachedChunk, args = (callback, mode, chunk, timeout))
-			threads.append(thread)
-			thread.start()
+			def cachedChunk(callback, mode, chunk, timeout):
+				hashes = [c[0] for c in chunk if not c[0] is None]
+				segments = [c[1] for c in chunk if not c[1] is None]
+				offcloud = OffCloud()
+				result = offcloud._retrieve(mode = mode, category = OffCloud.CategoryCache, hash = hashes, segment = segments, httpTimeout = timeout)
+				if offcloud.success():
+					cached = result['cachedItems']
+					claimed = result['claimedItems'] if 'claimedItems' in result else None
+					self.tCacheLock.acquire()
+					self.tCacheResult.extend(result)
+					self.tCacheLock.release()
+					if callback:
+						for c in chunk:
+							try: callback(self.id(), c[0], c[0] in cached and (c[1] is None or claimed is None or not c[1] in claimed))
+							except: pass
 
-		[i.join() for i in threads]
-		if not callback:
-			caches = []
-			for hash in id:
-				hash = hash.lower()
-				caches.append({'id' : hash, 'hash' : hash, 'cached' : hash in self.tCacheResult})
-			if single: return caches[0] if len(caches) > 0 else False
-			else: return caches
+			threads = []
+			for chunk in chunks:
+				thread = threading.Thread(target = cachedChunk, args = (callback, mode, chunk, timeout))
+				threads.append(thread)
+				thread.start()
+
+			[i.join() for i in threads]
+			if not callback:
+				caches = []
+				for source in sources:
+					hash = sources['hash'].lower()
+					segment = segmentExtract(sources)
+					caches.append({'id' : hash, 'hash' : hash, 'cached' : hash in self.tCacheResult['cachedItems'] and (segment is None or self.tCacheResult['claimedItems'] is None or not segment in self.tCacheResult['claimedItems'])})
+				if single: return caches[0] if len(caches) > 0 else False
+				else: return caches
+		except:
+			tools.Logger.error()
 
 	##############################################################################
 	# ITEM
@@ -3995,13 +4036,13 @@ class OffCloudInterface(object):
 		interface.Loader.hide()
 		return result
 
-	def add(self, link, category = None, title = None, season = None, episode = None, pack = False, close = True, source = None, cached = None, select = False):
+	def add(self, link, category = None, title = None, season = None, episode = None, pack = False, close = True, source = None, cached = None, cloud = False, select = False):
 		result = self.mDebrid.add(link = link, category = category, title = title, season = season, episode = episode, pack = pack, source = source)
 		if select: result = self._addSelect(result)
 		if result['success']:
 			return result
 		elif result['id']:
-			return self._addLink(result = result, season = season, episode = episode, close = close, pack = pack, cached = cached, select = select)
+			return self._addLink(result = result, season = season, episode = episode, close = close, pack = pack, cached = cached, cloud = False, select = select)
 		elif result['error'] == OffCloud.ErrorOffCloud:
 			title = 'Stream Error'
 			message = 'Failed To Add Stream To OffCloud'
@@ -4123,7 +4164,7 @@ class OffCloudInterface(object):
 	def _addProcessing(self, status, cached):
 		return status == OffCloud.StatusProcessing or (cached and (status == OffCloud.StatusInitialize or status == OffCloud.StatusFinalize))
 
-	def _addLink(self, result, season = None, episode = None, close = True, pack = False, cached = None, select = False):
+	def _addLink(self, result, season = None, episode = None, close = True, pack = False, cached = None, cloud = False, select = False):
 		self.tActionCanceled = False
 		try: category = result['category']
 		except: category = None
@@ -4168,8 +4209,11 @@ class OffCloudInterface(object):
 						# StatusProcessing is when an already cached file (which is stored as an archive) is being extracted to make it accessible for streaming.
 						created = False
 						processing = self._addProcessing(status = status, cached = cached)
-						if not processing:
+						if processing:
+							if cloud: interface.Loader.show()
+						else:
 							created = True
+							if cloud: interface.Loader.hide()
 							interface.Core.create(type = interface.Core.TypeDownload, title = title, message = descriptionWaiting)
 							interface.Core.update(progress = int(percentage), title = title, message = descriptionWaiting)
 
@@ -4191,11 +4235,14 @@ class OffCloudInterface(object):
 								processing = self._addProcessing(status = status, cached = cached)
 								if not processing and not created:
 									created = True
+									if cloud: interface.Loader.hide()
 									interface.Core.create(type = interface.Core.TypeDownload, title = title, message = descriptionWaiting)
 
 								try:
 									self.tLink = item['video']['link']
-									if self.tLink: return
+									if self.tLink:
+										interface.Core.close()
+										return
 								except: pass
 								if not status == OffCloud.StatusQueued and not status == OffCloud.StatusInitialize and not status == OffCloud.StatusBusy and not status == OffCloud.StatusFinalize:
 									close = True
@@ -5229,7 +5276,7 @@ class RealDebrid(Debrid):
 
 	def addContainer(self, link, title = None):
 		try:
-			source = network.Container(link).information()
+			source = network.Container(link, download = True).information()
 			if source['path'] == None and source['data'] == None:
 				return RealDebrid.ErrorInaccessible
 

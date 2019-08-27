@@ -26,10 +26,10 @@ from resources.lib.extensions import provider
 
 class source(provider.ProviderExternalStructured):
 
-	Name = 'UniversalScrapers'
+	Name = 'NanScrapers'
 
 	IdAddon = tools.Extensions.IdNanScrapers
-	IdLibrary = 'nanversalscrapers'
+	IdLibrary = 'nanscrapers'
 	IdGaia = 'nanscrapersx'
 
 	Module = nanscrapers

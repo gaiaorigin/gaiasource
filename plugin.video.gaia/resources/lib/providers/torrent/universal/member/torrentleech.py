@@ -75,6 +75,7 @@ class source(provider.ProviderBase):
 			else:
 				query = '%s %d' % (title, year)
 			query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
+			if not self._query(query): return sources
 			querySplit = query.split()
 
 			# Login

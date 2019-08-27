@@ -90,6 +90,8 @@ class source(provider.ProviderBase):
 					query = '%s %d' % (title, year)
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
+			if not self._query(query): return sources
+
 			threads = []
 			self.tLinks = {}
 			self.tLock = threading.Lock()

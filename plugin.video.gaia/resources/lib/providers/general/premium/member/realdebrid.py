@@ -66,6 +66,8 @@ class source(provider.ProviderBase):
 				episode = int(data['episode']) if 'episode' in data and not data['episode'] == None else None
 				pack = data['pack'] if 'pack' in data else False
 
+			if not self._query(title, year, season, episode, pack): return sources
+
 			items = realdebrid.items()
 			for item in items:
 				try:

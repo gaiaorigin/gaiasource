@@ -504,7 +504,7 @@ class Core:
 				threadsInformation.append(workers.Thread(additionalInformationTitle, title, tvshowtitle, imdb, tvdb))
 
 				if not tvshowtitle == None: title = tvshowtitle
-				if tools.Settings.getBoolean('scraping.foreign.characters'):
+				if tools.Settings.getBoolean('scraping.alternative.characters'):
 					threadsInformation.append(workers.Thread(additionalInformationCharacters, title, imdb, tvdb))
 
 				[thread.start() for thread in threadsInformation]
@@ -697,7 +697,6 @@ class Core:
 			self.dataLock = threading.Lock()
 
 			# Termination
-
 			self.termination = False
 			self.terminationLock = threading.Lock()
 			self.terminationPrevious = 0
@@ -832,7 +831,7 @@ class Core:
 
 			self.enabledProviders = tools.Settings.getBoolean('interface.navigation.scrape.providers')
 			self.enabledDevelopers = tools.System.developers()
-			self.enabledForeign = tools.Settings.getBoolean('scraping.foreign.enabled')
+			self.enabledAlternative = tools.Settings.getBoolean('scraping.alternative.enabled')
 			self.enabledPrecheck = self.enabledDevelopers and tools.Settings.getBoolean('scraping.precheck.enabled')
 			self.enabledMetadata = self.enabledDevelopers and tools.Settings.getBoolean('scraping.metadata.enabled')
 			self.enabledCache = tools.Settings.getBoolean('scraping.cache.enabled') and ((enabledPremiumize and tools.Settings.getBoolean('scraping.cache.premiumize')) or (enabledOffCloud and tools.Settings.getBoolean('scraping.cache.offcloud')) or (enabledRealDebrid and tools.Settings.getBoolean('scraping.cache.realdebrid')))
@@ -846,7 +845,7 @@ class Core:
 
 			percentageDone = 0
 			percentageInitialize = 0.05
-			percentageForeign = 0.05 if self.enabledForeign else 0
+			percentageForeign = 0.05 if self.enabledAlternative else 0
 			percentagePrecheck = 0.15 if self.enabledPrecheck else 0
 			percentageMetadata = 0.15 if self.enabledMetadata else 0
 			percentageCache = 0.05 if self.enabledCache else 0
@@ -932,7 +931,7 @@ class Core:
 				# Start the additional information before the providers are intialized.
 				# Save some search time. Even if there are no providers available later, still do this.
 				threadAdditional = None
-				if not exact and not self.progressCanceled() and self.enabledForeign:
+				if not exact and not self.progressCanceled() and self.enabledAlternative:
 					threadAdditional = workers.Thread(additionalInformation, title, tvshowtitle, imdb, tvdb)
 					threadAdditional.start()
 
@@ -965,10 +964,10 @@ class Core:
 					return None
 
 				_progressUpdate(int(percentageInitialize * 100), message) # In case the initialization finishes early.
-				if not exact and not self.progressCanceled() and self.enabledForeign:
+				if not exact and not self.progressCanceled() and self.enabledAlternative:
 					percentageDone = percentageInitialize
 					message = 'Retrieving Additional Information'
-					try: timeout = tools.Settings.getInteger('scraping.foreign.timeout')
+					try: timeout = tools.Settings.getInteger('scraping.alternative.timeout')
 					except: timeout = 15
 
 					timerSingle.start()
@@ -987,10 +986,10 @@ class Core:
 						time.sleep(0.3) # Ensure the time thread (0.2 interval) is stopped.
 						return None
 
-				if self.enabledForeign:
-					# Add aliases in case scraping.foreign.characters is disabled.
+				if self.enabledAlternative:
+					# Add aliases in case scraping.alternative.characters is disabled.
 					for i in range(len(self.titleAliases)):
-						self.titleAlternatives['alias' + str(i + 1)] = self.titleAliases[i]
+						self.titleAlternatives['alias%02d' % (i + 1)] = self.titleAliases[i]
 
 				# Remove duplicates.
 				seen = set([title, tvshowtitle])
@@ -1002,6 +1001,18 @@ class Core:
 					else:
 						seen.add(self.titleAlternatives[key])
 						if unicode: seen.add(unicode)
+
+				# Limit the maximum number of titles.
+				alternativeLimit = tools.Settings.getInteger('scraping.alternative.limit')
+				if len(self.titleAlternatives.keys()) > alternativeLimit:
+					for key in sorted(self.titleAlternatives.keys(), reverse = True):
+						if key.startswith('alias'):
+							del self.titleAlternatives[key]
+							if len(self.titleAlternatives.keys()) <= alternativeLimit: break
+					if len(self.titleAlternatives.keys()) > alternativeLimit:
+						for key in self.titleAlternatives.iterkeys():
+							del self.titleAlternatives[key]
+							if len(self.titleAlternatives.keys()) <= alternativeLimit: break
 
 				if movie:
 					for source in self.providers:
@@ -1035,6 +1046,8 @@ class Core:
 							termination = 0
 							if self.adjustTermination():
 								self.termination = True
+								interface.Dialog.notification(title = 33882, message = 35638, icon = interface.Dialog.IconInformation)
+								tools.Logger.log('Enough links found. Preemptive termination activated.')
 								break
 
 						totalThreads = len(threads)
@@ -1323,10 +1336,9 @@ class Core:
 	def scrapeMovieAlternatives(self, alternativetitles, title, localtitle, aliases, year, imdb, source, exact, cache):
 		threads = []
 		threads.append(workers.Thread(self.scrapeMovie, title, alternativetitles, localtitle, aliases, year, imdb, source, exact, cache))
-		if not source['id'] == 'oriscrapers': # Do not scrape alternative titles for Orion.
-			for key, value in alternativetitles.iteritems():
-				sourceNew = provider.Provider.copy(source) # Copy, since the object is used in multiple threads with alternative titles.
-				threads.append(workers.Thread(self.scrapeMovie, value, alternativetitles, localtitle, aliases, year, imdb, sourceNew, exact, cache, key))
+		for key, value in alternativetitles.iteritems():
+			sourceNew = provider.Provider.copy(source) # Copy, since the object is used in multiple threads with alternative titles.
+			threads.append(workers.Thread(self.scrapeMovie, value, alternativetitles, localtitle, aliases, year, imdb, sourceNew, exact, cache, key))
 		[thread.start() for thread in threads]
 		[thread.join() for thread in threads]
 
@@ -1504,10 +1516,9 @@ class Core:
 	def scrapeEpisodeAlternatives(self, alternativetitles, title, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, source, exact, cache):
 		threads = []
 		threads.append(workers.Thread(self.scrapeEpisode, title, alternativetitles, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, tvshowtitle, premiered, source, exact, cache))
-		if not source['id'] == 'oriscrapers': # Do not scrape alternative titles for Orion.
-			for key, value in alternativetitles.iteritems():
-				sourceNew = provider.Provider.copy(source) # Copy, since the object is used in multiple threads with alternative titles.
-				threads.append(workers.Thread(self.scrapeEpisode, title, alternativetitles, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, value, premiered, sourceNew, exact, cache, key))
+		for key, value in alternativetitles.iteritems():
+			sourceNew = provider.Provider.copy(source) # Copy, since the object is used in multiple threads with alternative titles.
+			threads.append(workers.Thread(self.scrapeEpisode, title, alternativetitles, localtitle, aliases, year, imdb, tvdb, season, episode, seasoncount, value, premiered, sourceNew, exact, cache, key))
 		[thread.start() for thread in threads]
 		[thread.join() for thread in threads]
 
@@ -1842,7 +1853,7 @@ class Core:
 			elif layoutNumber == 3: number = '%03d'
 			if not number == '': number = interface.Format.font(number, bold = True, translate = False)
 
-			infos.append(interface.Format.font(35233, bold = True, uppercase = True, color = interface.Format.colorOrion()))
+			infos.append(interface.Format.font(35233, bold = True, uppercase = True, color = interface.Format.colorTertiary()))
 			item['label'] = item['file'] = (interface.Format.separator().join(infos) % (number % 0, '')) + (interface.Format.newline() if layout == 2 else '') + link
 
 		if extras == None:
@@ -2002,7 +2013,7 @@ class Core:
 						try: episode = metadata['episode']
 						except: episode = None
 
-						extra = interface.Format.font(tools.Media.title(metadata = metadata, title = title, year = year, season = season, episode = episode), bold = True, color = interface.Format.colorOrion())
+						extra = interface.Format.font(tools.Media.title(metadata = metadata, title = title, year = year, season = season, episode = episode), bold = True, color = interface.Format.colorTertiary())
 						if not self.navigationStreamsSpecial: extra += interface.Format.separator()
 				except: pass
 
@@ -2027,6 +2038,7 @@ class Core:
 		sysmeta = tools.Converter.quoteTo(tools.Converter.jsonTo(metadata))
 		duration = self._duration(metadata)
 
+		prefix = tools.Settings.getInteger('interface.navigation.streams.prefix')
 		hasFanart = tools.Settings.getBoolean('interface.theme.fanart')
 		addonPoster = control.addonPoster()
 		addonBanner = control.addonBanner()
@@ -2089,9 +2101,9 @@ class Core:
 
 			window.Window.propertyGlobalSet('GaiaPosterStatic', tools.Settings.getInteger('interface.navigation.streams.poster') == 0)
 
-			window.Window.propertyGlobalSet('GaiaColorOrion', interface.Format.colorOrion())
 			window.Window.propertyGlobalSet('GaiaColorPrimary', interface.Format.colorPrimary())
 			window.Window.propertyGlobalSet('GaiaColorSecondary', interface.Format.colorSecondary())
+			window.Window.propertyGlobalSet('GaiaColorTertiary', interface.Format.colorTertiary())
 			window.Window.propertyGlobalSet('GaiaColorMain', interface.Format.colorMain())
 			window.Window.propertyGlobalSet('GaiaColorDisabled', interface.Format.colorDisabled())
 			window.Window.propertyGlobalSet('GaiaColorAlternative', interface.Format.colorAlternative())
@@ -2239,9 +2251,19 @@ class Core:
 						elif not name: name = link
 					elif not name:
 						name = link
+
+					origin = orionoid.Orionoid.Name if 'orion' in itemJson else itemJson['origin']
+					originFormat = None
+					if prefix > 0:
+						originFormat = origin
+						if prefix == 1: originFormat = originFormat[:3]
+						elif prefix == 2: originFormat = re.sub('scrapers*', '', originFormat, flags = re.IGNORECASE)
+						originFormat = interface.Format.font(originFormat, bold = True, uppercase = True, color = interface.Format.colorTertiary())
+
 					hoster = None if itemJson['source'].lower() == itemJson['providerlabel'].lower() else itemJson['source'] if meta.isHoster() or meta.isPremium() else None
-					provider = window.WindowStreams.separator([meta.labelOrion(), interface.Format.font(itemJson['providerlabel'], uppercase = True, bold = True), interface.Format.font(hoster, uppercase = True, bold = True)], color = True)
-					stream = window.WindowStreams.separator([extra if extra else None, meta.labelOrion(), interface.Format.font(itemJson['providerlabel'], uppercase = True, bold = True), interface.Format.font(hoster, uppercase = True, bold = True)], color = True)
+					provider = window.WindowStreams.separator([originFormat, interface.Format.font(itemJson['provider'], uppercase = True, bold = True), interface.Format.font(hoster, uppercase = True, bold = True)], color = True)
+					stream = window.WindowStreams.separator([extra if extra else None, originFormat, interface.Format.font(itemJson['provider'], uppercase = True, bold = True), interface.Format.font(hoster, uppercase = True, bold = True)], color = True)
+
 					access = metadatax.Metadata.labelFill(window.WindowStreams.separator([meta.labelDirect(), meta.labelCached(), meta.labelDebrid(), meta.labelOpen()], color = True))
 					info = metadatax.Metadata.labelFill(window.WindowStreams.separator([meta.labelType(), meta.labelAccess()], color = True))
 					metas = metadatax.Metadata.labelFill(window.WindowStreams.separator([meta.labelEdition(), meta.labelPack(), meta.labelRelease(), meta.labelUploader()], color = True))
@@ -2272,8 +2294,9 @@ class Core:
 					item.setProperty('GaiaAction', url)
 					item.setProperty('GaiaNumber', str(i + 1))
 					item.setProperty('GaiaExtra', extra)
+					item.setProperty('GaiaIcon', origin.lower())
+					item.setProperty('GaiaPrefix', str(int(prefix > 0)))
 					item.setProperty('GaiaType', meta.type())
-					item.setProperty('GaiaOrion', str(int(meta.orion())))
 					item.setProperty('GaiaProvider', provider)
 					item.setProperty('GaiaStream', stream)
 					item.setProperty('GaiaPopularity', popularity)
@@ -2459,7 +2482,7 @@ class Core:
 					break
 
 			try:
-				item = source
+				item = copy.deepcopy(source)
 				if isinstance(item, list):
 					item = item[0]
 
@@ -2511,7 +2534,6 @@ class Core:
 													sourceObject = provider.Provider.provider(i, enabled = False, local = True, exact = False)['object']
 													break
 												except: pass
-
 								try: url = sourceObject.resolve(url, internal = True) # To accomodate Torba's popup dialog.
 								except: url = sourceObject.resolve(url)
 								item['urlresolved'] = item['url'] = url # Assign to 'url', since it must first be resolved by eg Incursion scrapers and then by eg ResolveUrl
@@ -3059,11 +3081,13 @@ class Core:
 				for source in self.sourcesAdjusted:
 					if not 'hash' in source and (source['source'] == handler.Handler.TypeTorrent or source['source'] == handler.Handler.TypeUsenet):
 						links.append(source['url'])
-				hashes = self.cacheOrion.hashes(links = links, chunked = partial)
-				for link, hash in hashes.iteritems():
+				identifiers = self.cacheOrion.identifiers(links = links, chunked = partial)
+				for link, identifier in identifiers.iteritems():
 					for i in range(len(self.sourcesAdjusted)):
 						if self.sourcesAdjusted[i]['url'] == link:
-							self.sourcesAdjusted[i]['hash'] = hash
+							if not identifier is None:
+								self.sourcesAdjusted[i]['hash'] = identifier['hash'].lower()
+								self.sourcesAdjusted[i]['segment'] = identifier['segment']
 							break
 
 			threads = []
@@ -3101,10 +3125,12 @@ class Core:
 						'''if not 'hash' in source:
 							container = network.Container(link = source['url'])
 							source['hash'] = container.hash()'''
-						if modeHash and 'hash' in source and not source['hash'] == None and not source['hash'] == '':
+
+						torrentOrUsenet = source['source'] == handler.Handler.TypeTorrent or source['source'] == handler.Handler.TypeUsenet
+						if torrentOrUsenet and modeHash and 'hash' in source and not source['hash'] == None and not source['hash'] == '':
 							hashes.append(source['hash'])
 							sources.append(source)
-						elif modeLink and 'url' in source and not source['url'] == None and not source['url'] == '':
+						elif not torrentOrUsenet and modeLink and 'url' in source and not source['url'] == None and not source['url'] == '':
 							hashes.append(source['url'])
 							sources.append(source)
 
@@ -3272,7 +3298,7 @@ class Core:
 				if not urlresolved == None:
 					self.sourcesAdjusted[index]['urlresolved'] = urlresolved
 				if not hash == None:
-					self.sourcesAdjusted[index]['hash'] = hash
+					self.sourcesAdjusted[index]['hash'] = hash.lower()
 
 				if mutex: self.adjustUnlock()
 		except:
@@ -3457,12 +3483,14 @@ class Core:
 		if wait: thread.join()
 
 	def sourcesRemoveDuplicates(self, sources, orion = False):
-		def filterLink(link):
+		def filterLink(link, premium):
 			container = network.Container(link)
 			if container.torrentIsMagnet():
 				return container.torrentMagnetClean() # Clean magnet from trackers, name, domain, etc.
 			else:
-				return network.Networker(link).link() # Clean link from HTTP headers.
+				link = network.Networker(link).link() # Clean link from HTTP headers.
+				if premium: link = network.Networker.linkPath(link) # Parallel searches of premium services often returns the same file on different servers. Only check the URL path and ignore the domain.
+				return link
 
 		def cacheUpdate(sourceOld, sourceNew):
 			sourceOld['cache'].update({k : v for k, v in sourceNew['cache'].items() if v})
@@ -3481,8 +3509,10 @@ class Core:
 
 			index = None
 			duplicate = False
-			linkNormal = filterLink(source['url']).lower()
-			linkResolved = filterLink(source['urlresolved']) if 'urlresolved' in source else None
+			try: premium = source['premium']
+			except: premium = False
+			linkNormal = filterLink(source['url'], premium).lower()
+			linkResolved = filterLink(source['urlresolved'], premium) if 'urlresolved' in source else None
 
 			try:
 				index = linksNormal.index(linkNormal)
@@ -4673,6 +4703,7 @@ class Core:
 					except:
 						easynewsInformationUsage = None
 
+				prefix = tools.Settings.getInteger('interface.navigation.streams.prefix')
 				precheck = tools.System.developers() and tools.Settings.getBoolean('scraping.precheck.enabled')
 				layout = tools.Settings.getInteger('interface.information.layout')
 				layoutColor = tools.Settings.getBoolean('interface.information.layout.color')
@@ -4711,7 +4742,7 @@ class Core:
 					except: pass
 
 					source = items[i]['source']
-					pro = re.sub('v\d+$', '', items[i]['providerlabel'])
+					pro = re.sub('v\d+$', '', items[i]['provider'])
 					meta = items[i]['metadata']
 
 					infos = []
@@ -4732,10 +4763,16 @@ class Core:
 						value = interface.Format.font(value, bold = True, color = interface.Format.colorMain(), uppercase = True)
 						infos.append(value)
 
+					if prefix > 0:
+						origin = orionoid.Orionoid.Name if 'orion' in items[i] else items[i]['origin']
+						if prefix == 1: origin = origin[:3]
+						elif prefix == 2: origin = re.sub('scrapers*', '', origin, flags = re.IGNORECASE)
+						infos.append(interface.Format.font(origin, bold = True, uppercase = True, color = interface.Format.colorTertiary()))
+
 					if layoutProvider > 0 and not pro == None and not pro == '' and not pro == '0':
 						try:
 							if 'orion' in items[i]:
-								value = interface.Format.font(orionoid.Orionoid.Name, color = interface.Format.colorOrion(), bold = True, uppercase = True)
+								value = interface.Format.font(orionoid.Orionoid.Name, color = interface.Format.colorTertiary(), bold = True, uppercase = True)
 								infos.append(value)
 						except: pass
 						value = pro
@@ -5032,7 +5069,7 @@ class Core:
 			return []
 
 	def getLanguage(self):
-		if tools.Language.customization(): language = tools.Settings.getString('scraping.foreign.language')
+		if tools.Language.customization(): language = tools.Settings.getString('scraping.alternative.language')
 		else: language = tools.Language.Alternative
 		return tools.Language.code(language)
 

@@ -87,6 +87,8 @@ class source(provider.ProviderBase):
 				query = re.sub('(\\\|/| -|:|;|\*|\?|"|\'|<|>|\|)', ' ', query)
 
 			query = urllib.quote_plus(query)
+			if not self._query(query): return sources
+
 			query = self.search_link % (query, query)
 			query = urlparse.urljoin(self.base_link, query)
 
