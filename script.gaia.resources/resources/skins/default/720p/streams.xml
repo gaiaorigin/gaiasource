@@ -829,7 +829,7 @@
 									<height>16</height>
 									<visible>Integer.IsEqual(ListItem.Property(GaiaPrefix),1)</visible>
 									<visible>String.IsEmpty(ListItem.Property(GaiaExtra))</visible>
-									<texture>special://home/addons/script.gaia.resources/resources/media/addons/$INFO[Container(52000).ListItem.Property(GaiaIcon)].png</texture>
+									<texture>special://home/addons/script.gaia.resources/resources/media/addons/$INFO[ListItem.Property(GaiaIcon)].png</texture>
 								</control>
 								<control type="label">
 				  					<left>15</left>
@@ -1439,7 +1439,7 @@
 									<height>16</height>
 									<visible>Integer.IsEqual(ListItem.Property(GaiaPrefix),1)</visible>
 									<visible>String.IsEmpty(ListItem.Property(GaiaExtra))</visible>
-									<texture>special://home/addons/script.gaia.resources/resources/media/addons/$INFO[Container(52000).ListItem.Property(GaiaIcon)].png</texture>
+									<texture>special://home/addons/script.gaia.resources/resources/media/addons/$INFO[ListItem.Property(GaiaIcon)].png</texture>
 								</control>
 								<control type="label">
 				  					<left>15</left>
