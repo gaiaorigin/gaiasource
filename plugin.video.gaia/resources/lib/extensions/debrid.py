@@ -3408,7 +3408,7 @@ class OffCloud(Debrid):
 				chunks = [sources[i:i + OffCloud.LimitHashesGet] for i in xrange(0, len(sources), OffCloud.LimitHashesGet)]
 			for chunk in chunks:
 				for c in range(len(chunk)):
-					chunk[c] = [chunk[c]['hash'], segmentExtract(chunk[c])]
+					chunk[c] = [chunk[c]['hash'].lower(), segmentExtract(chunk[c])]
 
 			self.tCacheLock = threading.Lock()
 			self.tCacheResult = []
@@ -3419,7 +3419,7 @@ class OffCloud(Debrid):
 				offcloud = OffCloud()
 				result = offcloud._retrieve(mode = mode, category = OffCloud.CategoryCache, hash = hashes, segment = segments, httpTimeout = timeout)
 				if offcloud.success():
-					cached = result['cachedItems']
+					cached = [i.lower() for i in result['cachedItems']]
 					claimed = result['claimedItems'] if 'claimedItems' in result else None
 					self.tCacheLock.acquire()
 					self.tCacheResult.extend(result)

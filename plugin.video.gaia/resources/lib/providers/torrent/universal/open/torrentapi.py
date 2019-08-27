@@ -122,8 +122,8 @@ class source(provider.ProviderBase):
 
 				# Add
 				sources.append({'url' : jsonLink, 'debridonly' : False, 'direct' : False, 'source' : 'torrent', 'language' : self.language[0], 'quality':  meta.videoQuality(), 'metadata' : meta, 'file' : jsonName})
-		except:
-			pass
+		except: pass
 
-		source.Lock.release()
+		try: source.Lock.release()
+		except: pass
 		return sources

@@ -2320,7 +2320,7 @@ class Metadata(object):
 			except: value = value.lower()
 			value = client.replaceHTMLCodes(value)
 			value = value.replace("\n", '') # Double quotes with escape characters.
-			if splitAll: split = [item for item in re.split('\.|\,|\(|\)|\[|\]|\s|\-|\_|\+|\/|\\\'|\"', value) if not item == '']
+			if splitAll: split = [item for item in re.split('[-!$%^&*()_+|~=`{}\[\]:";\'<>?,.\/\s]', value) if not item == '']
 			else: split = [item for item in re.split('\s', value) if not item == '']
 			return value, split
 		else:

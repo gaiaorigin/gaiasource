@@ -49,6 +49,14 @@ class ProviderBase(object):
 	def supportShows(self):
 		return self.mSupportShows
 
+	def _id(self):
+		id = ''
+		try: id += sys.modules[self.__module__].__file__
+		except: pass
+		try: id += self.instanceId()
+		except: pass
+		return tools.Hash.sha512(id)
+
 	def _encode(self, dictionary):
 		try:
 			result = {}
@@ -77,8 +85,7 @@ class ProviderBase(object):
 
 	def _query(self, *args):
 		# Check if query was already executed, in order to avoid duplicate queries for alternative titles.
-		# Use self.Queries and not ProviderBase.Queries, since there are different subclasses.
-		query = ''
+		query = self._id()
 		for arg in args:
 			if not arg is None:
 				try: arg = str(arg)
@@ -86,10 +93,8 @@ class ProviderBase(object):
 				try: arg = arg.encode('utf-8')
 				except: pass
 				query += arg
-		try: query += self.instanceId()
-		except: pass
-		if query in self.Queries: return False
-		self.Queries.append(query)
+		if query in ProviderBase.Queries: return False
+		ProviderBase.Queries.append(query)
 		return True
 
 	def movie(self, imdb, title, alternativetitles, localtitle, year):
