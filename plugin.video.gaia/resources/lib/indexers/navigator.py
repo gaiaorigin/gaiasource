@@ -304,7 +304,7 @@ class navigator:
 	def settingsNavigator(self):
 		self.addDirectoryItem(33894, 'settingsAdvanced', 'settingsadvanced.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.addDirectoryItem(33893, 'settingsWizard', 'settingswizard.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		if tools.System.versionKodiNew(): self.addDirectoryItem(35325, 'settingsAdapt', 'settingsadapt.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
+		self.addDirectoryItem(35325, 'settingsAdapt', 'settingsadapt.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.endDirectory()
 
 	def backupNavigator(self):
