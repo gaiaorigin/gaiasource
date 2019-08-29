@@ -29,8 +29,8 @@ from resources.lib.extensions import network
 
 class source(provider.ProviderBase):
 
-	Lock = None
 	Token = None
+	Lock = None
 
 	def __init__(self):
 		provider.ProviderBase.__init__(self, supportMovies = True, supportShows = True)
@@ -89,41 +89,47 @@ class source(provider.ProviderBase):
 
 			# Ensure that only a single token is retrieved when searching for alternative titles.
 			# Otherwise a HTTP 429 error is thrown (too many requests).
+			first = False
 			if source.Lock is None:
-				# Get a token. Expires every 15 minutes, but just request the token on every search. The old token will be returned if the previous one did not yet expire.
 				source.Lock = threading.Lock()
-				source.Lock.acquire()
+				first = True
+			source.Lock.acquire()
+
+			if first:
+				# Get a token. Expires every 15 minutes, but just request the token on every search. The old token will be returned if the previous one did not yet expire.
 				url = self.base_link + self.api_link + self.token_link
 				result = json.loads(client.request(url))
 				source.Token = result['token']
 			else:
-				source.Lock.acquire() # Let all other subsequent threads wait here until the first thread's token has been retrieved.
 				tools.Time.sleep(self.rate_limit * 1.1) # There is a 1req/2s limit.
 
 			category = self.category_shows if 'tvshowtitle' in data else self.category_movies
 			url = (self.base_link + self.api_link + self.search_link) % (source.Token, urllib.quote_plus(query), category)
 
-			result = json.loads(client.request(url))
-			torrents = result['torrent_results']
+			try:
+				result = json.loads(client.request(url))
+				torrents = result['torrent_results']
 
-			for torrent in torrents:
-				jsonName = torrent['title']
-				jsonSize = torrent['size']
-				jsonLink = torrent['download']
-				try: jsonSeeds = int(torrent['seeders'])
-				except: jsonSeeds = None
+				for torrent in torrents:
+					jsonName = torrent['title']
+					jsonSize = torrent['size']
+					jsonLink = torrent['download']
+					try: jsonSeeds = int(torrent['seeders'])
+					except: jsonSeeds = None
 
-				# Metadata
-				meta = metadata.Metadata(name = jsonName, title = title, titles = titles, year = year, season = season, episode = episode, pack = pack, packCount = packCount, link = jsonLink, size = jsonSize, seeds = jsonSeeds)
+					# Metadata
+					meta = metadata.Metadata(name = jsonName, title = title, titles = titles, year = year, season = season, episode = episode, pack = pack, packCount = packCount, link = jsonLink, size = jsonSize, seeds = jsonSeeds)
 
-				# Ignore
-				meta.ignoreAdjust(contains = ignoreContains)
-				if meta.ignore(False): continue
+					# Ignore
+					meta.ignoreAdjust(contains = ignoreContains)
+					if meta.ignore(False): continue
 
-				# Add
-				sources.append({'url' : jsonLink, 'debridonly' : False, 'direct' : False, 'source' : 'torrent', 'language' : self.language[0], 'quality':  meta.videoQuality(), 'metadata' : meta, 'file' : jsonName})
-		except: pass
+					# Add
+					sources.append({'url' : jsonLink, 'debridonly' : False, 'direct' : False, 'source' : 'torrent', 'language' : self.language[0], 'quality':  meta.videoQuality(), 'metadata' : meta, 'file' : jsonName})
+			except: pass
 
-		try: source.Lock.release()
-		except: pass
+			source.Lock.release()
+		except:
+			tools.Logger.error()
+
 		return sources

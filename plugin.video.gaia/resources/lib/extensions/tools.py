@@ -1725,8 +1725,8 @@ class System(object):
 		try: idle = (Time.timestamp() - int(value)) > 10800 # If the last launch was more than 3 hours ago.
 		except: idle = True
 		if first or idle:
+			from resources.lib import debrid
 			from resources.lib.extensions import interface
-			from resources.lib.extensions import debrid
 			from resources.lib.extensions import settings
 			from resources.lib.extensions import provider
 			from resources.lib.extensions import window
@@ -1858,12 +1858,12 @@ class System(object):
 			NanScrapers.check()
 
 			# Intialize Premiumize
-			debrid.Premiumize().initialize()
+			debrid.premiumize.Core().initialize()
 
 			# Clear debrid files
-			debrid.Premiumize().deleteLaunch()
-			debrid.OffCloud().deleteLaunch()
-			debrid.RealDebrid().deleteLaunch()
+			debrid.premiumize.Core().deleteLaunch()
+			debrid.offcloud.Core().deleteLaunch()
+			debrid.realdebrid.Core().deleteLaunch()
 
 			# Copy the select theme background as fanart to the root folder.
 			# Ensures that the selected theme also shows outside the addon.
@@ -5051,8 +5051,8 @@ class Statistics(object):
 		try:
 			if not self.enabled(): return
 
+			from resources.lib import debrid
 			from resources.lib.extensions import api
-			from resources.lib.extensions import debrid
 			from resources.lib.extensions import network
 			from resources.lib.extensions import orionoid
 
@@ -5073,12 +5073,12 @@ class Statistics(object):
 
 				'premium' :
 				{
-					'premiumize' : debrid.Premiumize().accountValid(),
-					'offcloud' : debrid.OffCloud().accountValid(),
-					'realdebrid' : debrid.RealDebrid().accountValid(),
-					'easynews' : debrid.EasyNews().accountValid(),
-					'alldebrid' : debrid.AllDebrid().accountValid(),
-					'rapidpremium' : debrid.RapidPremium().accountValid(),
+					'premiumize' : debrid.premiumize.Core().accountValid(),
+					'offcloud' : debrid.offcloud.Core().accountValid(),
+					'realdebrid' : debrid.realdebrid.Core().accountValid(),
+					'easynews' : debrid.easynews.Core().accountValid(),
+					'alldebrid' : debrid.alldebrid.Core().accountValid(),
+					'rapidpremium' : debrid.rapidpremium.Core().accountValid(),
 				},
 			}
 

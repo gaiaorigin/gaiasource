@@ -24,7 +24,7 @@ from resources.lib.modules import control
 from resources.lib.extensions import provider
 from resources.lib.extensions import metadata
 from resources.lib.extensions import tools
-from resources.lib.extensions import debrid
+from resources.lib.debrid import offcloud
 
 class source(provider.ProviderBase):
 
@@ -40,12 +40,12 @@ class source(provider.ProviderBase):
 		self.items = []
 
 	def instanceEnabled(self):
-		offcloud = debrid.OffCloud()
-		return offcloud.accountEnabled() and offcloud.accountValid()
+		core = offcloud.Core()
+		return core.accountEnabled() and core.accountValid()
 
 	def _item(self, category, id, season, episode):
 		try:
-			item = debrid.OffCloud().item(category = category, id = id, transfer = True, files = True, season = season, episode = episode)
+			item = offcloud.Core().item(category = category, id = id, transfer = True, files = True, season = season, episode = episode)
 			try: self.mutex.acquire()
 			except: pass
 			if item: self.items.append(item)
@@ -59,19 +59,19 @@ class source(provider.ProviderBase):
 			timerEnd = tools.Settings.getInteger('scraping.providers.timeout') - 3
 			timer = tools.Time(start = True)
 
-			items = debrid.OffCloud().items(category = category)
+			items = offcloud.Core().items(category = category)
 			try: self.mutex.acquire()
 			except: pass
 
 			threads = []
 			for item in items:
-				if item['status'] == debrid.OffCloud.StatusFinished: # Only finished downloads.
+				if item['status'] == offcloud.Core.StatusFinished: # Only finished downloads.
 					id = item['id']
 					if not id in self.ids:
 						meta = metadata.Metadata(name = item['name'], title = title, titles = titles, year = year, season = season, episode = episode, pack = pack)
 						if not meta.ignore(size = False):
 							self.ids.append(id)
-							if category == debrid.OffCloud.CategoryInstant:
+							if category == offcloud.Core.CategoryInstant:
 								self.items.append(item)
 							else:
 								threads.append(threading.Thread(target = self._item, args = (category, id, season, episode)))
@@ -96,7 +96,7 @@ class source(provider.ProviderBase):
 		sources = []
 		try:
 			if url == None: raise Exception()
-			if not debrid.OffCloud().accountValid(): raise Exception()
+			if not offcloud.Core().accountValid(): raise Exception()
 
 			data = self._decode(url)
 
@@ -124,8 +124,8 @@ class source(provider.ProviderBase):
 
 			threads = []
 			self.ids = []
-			threads.append(threading.Thread(target = self._items, args = (debrid.OffCloud.CategoryCloud, title, titles, year, season, episode, pack)))
-			threads.append(threading.Thread(target = self._items, args = (debrid.OffCloud.CategoryInstant, title, titles, year, season, episode, pack)))
+			threads.append(threading.Thread(target = self._items, args = (offcloud.Core.CategoryCloud, title, titles, year, season, episode, pack)))
+			threads.append(threading.Thread(target = self._items, args = (offcloud.Core.CategoryInstant, title, titles, year, season, episode, pack)))
 			[thread.start() for thread in threads]
 
 			while True:

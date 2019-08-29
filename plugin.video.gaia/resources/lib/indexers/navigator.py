@@ -492,18 +492,18 @@ class navigator:
 		self.endDirectory()
 
 	def informationPremium(self):
+		from resources.lib import debrid
 		from resources.lib.extensions import emby
-		from resources.lib.extensions import debrid
 		full = ' (%s)' % interface.Translation.string(33458)
 		limited = ' (%s)' % interface.Translation.string(33459)
 		minimal = ' (%s)' % interface.Translation.string(33460)
-		self.addDirectoryItem(interface.Translation.string(33566) + full, 'linkOpen&link=%s' % debrid.Premiumize.website(), 'premiumize.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(interface.Translation.string(35200) + full, 'linkOpen&link=%s' % debrid.OffCloud.website(), 'offcloud.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(interface.Translation.string(33567) + full, 'linkOpen&link=%s' % debrid.RealDebrid.website(), 'realdebrid.png', 'DefaultAddonProgram.png')
+		self.addDirectoryItem(interface.Translation.string(33566) + full, 'linkOpen&link=%s' % debrid.premiumize.Core.website(), 'premiumize.png', 'DefaultAddonProgram.png')
+		self.addDirectoryItem(interface.Translation.string(35200) + full, 'linkOpen&link=%s' % debrid.offcloud.Core.website(), 'offcloud.png', 'DefaultAddonProgram.png')
+		self.addDirectoryItem(interface.Translation.string(33567) + full, 'linkOpen&link=%s' % debrid.realdebrid.Core.website(), 'realdebrid.png', 'DefaultAddonProgram.png')
 		self.addDirectoryItem(interface.Translation.string(35551) + full, 'linkOpen&link=%s' % emby.Emby.website(), 'emby.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(interface.Translation.string(33794) + limited, 'linkOpen&link=%s' % debrid.EasyNews.website(), 'easynews.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(interface.Translation.string(33568) + minimal, 'linkOpen&link=%s' % debrid.AllDebrid.website(), 'alldebrid.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(interface.Translation.string(33569) + minimal, 'linkOpen&link=%s' % debrid.RapidPremium.website(), 'rapidpremium.png', 'DefaultAddonProgram.png')
+		self.addDirectoryItem(interface.Translation.string(33794) + limited, 'linkOpen&link=%s' % debrid.easynews.Core.website(), 'easynews.png', 'DefaultAddonProgram.png')
+		self.addDirectoryItem(interface.Translation.string(33568) + minimal, 'linkOpen&link=%s' % debrid.alldebrid.Core.website(), 'alldebrid.png', 'DefaultAddonProgram.png')
+		self.addDirectoryItem(interface.Translation.string(33569) + minimal, 'linkOpen&link=%s' % debrid.rapidpremium.Core.website(), 'rapidpremium.png', 'DefaultAddonProgram.png')
 		self.endDirectory()
 
 	def traktAccount(self):
@@ -704,13 +704,14 @@ class navigator:
 		self.endDirectory()
 
 	def vpnNavigator(self):
-		from resources.lib.extensions import debrid
+		from resources.lib.debrid import premiumize
+		from resources.lib.debrid import easynews
 		self.addDirectoryItem(33017, 'vpnVerification', 'vpnverification.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.addDirectoryItem(33802, 'vpnConfiguration', 'vpnconfiguration.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.addDirectoryItem(33011, 'vpnSettings', 'vpnsettings.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		if debrid.Premiumize().accountValid():
+		if premiumize.Core().accountValid():
 			self.addDirectoryItem(33566, 'premiumizeVpn', 'vpnpremiumize.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
-		if debrid.EasyNews().accountValid():
+		if easynews.Core().accountValid():
 			self.addDirectoryItem(33794, 'easynewsVpn', 'vpneasynews.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.endDirectory()
 
@@ -847,9 +848,9 @@ class navigator:
 		self.endDirectory()
 
 	def servicesScraperNavigator(self):
-		self.addDirectoryItem(35548, 'opescrapersNavigator', 'opescrapers.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(35431, 'lamscrapersNavigator', 'lamscrapers.png', 'DefaultAddonProgram.png')
-		self.addDirectoryItem(35504, 'civscrapersNavigator', 'civscrapers.png', 'DefaultAddonProgram.png')
+		self.addDirectoryItem(35549, 'opescrapersNavigator', 'opescrapers.png', 'DefaultAddonProgram.png')
+		self.addDirectoryItem(35432, 'lamscrapersNavigator', 'lamscrapers.png', 'DefaultAddonProgram.png')
+		self.addDirectoryItem(35505, 'civscrapersNavigator', 'civscrapers.png', 'DefaultAddonProgram.png')
 		self.addDirectoryItem(35460, 'gloscrapersNavigator', 'gloscrapers.png', 'DefaultAddonProgram.png')
 		self.addDirectoryItem(35331, 'uniscrapersNavigator', 'uniscrapers.png', 'DefaultAddonProgram.png')
 		self.addDirectoryItem(35332, 'nanscrapersNavigator', 'nanscrapers.png', 'DefaultAddonProgram.png')
@@ -887,8 +888,8 @@ class navigator:
 		self.endDirectory()
 
 	def premiumizeNavigator(self):
-		from resources.lib.extensions import debrid
-		valid = debrid.Premiumize().accountValid()
+		from resources.lib.debrid import premiumize
+		valid = premiumize.Core().accountValid()
 		if valid:
 			self.addDirectoryItem(32009, 'premiumizeDownloadsNavigator&lite=1', 'premiumizedownloads.png', 'DefaultAddonProgram.png')
 			self.addDirectoryItem(33339, 'premiumizeAccount', 'premiumizeaccount.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
@@ -898,8 +899,8 @@ class navigator:
 		self.endDirectory()
 
 	def premiumizeDownloadsNavigator(self, lite = False):
-		from resources.lib.extensions import debrid
-		valid = debrid.Premiumize().accountValid()
+		from resources.lib.debrid import premiumize
+		valid = premiumize.Core().accountValid()
 		if valid:
 			self.addDirectoryItem(33297, 'premiumizeList', 'downloadslist.png', 'DefaultAddonProgram.png')
 			self.addDirectoryItem(35069, 'premiumizeAdd', 'downloadsadd.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
@@ -910,8 +911,8 @@ class navigator:
 		self.endDirectory()
 
 	def offcloudNavigator(self):
-		from resources.lib.extensions import debrid
-		valid = debrid.OffCloud().accountValid()
+		from resources.lib.debrid import offcloud
+		valid = offcloud.Core().accountValid()
 		if valid:
 			self.addDirectoryItem(32009, 'offcloudDownloadsNavigator&lite=1', 'offclouddownloads.png', 'DefaultAddonProgram.png')
 			self.addDirectoryItem(33339, 'offcloudAccount', 'offcloudaccount.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
@@ -921,8 +922,8 @@ class navigator:
 		self.endDirectory()
 
 	def offcloudDownloadsNavigator(self, lite = False, category = None):
-		from resources.lib.extensions import debrid
-		valid = debrid.OffCloud().accountValid()
+		from resources.lib.debrid import offcloud
+		valid = offcloud.Core().accountValid()
 		if category == None:
 			self.addDirectoryItem(35205, 'offcloudDownloadsNavigator&category=instant', 'downloadsinstant.png', 'DefaultAddonProgram.png')
 			self.addDirectoryItem(35206, 'offcloudDownloadsNavigator&category=cloud', 'downloadscloud.png', 'DefaultAddonProgram.png')
@@ -943,8 +944,8 @@ class navigator:
 		self.endDirectory()
 
 	def realdebridNavigator(self):
-		from resources.lib.extensions import debrid
-		valid = debrid.RealDebrid().accountValid()
+		from resources.lib.debrid import realdebrid
+		valid = realdebrid.Core().accountValid()
 		if valid:
 			self.addDirectoryItem(32009, 'realdebridDownloadsNavigator&lite=1', 'realdebriddownloads.png', 'DefaultAddonProgram.png')
 			self.addDirectoryItem(33339, 'realdebridAccount', 'realdebridaccount.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
@@ -954,8 +955,8 @@ class navigator:
 		self.endDirectory()
 
 	def realdebridDownloadsNavigator(self, lite = False):
-		from resources.lib.extensions import debrid
-		valid = debrid.RealDebrid().accountValid()
+		from resources.lib.debrid import realdebrid
+		valid = realdebrid.Core().accountValid()
 		if valid:
 			self.addDirectoryItem(33297, 'realdebridList', 'downloadslist.png', 'DefaultAddonProgram.png')
 			self.addDirectoryItem(35069, 'realdebridAdd', 'downloadsadd.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
@@ -966,8 +967,8 @@ class navigator:
 		self.endDirectory()
 
 	def easynewsNavigator(self):
-		from resources.lib.extensions import debrid
-		if debrid.EasyNews().accountValid():
+		from resources.lib.debrid import easynews
+		if easynews.Core().accountValid():
 			self.addDirectoryItem(33339, 'easynewsAccount', 'easynewsaccount.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 			self.addDirectoryItem(33030, 'speedtestEasyNews', 'easynewsspeed.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)
 		self.addDirectoryItem(33354, 'easynewsWebsite', 'easynewsweb.png', 'DefaultAddonProgram.png', isAction = True, isFolder = False)

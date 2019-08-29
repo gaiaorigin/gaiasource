@@ -461,23 +461,8 @@ class ProviderExternalStructured(ProviderExternal):
 	def sources(self, url, hostDict, hostprDict):
 		sources = []
 		try:
-			from resources.lib.extensions import debrid
-			debridHas = False
-			if not debridHas:
-				premiumize = debrid.Premiumize()
-				debridHas = premiumize.accountEnabled() and premiumize.accountValid()
-				if not debridHas:
-					offcloud = debrid.OffCloud()
-					debridHas = offcloud.accountEnabled() and offcloud.accountValid()
-					if not debridHas:
-						realdebrid = debrid.RealDebrid()
-						debridHas = realdebrid.accountEnabled() and realdebrid.accountValid()
-						if not debridHas:
-							alldebrid = debrid.AllDebrid()
-							debridHas = alldebrid.accountEnabled() and alldebrid.accountValid()
-							if not debrid:
-								rapidpremium = debrid.RapidPremium()
-								debridHas = rapidpremium.accountEnabled() and rapidpremium.accountValid()
+			from resources.lib import debrid
+			debridHas = debrid.Debrid.enabled()
 
 			data = urlparse.parse_qs(url)
 			data = dict([(i, data[i][0]) if data[i] else (i, '') for i in data])
@@ -782,7 +767,7 @@ class Provider(object):
 
 					return providers
 		except:
-			pass
+			tools.Logger.error()
 		return None
 
 	@classmethod
@@ -1055,6 +1040,8 @@ class Provider(object):
 							total = len(files)
 							progressDialog.update(int(40 + (50 * ((len(providers) - providersExtras) / float(total)))))
 
+					except ImportError:
+						pass # Do not log errors for non-installed external scraping addons.
 					except Exception as error:
 						tools.Logger.log('A provider could not be loaded (%s): %s.' % (str(f[4]), str(error)))
 						tools.Logger.error()

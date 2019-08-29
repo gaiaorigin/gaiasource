@@ -24,7 +24,7 @@ from resources.lib.modules import control
 from resources.lib.extensions import provider
 from resources.lib.extensions import metadata
 from resources.lib.extensions import tools
-from resources.lib.extensions import debrid
+from resources.lib.debrid import realdebrid
 
 class source(provider.ProviderBase):
 
@@ -38,16 +38,16 @@ class source(provider.ProviderBase):
 		self.base_link = 'https://real-debrid.com'
 
 	def instanceEnabled(self):
-		realdebrid = debrid.RealDebrid()
-		return realdebrid.accountEnabled() and realdebrid.accountValid()
+		core = realdebrid.Core()
+		return core.accountEnabled() and core.accountValid()
 
 	def sources(self, url, hostDict, hostprDict):
 		sources = []
 		try:
 			if url == None: raise Exception()
 
-			realdebrid = debrid.RealDebrid()
-			if not realdebrid.accountValid(): raise Exception()
+			core = realdebrid.Core()
+			if not core.accountValid(): raise Exception()
 
 			data = self._decode(url)
 
@@ -68,7 +68,7 @@ class source(provider.ProviderBase):
 
 			if not self._query(title, year, season, episode, pack): return sources
 
-			items = realdebrid.items()
+			items = core.items()
 			for item in items:
 				try:
 					if item['transfer']['progress']['completed']['value'] == 1: # Only finished downloads.

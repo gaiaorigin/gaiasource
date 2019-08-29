@@ -24,7 +24,7 @@ from resources.lib.modules import control
 from resources.lib.extensions import provider
 from resources.lib.extensions import metadata
 from resources.lib.extensions import tools
-from resources.lib.extensions import debrid
+from resources.lib.debrid import premiumize
 
 class source(provider.ProviderBase):
 
@@ -42,11 +42,11 @@ class source(provider.ProviderBase):
 		self.items = []
 
 	def instanceEnabled(self):
-		premiumize = debrid.Premiumize()
-		return premiumize.accountEnabled() and premiumize.accountValid()
+		core = premiumize.Core()
+		return core.accountEnabled() and core.accountValid()
 
 	def _item(self, idFolder, idFile, season, episode):
-		item = debrid.Premiumize().item(idFolder = idFolder, idFile = idFile, content = True, season = season, episode = episode)
+		item = premiumize.Core().item(idFolder = idFolder, idFile = idFile, content = True, season = season, episode = episode)
 		try: self.mutex.acquire()
 		except: pass
 		if item: self.items.append(item)
@@ -59,8 +59,8 @@ class source(provider.ProviderBase):
 		try:
 			if url == None: raise Exception()
 
-			premiumize = debrid.Premiumize()
-			if not premiumize.accountValid(): raise Exception()
+			core = premiumize.Core()
+			if not core.accountValid(): raise Exception()
 
 			data = self._decode(url)
 
@@ -86,7 +86,7 @@ class source(provider.ProviderBase):
 
 			threads = []
 			ids = []
-			items = premiumize._items()
+			items = core._items()
 			for item in items:
 				id = item['id']
 				if not id in ids:

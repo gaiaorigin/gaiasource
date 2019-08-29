@@ -2057,7 +2057,7 @@ class Metadata(object):
 					self.mVideoQuality = self.videoQualityConvert(quality.replace(' ', '').lower())
 				elif isinstance(source, dict) and 'quality' in source:
 					self.mVideoQuality = self.videoQualityConvert(source['quality'].replace(' ', '').lower())
-			else:
+			elif not name == None or not title == None or not year == None or not season == None or not episode == None: # Check if parameters where set, otherwise creating an empty Metadata object takes too long.
 				self.mName = name
 				if not self.mName: self.mName = ''
 				self.setName(self.mName)

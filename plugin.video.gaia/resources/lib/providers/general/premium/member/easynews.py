@@ -23,7 +23,7 @@ from resources.lib.modules import client
 from resources.lib.extensions import provider
 from resources.lib.extensions import metadata
 from resources.lib.extensions import tools
-from resources.lib.extensions import debrid
+from resources.lib.debrid import easynews
 
 class source(provider.ProviderBase):
 
@@ -42,18 +42,18 @@ class source(provider.ProviderBase):
 		self.search_link = '/2.0/search/solr-search/advanced?st=adv&safeO=1&sb=1&from=&ns=&fex=mkv%%2Cmp4%%2Cavi%%2Cmpg%%2Cwebm&vc=&ac=&s1=nsubject&s1d=%%2B&s2=nrfile&s2d=%%2B&s3=dsize&s3d=%%2B&fty[]=VIDEO&spamf=1&u=1&gx=1&pby=3000&pno=1&sS=3&d1=&d1t=&d2=&d2t=&b1=&b1t=11&b2=&b2t=&px1=&px1t=&px2=&px2t=&fps1=&fps1t=&fps2=&fps2t=&bps1=&bps1t=&bps2=&bps2t=&hz1=&hz1t=&hz2=&hz2t=&rn1=&rn1t=&rn2=&rn2t=&gps=%s&sbj=%s'
 
 	def instanceEnabled(self):
-		easynews = debrid.EasyNews()
-		return easynews.accountEnabled() and easynews.accountValid()
+		core = easynews.Core()
+		return core.accountEnabled() and core.accountValid()
 
 	def sources(self, url, hostDict, hostprDict):
 		sources = []
 		try:
 			if url == None: raise Exception()
 
-			easynews = debrid.EasyNews()
-			if not easynews.accountValid(): raise Exception()
+			core = easynews.Core()
+			if not core.accountValid(): raise Exception()
 
-			cookie = easynews.accountCookie()
+			cookie = core.accountCookie()
 
 			ignoreContains = None
 			data = self._decode(url)

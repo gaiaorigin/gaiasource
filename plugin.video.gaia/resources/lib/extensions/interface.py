@@ -1158,7 +1158,6 @@ class Splash(xbmcgui.WindowDialog):
 	def __init__(self, type, message = None, donation = None):
 		Loader.show()
 
-		from resources.lib.extensions import debrid
 		self.mType = type
 		self.mSplash = None
 
@@ -1579,18 +1578,23 @@ class Splash(xbmcgui.WindowDialog):
 		return int((self.mHeight - height) / 2)
 
 	def __referalPremiumize(self):
-		from resources.lib.extensions import debrid
-		debrid.Premiumize.website(open = True)
+		from resources.lib.debrid import premiumize
+		premiumize.Core.website(open = True)
+		self.close()
+
+	def __referalOffCloud(self):
+		from resources.lib.debrid import offcloud
+		offcloud.Core.website(open = True)
 		self.close()
 
 	def __referalRealDebrid(self):
-		from resources.lib.extensions import debrid
-		debrid.RealDebrid.website(open = True)
+		from resources.lib.debrid import realdebrid
+		realdebrid.Core.website(open = True)
 		self.close()
 
 	def __referalEasyNews(self):
-		from resources.lib.extensions import debrid
-		debrid.EasyNews.website(open = True)
+		from resources.lib.debrid import easynews
+		easynews.Core.website(open = True)
 		self.close()
 
 	def __referalCoinBase(self):
@@ -1614,7 +1618,7 @@ class Splash(xbmcgui.WindowDialog):
 			actions.append(self.__referalPremiumize)
 		if self.mButtonOffCloud:
 			distances.append(abs(control.getX() - self.mButtonOffCloud[0]) + abs(control.getY() - self.mButtonOffCloud[1]))
-			actions.append(self.__referalRealDebrid)
+			actions.append(self.__referalOffCloud)
 		if self.mButtonRealDebrid:
 			distances.append(abs(control.getX() - self.mButtonRealDebrid[0]) + abs(control.getY() - self.mButtonRealDebrid[1]))
 			actions.append(self.__referalRealDebrid)
@@ -2157,8 +2161,8 @@ class Context(object):
 	def _initializeRefresh(self):
 		# NB: Save each variable individually, instead of a JSON object, since encoding/decoding JSON objects takes too long.
 
+		from resources.lib import debrid
 		from resources.lib.extensions import downloader
-		from resources.lib.extensions import debrid
 		from resources.lib.extensions import window
 
 		manualEnabled = tools.Settings.getBoolean('downloads.manual.enabled')

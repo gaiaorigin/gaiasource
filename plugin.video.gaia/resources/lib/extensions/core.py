@@ -20,10 +20,10 @@
 
 import xbmc,xbmcgui,xbmcvfs,sys,pkgutil,re,json,urllib,urlparse,datetime,time,os,copy,threading
 
+from resources.lib import debrid
 from resources.lib.modules import control
 from resources.lib.modules import cleantitle
 from resources.lib.modules import client
-from resources.lib.modules import debrid
 from resources.lib.modules import workers
 from resources.lib.modules import trakt
 from resources.lib.modules import tvmaze
@@ -37,7 +37,6 @@ from resources.lib.extensions import history
 from resources.lib.extensions import trailer
 from resources.lib.extensions import provider
 from resources.lib.extensions import orionoid
-from resources.lib.extensions import debrid as debridx
 from resources.lib.extensions import metadata as metadatax
 from resources.lib.extensions import cache as cachex
 from resources.lib.externals.beautifulsoup import BeautifulSoup
@@ -789,31 +788,31 @@ class Core:
 				self.cacheTypes = []
 				self.cacheObjects = []
 				if tools.Settings.getBoolean('scraping.cache.premiumize'):
-					premiumize = debridx.Premiumize()
-					if premiumize.accountValid():
+					premiumizeCore = debrid.premiumize.Core()
+					if premiumizeCore.accountValid():
 						if tools.Settings.getBoolean('streaming.torrent.premiumize.enabled'):
 							self.cacheTypes.append(handler.Handler.TypeTorrent)
-							self.cacheObjects.append(premiumize)
+							self.cacheObjects.append(premiumizeCore)
 						if tools.Settings.getBoolean('streaming.usenet.premiumize.enabled') and (self.cacheOrion or tools.Settings.getBoolean('scraping.cache.preload.usenet')):
 							self.cacheTypes.append(handler.Handler.TypeUsenet)
-							self.cacheObjects.append(premiumize)
+							self.cacheObjects.append(premiumizeCore)
 						if tools.Settings.getBoolean('streaming.hoster.premiumize.enabled'):
 							self.cacheTypes.append(handler.Handler.TypeHoster)
-							self.cacheObjects.append(premiumize)
+							self.cacheObjects.append(premiumizeCore)
 				if tools.Settings.getBoolean('scraping.cache.offcloud'):
-					offcloud = debridx.OffCloud()
-					if offcloud.accountValid():
+					offcloudCore = debrid.offcloud.Core()
+					if offcloudCore.accountValid():
 						if tools.Settings.getBoolean('streaming.torrent.offcloud.enabled'):
 							self.cacheTypes.append(handler.Handler.TypeTorrent)
-							self.cacheObjects.append(offcloud)
+							self.cacheObjects.append(offcloudCore)
 						if tools.Settings.getBoolean('streaming.usenet.offcloud.enabled') and (self.cacheOrion or tools.Settings.getBoolean('scraping.cache.preload.usenet')):
 							self.cacheTypes.append(handler.Handler.TypeUsenet)
-							self.cacheObjects.append(offcloud)
+							self.cacheObjects.append(offcloudCore)
 				if tools.Settings.getBoolean('scraping.cache.realdebrid'):
-					realdebrid = debridx.RealDebrid()
-					if realdebrid.accountValid() and tools.Settings.getBoolean('streaming.torrent.realdebrid.enabled'):
+					realdebridCore = debrid.realdebrid.Core()
+					if realdebridCore.accountValid() and tools.Settings.getBoolean('streaming.torrent.realdebrid.enabled'):
 						self.cacheTypes.append(handler.Handler.TypeTorrent)
-						self.cacheObjects.append(realdebrid)
+						self.cacheObjects.append(realdebridCore)
 				self.cacheEnabled = len(self.cacheTypes) > 0
 
 			# Limit the number of running threads.
@@ -822,9 +821,9 @@ class Core:
 			# NB: Do not use None (aka unlimited). If 500+ links are found, too many threads are started, causing a major delay by having to switch between threads. Use a limited number of threads.
 			self.threadsLimit = tools.Hardware.processors() * 2
 
-			enabledPremiumize = debridx.Premiumize().accountValid() and (tools.Settings.getBoolean('streaming.torrent.premiumize.enabled') or tools.Settings.getBoolean('streaming.usenet.premiumize.enabled'))
-			enabledOffCloud = debridx.OffCloud().accountValid() and (tools.Settings.getBoolean('streaming.torrent.offcloud.enabled') or tools.Settings.getBoolean('streaming.usenet.offcloud.enabled'))
-			enabledRealDebrid = debridx.RealDebrid().accountValid() and tools.Settings.getBoolean('streaming.torrent.realdebrid.enabled')
+			enabledPremiumize = debrid.premiumize.Core().accountValid() and (tools.Settings.getBoolean('streaming.torrent.premiumize.enabled') or tools.Settings.getBoolean('streaming.usenet.premiumize.enabled'))
+			enabledOffCloud = debrid.offcloud.Core().accountValid() and (tools.Settings.getBoolean('streaming.torrent.offcloud.enabled') or tools.Settings.getBoolean('streaming.usenet.offcloud.enabled'))
+			enabledRealDebrid = debrid.realdebrid.Core().accountValid() and tools.Settings.getBoolean('streaming.torrent.realdebrid.enabled')
 
 			control.makeFile(control.dataPath)
 			self.sourceFile = control.providercacheFile
@@ -2566,7 +2565,7 @@ class Core:
 						return None
 				except: pass
 
-				self.progressPlaybackUpdate(progress = 5, title = heading, message = message)
+				self.progressPlaybackUpdate(progress = 2, title = heading, message = message)
 
 				local = 'local' in item and item['local']
 				if item['source'] == block: raise Exception()
@@ -2574,7 +2573,7 @@ class Core:
 				self.tResolved = None
 
 				# OffCloud cloud downloads require a download, even if it is a hoster. Only instant downloads on OffCloud do not need this.
-				try: cloud = (not 'premium' in item or not item['premium']) and (not item['source'] == 'torrent' and not item['source'] == 'usenet') and not tools.Settings.getBoolean('accounts.debrid.offcloud.instant') and handler.Handler(handler.Handler.TypeHoster).service(handle).id() == handler.HandleOffCloud.Id
+				try: cloud = (not 'premium' in item or not item['premium']) and (not item['source'] == 'torrent' and not item['source'] == 'usenet') and not tools.Settings.getBoolean('accounts.debrid.offcloud.instant') and handler.Handler(handler.Handler.TypeHoster).service(handle).id() == debrid.offcloud.Core().id()
 				except: cloud = False
 
 				# Torrents and usenet have a download dialog with their own thread. Do not start a thread for them here.
@@ -2585,7 +2584,7 @@ class Core:
 
 					labelTransferring = 33674 if item['source'] == 'torrent' else 33675 if item['source'] == 'usenet' else 33943
 					labelTransferring = interface.Translation.string(labelTransferring)
-					self.progressPlaybackUpdate(progress = 10, title = heading, message = labelTransferring)
+					self.progressPlaybackUpdate(progress = 5, title = heading, message = labelTransferring)
 
 					def _resolve(item, handle):
 						try:
@@ -2636,7 +2635,7 @@ class Core:
 							self.loaderHide()
 
 						progress += 0.25
-						progressCurrent = 5 + min(int(progress), 30)
+						progressCurrent = 5 + min(int(progress), 25)
 						self.progressPlaybackUpdate(progress = progressCurrent, title = heading, message = labelTransferring)
 						time.sleep(0.5)
 
@@ -3103,16 +3102,16 @@ class Core:
 			self.cacheBusy = False
 			self.adjustUnlock()
 
-	def _adjustSourceCache(self, debrid, type, timeout, partial = False):
+	def _adjustSourceCache(self, object, type, timeout, partial = False):
 		try:
-			debridId = debrid.id()
+			debridId = object.id()
 			self.adjustLock()
 			hashes = []
 			sources = []
 
-			modes = debrid.cachedModes()
-			modeHash = debridx.Debrid.ModeTorrent in modes or debridx.Debrid.ModeUsenet in modes
-			modeLink = debridx.Debrid.ModeHoster in modes
+			modes = object.cachedModes()
+			modeHash = handler.Handler.TypeTorrent in modes or handler.Handler.TypeUsenet in modes
+			modeLink = handler.Handler.TypeHoster in modes
 			for source in self.sourcesAdjusted:
 				if (source['source'] == type or (modeLink and type == handler.Handler.TypeHoster)) and (not 'premium' in source or not source['premium']):
 					# Only check those that were not previously inspected.
@@ -3147,22 +3146,22 @@ class Core:
 					source['cache'][debridId] = False
 			self.adjustUnlock()
 
-			def _updateIndividually(debrid, hash, cached):
+			def _updateIndividually(id, hash, cached):
 				hashLower = hash.lower()
 				self.adjustLock()
 				for i in range(len(self.sourcesAdjusted)):
 					try:
 						if self.sourcesAdjusted[i]['hash'].lower() == hashLower:
-							if cached and (not debrid in self.sourcesAdjusted[i]['cache'] or not self.sourcesAdjusted[i]['cache'][debrid]):
-								self.sourcesAdjusted[i]['cache'][debrid] = cached
+							if cached and (not id in self.sourcesAdjusted[i]['cache'] or not self.sourcesAdjusted[i]['cache'][id]):
+								self.sourcesAdjusted[i]['cache'][id] = cached
 								if cached and sum(self.sourcesAdjusted[i]['cache'].values()) == 1: # Only count one of the debird service caches.
 									self.streamsCached += 1
 							break
 					except: pass
 					try:
 						if self.sourcesAdjusted[i]['url'] == hash:
-							if cached and (not debrid in self.sourcesAdjusted[i]['cache'] or not self.sourcesAdjusted[i]['cache'][debrid]):
-								self.sourcesAdjusted[i]['cache'][debrid] = cached
+							if cached and (not id in self.sourcesAdjusted[i]['cache'] or not self.sourcesAdjusted[i]['cache'][id]):
+								self.sourcesAdjusted[i]['cache'][id] = cached
 								if cached and sum(self.sourcesAdjusted[i]['cache'].values()) == 1: # Only count one of the debird service caches.
 									self.streamsCached += 1
 							break
@@ -3172,7 +3171,7 @@ class Core:
 			self.adjustLock()
 			self.progressCache += 1 # Used to determine when the cache-inspection threads are completed.
 			self.adjustUnlock()
-			debrid.cached(id = hashes, timeout = timeout, callback = _updateIndividually, sources = sources)
+			object.cached(id = hashes, timeout = timeout, callback = _updateIndividually, sources = sources)
 			self.adjustLock()
 			self.progressCache -= 1
 			self.adjustUnlock()
@@ -3248,7 +3247,7 @@ class Core:
 		contains = False
 		if mutex: self.adjustLock()
 		try:
-			debrids = [debridx.Premiumize().id(), debridx.RealDebrid().id()]
+			debrids = [debrid.premiumize.Core().id(), debrid.offcloud.Core().id(), debrid.realdebrid.Core().id()]
 			for i in range(len(self.sourcesAdjusted)):
 				sourceAdjusted = self.sourcesAdjusted[i]
 				if sourceAdjusted['url'] == source['url']:
@@ -4017,9 +4016,9 @@ class Core:
 			# PREPROCESSING
 			####################################################################################
 
-			handlePremiumize = handler.HandlePremiumize()
-			premiumize = debridx.Premiumize()
-			premiumizeEnabled = premiumize.accountValid()
+			premiumizeHandle = debrid.premiumize.Handle()
+			premiumizeCore = debrid.premiumize.Core()
+			premiumizeEnabled = premiumizeCore.accountValid()
 
 			self.countInitial = len(items)
 			self.countDuplicates = 0
@@ -4270,9 +4269,9 @@ class Core:
 					torrentCacheExclude = filterProviderCacheTorrent == 1
 					torrentCacheRequire = filterProviderCacheTorrent == 2
 					if torrentCacheExclude:
-						items = [i for i in items if not i['source'] == 'torrent' or not ('cache' in i and debridx.Debrid.cachedAny(i['cache']))]
+						items = [i for i in items if not i['source'] == 'torrent' or not ('cache' in i and debrid.Debrid.cached(i['cache']))]
 					elif torrentCacheRequire:
-						items = [i for i in items if not i['source'] == 'torrent' or ('cache' in i and debridx.Debrid.cachedAny(i['cache']))]
+						items = [i for i in items if not i['source'] == 'torrent' or ('cache' in i and debrid.Debrid.cached(i['cache']))]
 
 					# Filter - Torrent Seeds
 					if not torrentCacheRequire:
@@ -4287,9 +4286,9 @@ class Core:
 					usenetCacheExclude = filterProviderCacheUsenet == 1
 					usenetCacheRequire = filterProviderCacheUsenet == 2
 					if usenetCacheExclude:
-						items = [i for i in items if not i['source'] == 'usenet' or not ('cache' in i and debridx.Debrid.cachedAny(i['cache']))]
+						items = [i for i in items if not i['source'] == 'usenet' or not ('cache' in i and debrid.Debrid.cached(i['cache']))]
 					elif usenetCacheRequire:
-						items = [i for i in items if not i['source'] == 'usenet' or ('cache' in i and debridx.Debrid.cachedAny(i['cache']))]
+						items = [i for i in items if not i['source'] == 'usenet' or ('cache' in i and debrid.Debrid.cached(i['cache']))]
 				else:
 					items = [i for i in items if not i['source'] == 'usenet']
 
@@ -4302,9 +4301,9 @@ class Core:
 					hosterCacheRequire = filterProviderCacheHoster == 2
 
 					if hosterCacheExclude:
-						items = [i for i in items if not (not i['source'] == 'torrent' and not i['source'] == 'usenet') or not ('cache' in i and debridx.Debrid.cachedAny(i['cache']))]
+						items = [i for i in items if not (not i['source'] == 'torrent' and not i['source'] == 'usenet') or not ('cache' in i and debrid.Debrid.cached(i['cache']))]
 					elif hosterCacheRequire:
-						items = [i for i in items if not (not i['source'] == 'torrent' and not i['source'] == 'usenet') or ('cache' in i and debridx.Debrid.cachedAny(i['cache']))]
+						items = [i for i in items if not (not i['source'] == 'torrent' and not i['source'] == 'usenet') or ('cache' in i and debrid.Debrid.cached(i['cache']))]
 				else:
 					items = [i for i in items if not (not i['source'] == 'torrent' and not i['source'] == 'usenet')]
 
@@ -4313,8 +4312,8 @@ class Core:
 				if costMaximum > 0 and premiumizeEnabled:
 					filter = []
 					for i in items:
-						if handlePremiumize.supported(i):
-							try: cost = premiumize.service(i['source'].lower().rsplit('.', 1)[0])['usage']['factor']['value']
+						if premiumizeHandle.supported(i):
+							try: cost = premiumizeCore.service(i['source'].lower().rsplit('.', 1)[0])['usage']['factor']['value']
 							except: cost = None
 							if cost == None or cost <= costMaximum:
 								filter.append(i)
@@ -4348,7 +4347,7 @@ class Core:
 			filterLocal = _filterMetadata(filterLocal, ['HD8K', 'HD6K', 'HD4K', 'HD2K', 'HD1080', 'HD720', 'SD'])
 
 			# Filter - Add Hosters that are supported by a Debrid service.
-			if debrid.status():
+			if debrid.Debrid.enabled():
 				filter = []
 				for i in range(len(items)):
 					if not 'debrid' in items[i]:
@@ -4590,7 +4589,7 @@ class Core:
 						filter[optionLocal].append(i)
 					elif 'premium' in i and i['premium']:
 						filter[optionPremium].append(i)
-					elif 'cache' in i and debridx.Debrid.cachedAny(i['cache']):
+					elif 'cache' in i and debrid.Debrid.cached(i['cache']):
 						filter[optionCached].append(i)
 					elif 'direct' in i and i['direct']:
 						filter[optionDirect].append(i)
@@ -4670,9 +4669,9 @@ class Core:
 			if not self.navigationStreamsSpecial:
 				duration = self._duration(metadata)
 
-				handlePremiumize = handler.HandlePremiumize()
-				premiumize = debridx.Premiumize()
-				premiumizeEnabled = premiumize.accountValid()
+				premiumizeHandle = debrid.premiumize.Handle()
+				premiumizeCore = debrid.premiumize.Core()
+				premiumizeEnabled = premiumizeCore.accountValid()
 
 				premiumInformation = tools.Settings.getBoolean('interface.information.premium.enabled')
 
@@ -4681,16 +4680,16 @@ class Core:
 				premiumizeInformationUsage = None
 				if premiumInformation and premiumizeInformation > 0 and premiumizeEnabled:
 					if premiumizeInformation == 1 or premiumizeInformation == 2:
-						try: premiumizeInformationUsage = premiumize.account()['usage']['consumed']['description']
+						try: premiumizeInformationUsage = premiumizeCore.account()['usage']['consumed']['description']
 						except: pass
 
-				easynews = debridx.EasyNews()
+				easynewsCore = debrid.easynews.Core()
 				easynewsInformation = tools.Settings.getInteger('interface.information.premium.easynews')
 				easynewsInformationUsage = None
-				if premiumInformation and easynewsInformation > 0 and easynews.accountValid():
+				if premiumInformation and easynewsInformation > 0 and easynewsCore.accountValid():
 					try:
 						easynewsInformationUsage = []
-						usage = easynews.account()['usage']
+						usage = easynewsCore.account()['usage']
 						if easynewsInformation == 1: easynewsInformationUsage.append('%s Consumed' % (usage['consumed']['description']))
 						elif easynewsInformation == 2: easynewsInformationUsage.append('%s Remaining' % (usage['remaining']['description']))
 						elif easynewsInformation == 3: easynewsInformationUsage.append('%s Total' % (usage['total']['size']['description']))
@@ -4803,11 +4802,11 @@ class Core:
 
 					labelTop = interface.Format.fontSeparator().join(infos)
 
-					if premiumizeEnabled and premiumizeInformation > 0 and ((not('direct' in items[i] and items[i]['direct']) and debridHas and handlePremiumize.supported(items[i]) or source == 'premiumize')):
-						try: # Somtimes Premiumize().service(source) failes. In such a case, just ignore it.
+					if premiumizeEnabled and premiumizeInformation > 0 and ((not('direct' in items[i] and items[i]['direct']) and debridHas and premiumizeHandle.supported(items[i]) or source == 'premiumize')):
+						try: # Somtimes premiumize.Core().service(source) failes. In such a case, just ignore it.
 							cost = None
 							limit = None
-							service = premiumize.service(source)
+							service = premiumizeCore.service(source)
 							if service:
 								if premiumizeInformation == 1 or premiumizeInformation == 2:
 									cost = service['usage']['factor']['description']
@@ -4910,8 +4909,10 @@ class Core:
 		try:
 			self.downloadCanceled = False
 			log = True
+
 			if not internal: self.url = None
-			u = url = item['url']
+			url = item['url']
+			url = url.replace('filefactory.com/stream/', 'filefactory.com/file/')
 
 			if resolve == network.Networker.ResolveNone:
 				self.url = url
@@ -4938,14 +4939,14 @@ class Core:
 
 				try:
 					# To accomodate Torba's popup dialog.
-					u = url = source.resolve(url, internal = internal)
+					url = source.resolve(url, internal = internal)
 				except:
-					u = url = source.resolve(url)
+					url = source.resolve(url)
 
 				if not item['source'] == 'torrent' and not item['source'] == 'usenet':
 					item['source'] = network.Networker.linkDomain(u).lower()
 			except:
-				u = url
+				pass
 
 			if resolve == network.Networker.ResolveProvider:
 				self.url = url
@@ -4973,7 +4974,7 @@ class Core:
 					self.downloadCanceled = (handle == handler.Handler.ReturnCancel)
 					raise Exception('Error Handler')
 
-			result = sourceHandler.handle(link = u, item = item, name = handle, download = download, popups = popups, close = handleClose, mode = handleMode, cloud = cloud)
+			result = sourceHandler.handle(link = url, item = item, name = handle, download = download, popups = popups, close = handleClose, mode = handleMode, cloud = cloud)
 
 			if not result['success']:
 				if result['error'] == handler.Handler.ReturnUnavailable or result['error'] == handler.Handler.ReturnExternal or result['error'] == handler.Handler.ReturnCancel:
@@ -5001,14 +5002,14 @@ class Core:
 			headers = dict(urlparse.parse_qsl(headers))
 
 			if result['link'].startswith('http') and '.m3u8' in result['link']:
-				resultRequest = client.request(url.split('|')[0], headers=headers, output='geturl', timeout='20')
+				resultRequest = client.request(url.split('|')[0], headers = headers, output = 'geturl', timeout = '20')
 				if resultRequest == None:
 					raise Exception('Error M3U8')
 			elif result['link'].startswith('http'):
 				# Some Premiumize hoster links, eg Vidto, return a 403 error when doing this precheck with client.request, even though the link works.
 				# Do not conduct these prechecks for debrid services. If there is a problem with the link, the Kodi player will just fail.
 				if not 'handle' in result or not result['handle'] in [i['id'] for i in handler.Handler.handles()]:
-					resultRequest = client.request(result['link'].split('|')[0], headers=headers, output='chunk', timeout='20')
+					resultRequest = client.request(result['link'].split('|')[0], headers = headers, output = 'chunk', timeout = '20')
 					if resultRequest == None:
 						raise Exception('Error Server')
 
@@ -5036,7 +5037,7 @@ class Core:
 		self.hostcapDict = ['hugefiles.net', 'kingfiles.net', 'openload.io', 'openload.co', 'oload.tv', 'thevideo.me', 'vidup.me', 'streamin.to', 'torba.se']
 		self.hostblockDict = []
 
-		self.debridServices = debrid.services()
+		self.debridServices = debrid.Debrid.services()
 
 		self.externalServices = {}
 		providers = provider.Provider.providers(enabled = True, local = False)

@@ -148,6 +148,7 @@ class Window(object):
 	IdWindowPlayer = 12901
 	IdWindowPlayerFull = 12005
 	IdWindowPlaylist = 10028
+	IdWindowOk = 12002
 	IdWindowInformation = 12003
 	IdListControl = 52000
 
@@ -974,7 +975,7 @@ class WindowProgress(Window):
 		if not progress is None:
 			if progress < 1: progress *= 100
 			reduced = progress < instance.mProgress
-			instance.mProgress = progress
+			instance.mProgress = min(100, progress)
 			instance.propertySet(WindowProgress.ProgressPercentage, int(instance.mProgress))
 			progress = instance._progress()
 			for i in range(progress):

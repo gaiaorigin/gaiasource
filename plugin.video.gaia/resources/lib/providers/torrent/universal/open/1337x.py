@@ -42,7 +42,7 @@ class source(provider.ProviderBase):
 	def _link(self, link):
 		try:
 			html = BeautifulSoup(client.request(link))
-			html = html.find_all('ul', class_ = 'download-links-dontblock')[0]
+			html = html.find_all('div', class_ = 'torrent-detail-page')[0].find_all('ul')[0]
 			htmlLinks = html.find_all('a')
 			for i in range(len(htmlLinks)):
 				resolved = htmlLinks[i]['href']
