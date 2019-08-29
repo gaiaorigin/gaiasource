@@ -64,13 +64,14 @@ try:
 
 		ChunkLimit = 30
 
+		Providers = None
+
 		##############################################################################
 		# CONSTRUCTOR
 		##############################################################################
 
 		def __init__(self, silent = False):
 			self.mOrion = Orion(key = tools.System.obfuscate(tools.Settings.getString('internal.orion.api', raw = True)), silent = silent)
-			self.mProviders = None
 			self.mHashesQueue = []
 			self.mHashesCompleted = {}
 			self.mHashesThreads = []
@@ -203,12 +204,15 @@ try:
 		# PROVIDER
 		##############################################################################
 
-		def _provider(self, id):
-			id = id.lower()
-			if self.mProviders == None:
+		def providerInitialize(self):
+			if Orionoid.Providers == None:
 				provider.Provider.initialize(forceAll = True)
-				self.mProviders = provider.Provider.providers(enabled = False, local = False, orion = False)
-			for pro in self.mProviders:
+				Orionoid.Providers = provider.Provider.providers(enabled = False, local = False, orion = False)
+
+		def _provider(self, id):
+			self.providerInitialize()
+			id = id.lower()
+			for pro in Orionoid.Providers:
 				if pro['id'] == id:
 					return pro['object']
 			return None

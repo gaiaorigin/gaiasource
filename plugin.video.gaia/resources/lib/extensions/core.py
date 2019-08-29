@@ -640,6 +640,14 @@ class Core:
 
 			tools.Logger.log('Starting Scraping ...', name = 'CORE', level = tools.Logger.TypeNotice)
 
+			# NB: Initialize the providers inside Orion here, BEFORE the scraping providers are initialized or the scraping prrocess starts.
+			# Otherwise, Orion will initialize them during the scraping process, which can cause various issues to the other running providers.
+			# For instance, TorrentApi's Lock might suddenly be reset, causing synchronization errors, becuase Orion will create a NEW instance of TorrentApi.
+			try:
+				orion = orionoid.Orionoid()
+				if orion.accountEnabled(): orion.providerInitialize()
+			except: pass
+
 			threads = []
 			movie = tvshowtitle == None if self.type == None else (self.type == tools.Media.TypeMovie or self.type == self.type == tools.Media.TypeDocumentary or self.type == self.type == tools.Media.TypeShort)
 
@@ -884,7 +892,6 @@ class Core:
 			scrapingContinue = True
 			scrapingExcludeOrion = False
 			try:
-				orion = orionoid.Orionoid()
 				if orion.accountEnabled():
 					orionScrapingMode = orion.settingsScrapingMode()
 					tools.Logger.log('Launching Orion: ' + str(orionScrapingMode), name = 'CORE', level = tools.Logger.TypeNotice)
