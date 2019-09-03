@@ -39,6 +39,7 @@ class Core(base.Core):
 
 	Id = 'premiumize'
 	Name = 'Premiumize'
+	Abbreviation = 'P'
 
 	# Services
 	ServicesUpdate = None

@@ -34,6 +34,7 @@ class Core(base.Core):
 
 	Id = 'realdebrid'
 	Name = 'RealDebrid'
+	Abbreviation = 'R'
 
 	# Service Statuses
 	ServiceStatusUp = 'up'
@@ -172,7 +173,6 @@ class Core(base.Core):
 
 		def redo(mode, link, parameters, httpTimeout, httpData, httpHeaders, httpAuthenticate):
 			if httpAuthenticate:
-				tools.Logger.log('The RealDebrid token expired. Retrying the request with a refreshed token: ' + str(link))
 				if self._accountAuthentication():
 					httpHeaders['Authorization'] = 'Bearer %s' % self.mAuthenticationToken # Update token in headers.
 					return self._request(mode = mode, link = link, parameters = parameters, httpTimeout = httpTimeout, httpData = httpData, httpHeaders = httpHeaders, httpAuthenticate = False)
@@ -362,6 +362,7 @@ class Core(base.Core):
 
 		if Core.AuthenticationToken is None:
 			try:
+				tools.Logger.log('The RealDebrid token expired. The token is being refreshed.')
 				link = network.Networker.linkJoin(Core.LinkAuthentication, Core.CategoryToken)
 				parameters = {
 					Core.ParameterClientId : self.accountId(),

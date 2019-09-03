@@ -49,7 +49,7 @@ class ProviderBase(object):
 	def supportShows(self):
 		return self.mSupportShows
 
-	def _id(self):
+	def _provider(self):
 		id = ''
 		try: id += sys.modules[self.__module__].__file__
 		except: pass
@@ -85,7 +85,7 @@ class ProviderBase(object):
 
 	def _query(self, *args):
 		# Check if query was already executed, in order to avoid duplicate queries for alternative titles.
-		query = self._id()
+		query = self._provider()
 		for arg in args:
 			if not arg is None:
 				try: arg = str(arg)

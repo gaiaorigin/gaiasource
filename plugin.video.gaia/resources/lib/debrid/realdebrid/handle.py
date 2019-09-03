@@ -24,13 +24,8 @@ from resources.lib.debrid.realdebrid import interface
 
 class Handle(base.Handle):
 
-	# Accessed from metadata.
-	Id = 'realdebrid'
-	Name = 'RealDebrid'
-	Abbreviation = 'R'
-
 	def __init__(self):
-		base.Handle.__init__(self, id = Handle.Id, name = Handle.Name, abbreviation = Handle.Abbreviation, debrid = True)
+		base.Handle.__init__(self, id = core.Core.Id, name = core.Core.Name, abbreviation = core.Core.Abbreviation, debrid = True)
 		self.mService = core.Core()
 		self.mServices = None
 
@@ -41,7 +36,7 @@ class Handle(base.Handle):
 		except: pack = False
 		try: hash = item['hash']
 		except: hash = None
-		try: cached = item['cache'][Handle.Id]
+		try: cached = item['cache'][self.id()]
 		except: cached = False
 		try:
 			season = item['information']['season']

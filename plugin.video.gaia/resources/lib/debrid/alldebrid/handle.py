@@ -23,13 +23,8 @@ from resources.lib.debrid.alldebrid import core
 
 class Handle(base.Handle):
 
-	# Accessed from metadata.
-	Id = 'alldebrid'
-	Name = 'AllDebrid'
-	Abbreviation = 'A'
-
 	def __init__(self):
-		base.Handle.__init__(self, id = Handle.Id, name = Handle.Name, abbreviation = Handle.Abbreviation, debrid = True)
+		base.Handle.__init__(self, id = core.Core.Id, name = core.Core.Name, abbreviation = core.Core.Abbreviation, debrid = True)
 		self.mService = core.Core()
 		self.mServices = None
 

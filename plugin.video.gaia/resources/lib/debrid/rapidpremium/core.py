@@ -26,6 +26,7 @@ class Core(base.Core):
 
 	Id = 'rapidpremium'
 	Name = 'RapidPremium'
+	Abbreviation = 'M'
 
 	##############################################################################
 	# CONSTRUCTOR

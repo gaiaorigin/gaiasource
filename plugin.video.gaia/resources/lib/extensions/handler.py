@@ -68,34 +68,7 @@ class Handler(object):
 	def handles(self):
 		from resources.lib import debrid
 		global Handles
-		if Handles == None:
-			Handles = [
-				{
-					'id' : debrid.premiumize.Handle.Id,
-					'name' : debrid.premiumize.Handle.Name,
-					'abbreviation' : debrid.premiumize.Handle.Abbreviation,
-				},
-				{
-					'id' : debrid.offcloud.Handle.Id,
-					'name' : debrid.offcloud.Handle.Name,
-					'abbreviation' : debrid.offcloud.Handle.Abbreviation,
-				},
-				{
-					'id' : debrid.realdebrid.Handle.Id,
-					'name' : debrid.realdebrid.Handle.Name,
-					'abbreviation' : debrid.realdebrid.Handle.Abbreviation,
-				},
-				{
-					'id' : debrid.alldebrid.Handle.Id,
-					'name' : debrid.alldebrid.Handle.Name,
-					'abbreviation' : debrid.alldebrid.Handle.Abbreviation,
-				},
-				{
-					'id' : debrid.rapidpremium.Handle.Id,
-					'name' : debrid.rapidpremium.Handle.Name,
-					'abbreviation' : debrid.rapidpremium.Handle.Abbreviation,
-				},
-			]
+		if Handles == None: Handles = debrid.Debrid.handles(data = True)
 		return Handles
 
 	@classmethod
@@ -465,6 +438,16 @@ class Handle(object):
 		self.mOpen = open
 		self.mAddon = addon
 
+	def data(self):
+		return {
+			'id' : self.mId,
+			'name' : self.mName,
+			'abbreviation' : self.mAbbreviation,
+			'debrid' : self.mDebrid,
+			'open' : self.mOpen,
+			'addon' : self.mAddon,
+		}
+
 	def id(self):
 		return self.mId
 
@@ -518,7 +501,7 @@ class HandleDirect(Handle):
 		# RealDebrid premium links need to be resolved through RealDebrid.
 		# Other debrid services have direct links.
 		if provider == 'realdebrid': return debrid.realdebrid.Handle().handle(link = link, item = item, download = download, popups = popups, close = close, select = select, cloud = cloud)
-		else: return core.Core.addResult(link = link)
+		else: return debrid.core.Core.addResult(link = link)
 
 	def supported(self, item, cloud = False):
 		if cloud: return False

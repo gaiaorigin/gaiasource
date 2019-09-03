@@ -20,4 +20,3 @@
 
 from core import Core
 from interface import Interface
-from handle import Handle

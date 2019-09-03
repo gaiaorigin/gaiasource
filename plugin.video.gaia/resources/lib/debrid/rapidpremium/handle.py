@@ -19,17 +19,12 @@
 '''
 
 from resources.lib.debrid import base
-from resources.lib.debrid.offcloud import core
+from resources.lib.debrid.rapidpremium import core
 
 class Handle(base.Handle):
 
-	# Accessed from metadata.
-	Id = 'rapidpremium'
-	Name = 'RapidPremium'
-	Abbreviation = 'M'
-
 	def __init__(self):
-		base.Handle.__init__(self, id = Handle.Id, name = Handle.Name, abbreviation = Handle.Abbreviation, debrid = True)
+		base.Handle.__init__(self, id = core.Core.Id, name = core.Core.Name, abbreviation = core.Core.Abbreviation, debrid = True)
 		self.mService = core.Core()
 		self.mServices = None
 

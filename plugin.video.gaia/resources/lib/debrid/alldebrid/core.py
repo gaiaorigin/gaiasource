@@ -26,6 +26,7 @@ class Core(base.Core):
 
 	Id = 'alldebrid'
 	Name = 'AllDebrid'
+	Abbreviation = 'A'
 
 	##############################################################################
 	# CONSTRUCTOR

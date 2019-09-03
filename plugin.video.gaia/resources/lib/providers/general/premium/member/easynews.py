@@ -139,8 +139,7 @@ class source(provider.ProviderBase):
 					jsonLink = urllib.quote('%s%s/%s%s' % (result['0'], result['11'], result['10'], result['11']))
 					jsonLink = '%s/dl/%s|Cookie=%s' % (self.base_link, jsonLink, urllib.quote_plus(cookie))
 					jsonLink = jsonLink.encode('utf-8')
-					if jsonLink in links:
-						continue
+					if jsonLink in links: continue
 
 					# Metadata
 					meta = metadata.Metadata(name = jsonName, title = title, titles = titles, year = year, season = season, episode = episode, link = jsonLink, size = jsonSize, quality = jsonQuality)

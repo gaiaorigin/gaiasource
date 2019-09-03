@@ -34,6 +34,7 @@ class Core(base.Core):
 
 	Id = 'offcloud'
 	Name = 'OffCloud'
+	Abbreviation = 'O'
 
 	LinkMain = 'https://offcloud.com'
 	LinkApi = 'https://offcloud.com/api/'

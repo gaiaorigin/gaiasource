@@ -420,6 +420,28 @@
 		<setting id="interface.sort.calendar.order" type="enum" label="33679" lvalues="33649|33650" default="1" subsetting="true" />
 			<setting id="helper.interface.sort.calendar.order" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34276]  [/LIGHT]" visible="eq(-26,true)" />
 
+		<setting type="lsep" label="[UPPERCASE][B]$ADDON[plugin.video.gaia 35352][/B][/UPPERCASE]" />
+		<setting type="sep" />
+			<setting id="help.interface.context" type="bool" default="false" visible="false" />
+		<setting id="interface.context.enabled" type="bool" label="32301" default="true" />
+			<setting id="helper.interface.context.enabled" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34325]  [/LIGHT]" visible="eq(-2,true)" />
+		<setting id="interface.context.enabled.gaia" type="bool" label="35639" default="true" subsetting="true" visible="eq(-2,true)" />
+			<setting id="helper.interface.context.enabled.gaia" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34326]  [/LIGHT]" visible="eq(-3,true) + eq(-4,true)" />
+		<setting id="interface.context.enabled.addon" type="bool" label="35640" default="false" subsetting="true" visible="eq(-4,true)" />
+			<setting id="helper.interface.context.enabled.addon" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34327]  [/LIGHT]" visible="eq(-5,true) + eq(-6,true)" />
+		<setting id="interface.context.enabled.widget" type="bool" label="35641" default="true" subsetting="true" visible="eq(-6,true)" />
+			<setting id="helper.interface.context.enabled.widget" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34328]  [/LIGHT]" visible="eq(-7,true) + eq(-8,true)" />
+		<setting id="interface.context.enabled.playlist" type="bool" label="35642" default="true" subsetting="true" visible="eq(-8,true)" />
+			<setting id="helper.interface.context.enabled.playlist" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34329]  [/LIGHT]" visible="eq(-9,true) + eq(-10,true)" />
+		<setting id="interface.context.layout" type="bool" label="35643" default="false" visible="eq(-10,true)" />
+			<setting id="helper.interface.context.format" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34364]  [/LIGHT]" visible="eq(-11,true) + eq(-12,true)" />
+		<setting id="interface.context.layout.prefix" type="bool" label="35333" default="true" subsetting="true" visible="eq(-2,true) + eq(-12,true)" />
+			<setting id="helper.interface.context.format.prefix" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34365]  [/LIGHT]" visible="eq(-3,true) + eq(-13,true) + eq(-14,true)" />
+		<setting id="interface.context.layout.bold" type="bool" label="35644" default="true" subsetting="true" visible="eq(-4,true) + eq(-14,true)" />
+			<setting id="helper.interface.context.format.bold" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34366]  [/LIGHT]" visible="eq(-5,true) + eq(-15,true) + eq(-16,true)" />
+		<setting id="interface.context.layout.color" type="bool" label="35468" default="true" subsetting="true" visible="eq(-6,true) + eq(-16,true)" />
+			<setting id="helper.interface.context.format.color" type="action" default="[B][COLOR FFA0C12C]$ADDON[plugin.video.gaia 33239][/COLOR][/B]" label="  [B][COLOR FFA0C12C]•[/COLOR][/B] [LIGHT]$ADDON[plugin.video.gaia 34367]  [/LIGHT]" visible="eq(-7,true) + eq(-17,true) + eq(-18,true)" />
+
 		<setting type="lsep" label="[UPPERCASE][B]$ADDON[plugin.video.gaia 35237][/B][/UPPERCASE]" />
 		<setting type="sep" />
 			<setting id="help.interface.color" type="bool" default="false" visible="false" />

@@ -22,6 +22,8 @@ from resources.lib.extensions import tools
 
 class Debrid(object):
 
+	Instances = {}
+
 	@classmethod
 	def _path(self):
 		return tools.File.directory(__file__)
@@ -35,11 +37,17 @@ class Debrid(object):
 
 	@classmethod
 	def _instances(self, type = 'core'):
-		import importlib
-		directories, files = tools.File.listDirectory(self._path(), absolute = False)
-		for directory in directories:
-			module = importlib.import_module('resources.lib.debrid.' + directory + '.' + type.lower())
-			yield getattr(module, type.capitalize())()
+		if not type in Debrid.Instances:
+			import importlib
+			instances = []
+			directories, files = tools.File.listDirectory(self._path(), absolute = False)
+			for directory in directories:
+				module = importlib.import_module('resources.lib.debrid.' + directory + '.' + type.lower())
+				try: module = getattr(module, type.capitalize())()
+				except: continue # If does not have the class (eg: EasyNews Handle).
+				instances.append(module)
+			Debrid.Instances[type] = instances
+		return Debrid.Instances[type]
 
 	@classmethod
 	def enabled(self):
@@ -76,3 +84,11 @@ class Debrid(object):
 				if instance.deletePossible(source['source']):
 					instance.deletePlayback(id = id, pack = pack, category = category)
 				break
+
+	@classmethod
+	def handles(self, data = False):
+		result = self._instances(type = 'handle')
+		if data:
+			for i in range(len(result)):
+				result[i] = result[i].data()
+		return result

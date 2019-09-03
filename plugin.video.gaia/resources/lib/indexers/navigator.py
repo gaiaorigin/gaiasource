@@ -34,6 +34,7 @@ class navigator:
 	def __init__(self, type = tools.Media.TypeNone, kids = tools.Selection.TypeUndefined):
 		self.mType = type
 		self.mKids = kids
+		self.mContext = interface.Context.enabled()
 
 	def parameterize(self, action, type = None, kids = None, lite = None):
 		if type == None: type = self.mType
@@ -57,7 +58,7 @@ class navigator:
 			type = self.mType
 
 		item = control.item(label = name)
-		item.addContextMenuItems([interface.Context(mode = interface.Context.ModeGeneric, type = type, kids = self.mKids, link = url, title = name, create = True, library = library).menu()])
+		if self.mContext: item.addContextMenuItems([interface.Context(mode = interface.Context.ModeGeneric, type = type, kids = self.mKids, link = url, title = name, create = True, library = library).menu()])
 
 		iconIcon, iconThumb, iconPoster, iconBanner = interface.Icon.pathAll(icon = thumb, default = icon, special = iconSpecial)
 		item.setArt({'icon': iconIcon, 'thumb': iconThumb, 'poster': iconPoster, 'banner': iconBanner})
@@ -1160,7 +1161,7 @@ class navigator:
 		link = shortcuts.Shortcuts.parameterize(link, location, id)
 		id = str(id)
 		item = control.item(label = name)
-		item.addContextMenuItems([interface.Context(mode = interface.Context.ModeGeneric, type = self.mType, kids = self.mKids, id = id, location = location, delete = True).menu()])
+		if self.mContext: item.addContextMenuItems([interface.Context(mode = interface.Context.ModeGeneric, type = self.mType, kids = self.mKids, id = id, location = location, delete = True).menu()])
 
 		iconIcon, iconThumb, iconPoster, iconBanner = interface.Icon.pathAll(icon = 'shortcuts.png', default = 'DefaultAddonProgram.png')
 		item.setArt({'icon': iconIcon, 'thumb': iconThumb, 'poster': iconPoster, 'banner': iconBanner})

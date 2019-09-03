@@ -1702,8 +1702,17 @@ class System(object):
 			thread.start()
 
 	@classmethod
-	def launchAddon(self):
-		return System.execute('RunAddon(%s)' % self.id())
+	def launchAddon(self, wait = True):
+		System.execute('RunAddon(%s)' % self.id())
+		if wait:
+			for i in range(0, 150):
+				if self.infoLabel('Container.PluginName') == self.GaiaAddon:
+					try: items = int(self.infoLabel('Container.NumItems'))
+					except: items = 0
+					# Check NumItems, because the addon might have been launched, but the container/directory is still loading.
+					# The container must be done loading, otherwise if a container update is executed right afterwards, the main menu items and the container update items might be mixed and displayed as the same list.
+					if items > 0: break
+				Time.sleep(0.2)
 
 	@classmethod
 	def launchInitialize(self):
@@ -5004,11 +5013,12 @@ class Playlist(object):
 			item.setArt(art)
 			item.setInfo(type = 'Video', infoLabels = Media.metadataClean(metadata))
 
-			if not context == None:
+			# Use the global context menu instead.
+			'''if not context == None:
 				from resources.lib.extensions import interface
 				menu = interface.Context()
 				menu.jsonFrom(context)
-				item.addContextMenuItems([menu.menu()])
+				item.addContextMenuItems([menu.menu()])'''
 
 			self.playlist().add(url = link, listitem = item)
 			if notification:

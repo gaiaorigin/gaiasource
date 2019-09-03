@@ -27,6 +27,7 @@ class Core(base.Core):
 
 	Id = 'easynews'
 	Name = 'EasyNews'
+	Abbreviation = 'E'
 
 	Cookie = 'chickenlicker=%s%%3A%s'
 

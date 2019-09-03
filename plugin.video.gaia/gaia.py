@@ -415,7 +415,7 @@ elif action.startswith('playlist'): # Must be before the 'play' section.
 		tools.Playlist.clear()
 
 	elif action == 'playlistAdd':
-		label = params.get('label')
+		label = tools.Converter.quoteFrom(params.get('label'))
 		art = params.get('art')
 		context = params.get('context')
 		tools.Playlist.add(link = link, label = label, metadata = metadata, art = art, context = context)

@@ -5941,23 +5941,23 @@ msgid "Launches the UniversalScrapers settings."
 msgstr ""
 
 msgctxt "#34325"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Enables a custom Gaia menu in the context menu."
 msgstr ""
 
 msgctxt "#34326"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Shows the context menu within Gaia. Requires Kodi to be restarted."
 msgstr ""
 
 msgctxt "#34327"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Shows the context menu within other addons. Requires Kodi to be restarted."
 msgstr ""
 
 msgctxt "#34328"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Shows the context menu within widgets. Requires Kodi to be restarted."
 msgstr ""
 
 msgctxt "#34329"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Shows the context menu within playlists. Requires Kodi to be restarted."
 msgstr ""
 
 msgctxt "#34330"
@@ -6105,19 +6105,19 @@ msgid "Filters out unsupported streams that cannot be played with any of the ava
 msgstr ""
 
 msgctxt "#34364"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Customizes the layout of the context menu. Requires Kodi to be restarted."
 msgstr ""
 
 msgctxt "#34365"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Shows the prefix in front of menu items. Requires Kodi to be restarted."
 msgstr ""
 
 msgctxt "#34366"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Formats menu items with bold. Requires Kodi to be restarted."
 msgstr ""
 
 msgctxt "#34367"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Formats menu items with color. Requires Kodi to be restarted."
 msgstr ""
 
 msgctxt "#34368"
@@ -7741,7 +7741,7 @@ msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 msgstr ""
 
 msgctxt "#35352"
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "Context Menu"
 msgstr ""
 
 msgctxt "#35353"
@@ -8890,4 +8890,28 @@ msgstr ""
 
 msgctxt "#35638"
 msgid "Scraping Terminated With Enough Streams"
+msgstr ""
+
+msgctxt "#35639"
+msgid "Gaia"
+msgstr ""
+
+msgctxt "#35640"
+msgid "Addons"
+msgstr ""
+
+msgctxt "#35641"
+msgid "Widgets"
+msgstr ""
+
+msgctxt "#35642"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#35643"
+msgid "Customize"
+msgstr ""
+
+msgctxt "#35644"
+msgid "Bold"
 msgstr ""

@@ -262,16 +262,7 @@ class Core:
 			# Otherwise the directory with streams is not shown.
 			# Only has to be done if accessed from the home screen. Not necessary if the user is already in a directory structure.
 			if self.navigationStreamsDirectory and not 'plugin' in tools.System.infoLabel('Container.PluginName') and not tools.System.infoLabel('Container.FolderPath'):
-				if tools.System.versionKodiNew():
-					# launchAddon() does not seem to work in Kodi 18 anymore. Switch to dialog. Other addons are doing the same.
-					#self.navigationStreamsDirectory = False
-					#self.navigationStreamsDialog = True
-					# Seems to work again, at least in Kodi 19.
-					tools.System.launchAddon()
-					tools.Time.sleep(1)
-				else:
-					tools.System.launchAddon()
-					tools.Time.sleep(2) # Important, otherwise the dialog is shown if the main directory shows a bit late.
+				tools.System.launchAddon()
 
 			if autoplay == None:
 				if tools.Converter.boolean(window.Window.propertyGlobal('PseudoTVRunning')): autoplay = True
@@ -286,10 +277,10 @@ class Core:
 					from resources.lib.indexers import tvshows
 					# TODO: The episode metadata should be retrieved, not the show metadata.
 					# Currently the metadata is always passed as a parameter, but if that changes, this has to be fixed.
-					metadata = tvshows.tvshows().metadataRetrieve(tvshowtitle = tvshowtitle, title = title, year = year, imdb = imdb, tvdb = tvdb, season = season, episode = episode)
+					metadata = tvshows.tvshows().metadata(tvshowtitle = tvshowtitle, title = title, year = year, imdb = imdb, tvdb = tvdb, season = season, episode = episode)
 				else:
 					from resources.lib.indexers import movies
-					metadata = movies.movies().metadataRetrieve(imdb = imdb)
+					metadata = movies.movies().metadata(imdb = imdb)
 
 			if new:
 				if not self.silent and self.navigationCinema:
