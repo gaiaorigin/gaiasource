@@ -86,9 +86,22 @@ class Debrid(object):
 				break
 
 	@classmethod
-	def handles(self, data = False):
-		result = self._instances(type = 'handle')
-		if data:
-			for i in range(len(result)):
-				result[i] = result[i].data()
-		return result
+	def handles(self, data = False, priority = False):
+		try:
+			instances = self._instances(type = 'handle')
+			if priority:
+				highest = 0
+				for instance in instances:
+					if instance.priority() > highest:
+						highest = instance.priority()
+				temp = [None] * (max(highest, len(instances)) + 1)
+				for instance in instances:
+					temp[instance.priority() - 1] = instance
+				instances = [i for i in temp if i]
+			if data:
+				for i in range(len(instances)):
+					instances[i] = instances[i].data()
+			tools.Logger.log("FFFFFFF: "+str(instances))#gaiaremove
+			return instances
+		except:
+			tools.Logger.error()

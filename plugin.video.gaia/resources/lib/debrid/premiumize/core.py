@@ -40,6 +40,7 @@ class Core(base.Core):
 	Id = 'premiumize'
 	Name = 'Premiumize'
 	Abbreviation = 'P'
+	Priority = 1
 
 	# Services
 	ServicesUpdate = None

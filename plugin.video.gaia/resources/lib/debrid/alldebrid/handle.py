@@ -23,8 +23,10 @@ from resources.lib.debrid.alldebrid import core
 
 class Handle(base.Handle):
 
+
+
 	def __init__(self):
-		base.Handle.__init__(self, id = core.Core.Id, name = core.Core.Name, abbreviation = core.Core.Abbreviation, debrid = True)
+		base.Handle.__init__(self, id = core.Core.Id, name = core.Core.Name, abbreviation = core.Core.Abbreviation, priority = core.Core.Priority, debrid = True)
 		self.mService = core.Core()
 		self.mServices = None
 

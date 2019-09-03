@@ -68,7 +68,7 @@ class Handler(object):
 	def handles(self):
 		from resources.lib import debrid
 		global Handles
-		if Handles == None: Handles = debrid.Debrid.handles(data = True)
+		if Handles == None: Handles = debrid.Debrid.handles(data = True, priority = True)
 		return Handles
 
 	@classmethod
@@ -430,10 +430,11 @@ class Handler(object):
 
 class Handle(object):
 
-	def __init__(self, name, id = None, abbreviation = None, debrid = False, open = False, addon = False):
+	def __init__(self, name, id = None, abbreviation = None, priority = None, debrid = False, open = False, addon = False):
 		self.mId = name.lower() if id == None else id
 		self.mName = name
 		self.mAbbreviation = abbreviation
+		self.mPriority = priority
 		self.mDebrid = debrid
 		self.mOpen = open
 		self.mAddon = addon
@@ -443,6 +444,7 @@ class Handle(object):
 			'id' : self.mId,
 			'name' : self.mName,
 			'abbreviation' : self.mAbbreviation,
+			'priority' : self.mPriority,
 			'debrid' : self.mDebrid,
 			'open' : self.mOpen,
 			'addon' : self.mAddon,
@@ -456,6 +458,9 @@ class Handle(object):
 
 	def abbreviation(self):
 		return self.mAbbreviation
+
+	def priority(self):
+		return self.mPriority
 
 	def debrid(self):
 		return self.mDebrid

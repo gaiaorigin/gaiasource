@@ -35,6 +35,7 @@ class Core(base.Core):
 	Id = 'realdebrid'
 	Name = 'RealDebrid'
 	Abbreviation = 'R'
+	Priority = 3
 
 	# Service Statuses
 	ServiceStatusUp = 'up'
