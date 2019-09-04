@@ -198,12 +198,15 @@ class Interface(base.Interface):
 		interface.Loader.hide()
 		return result
 
-	def add(self, link, title = None, season = None, episode = None, pack = False, close = True, source = None, cached = None, select = False):
+	def add(self, link, title = None, season = None, episode = None, pack = False, close = True, source = None, cached = None, select = False, cloud = False):
+		if cloud: interface.Loader.show()
 		result = self.mDebrid.add(link = link, title = title, season = season, episode = episode, pack = pack, source = source)
+
 		if result['success']:
 			return result
 		elif result['id']:
-			result = self._addWait(result = result, season = season, episode = episode, close = close, pack = pack, source = source, cached = cached, select = select)
+			result = self._addWait(result = result, season = season, episode = episode, close = close, pack = pack, source = source, cached = cached, select = select, cloud = cloud)
+		if cloud: interface.Loader.hide()
 
 		if result['success']:
 			return result
@@ -329,7 +332,7 @@ class Interface(base.Interface):
 				return True
 		return False
 
-	def _addWait(self, result, season = None, episode = None, close = True, pack = False, source = None, cached = None, select = False):
+	def _addWait(self, result, season = None, episode = None, close = True, pack = False, source = None, cached = None, select = False, cloud = False):
 		try:
 			id = result['id']
 
@@ -356,7 +359,7 @@ class Interface(base.Interface):
 			selectionFile = None
 			canceled = False
 
-			interface.Loader.hide()
+			if not cloud: interface.Loader.hide()
 			background = interface.Core.background()
 
 			while True:

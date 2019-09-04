@@ -18,6 +18,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+import threading
+
 from resources.lib.debrid import base
 from resources.lib.debrid.premiumize import core
 from resources.lib.extensions import tools
@@ -210,8 +212,10 @@ class Interface(base.Interface):
 
 	# season/episode: Filter out the correct file from a season pack.
 	def add(self, link, title = None, season = None, episode = None, pack = False, close = True, source = None, cached = False, select = False, cloud = False):
+		if cloud: interface.Loader.show()
 		result = self.mDebrid.add(link = link, title = title, season = season, episode = episode, pack = pack, source = source, cached = cached, cloud = cloud)
 		if select: result = self._addSelect(result)
+		if cloud: interface.Loader.hide()
 		if result['success']:
 			return result
 		elif result['id']:
@@ -278,7 +282,7 @@ class Interface(base.Interface):
 		items.append(interface.Format.font(interface.Translation.string(33079) + ': ', bold = True) + interface.Translation.string(33080))
 		items.append(interface.Format.font(interface.Translation.string(33083) + ': ', bold = True) + interface.Translation.string(33084))
 
-		interface.core.Core.close()
+		interface.Core.close()
 		tools.Time.sleep(0.1) # Ensures progress dialog is closed, otherwise shows flickering.
 		choice = interface.Dialog.options(title = 33076, items = items)
 
@@ -335,7 +339,7 @@ class Interface(base.Interface):
 		id = result['id']
 
 		# In case the progress dialog was canceled while transfering torrent data.
-		if interface.core.Core.canceled():
+		if interface.Core.canceled():
 			self._addDelete(id = id, notification = False)
 			return self.mDebrid.addResult(error = core.Core.ErrorCancel)
 
@@ -365,9 +369,9 @@ class Interface(base.Interface):
 
 				def updateProgress(id, percentage, close):
 					while True:
-						background = interface.core.Core.background()
-						interface.core.Core.create(type = interface.core.Core.TypeDownload, title = title, message = descriptionWaiting)
-						interface.core.Core.update(progress = int(percentage), title = title, message = descriptionWaiting)
+						background = interface.Core.background()
+						interface.Core.create(type = interface.Core.TypeDownload, title = title, message = descriptionWaiting)
+						interface.Core.update(progress = int(percentage), title = title, message = descriptionWaiting)
 						try:
 							status = core.Core.StatusQueued
 							seconds = None
@@ -395,9 +399,9 @@ class Interface(base.Interface):
 								waiting = item['transfer']['speed']['bytes'] == 0 and item['size']['bytes'] == 0 and item['transfer']['progress']['completed']['value'] == 0 and item['transfer']['progress']['completed']['time']['seconds'] == 0
 
 								if status == core.Core.StatusFinalize:
-									interface.core.Core.update(progress = 0, title = title, message = descriptionFinalize)
+									interface.Core.update(progress = 0, title = title, message = descriptionFinalize)
 								elif waiting:
-									interface.core.Core.update(progress = 0, title = title, message = descriptionWaiting)
+									interface.Core.update(progress = 0, title = title, message = descriptionWaiting)
 								else:
 									percentageNew = item['transfer']['progress']['completed']['percentage']
 									# If Premiumize looses the connection in the middle of the download, the progress goes back to 0, causing the dialog to close. Avoid this by keeping track of the last progress.
@@ -442,10 +446,10 @@ class Interface(base.Interface):
 											if eta: description.append(interface.Format.font('Remaining Time: ', bold = True) + eta)
 											description = interface.Format.fontNewline().join(description)
 
-										interface.core.Core.update(progress = int(percentage), title = title, message = description)
+										interface.Core.update(progress = int(percentage), title = title, message = description)
 
-								if interface.core.Core.canceled():
-									canceled = True # Because the status is reset with interface.core.Core.close().
+								if interface.Core.canceled():
+									canceled = True # Because the status is reset with interface.Core.close().
 									break
 
 								# Ask to close a background dialog, because there is no cancel button as with the foreground dialog.
@@ -476,12 +480,12 @@ class Interface(base.Interface):
 								# Sleep
 								tools.Time.sleep(0.5)
 
-							if close: interface.core.Core.close()
+							if close: interface.Core.close()
 						except:
 							tools.Logger.error()
 
 						# Action Dialog
-						if interface.core.Core.canceled() or canceled:
+						if interface.Core.canceled() or canceled:
 							if not self._addAction(result):
 								self.tActionCanceled = True
 								return None
@@ -490,7 +494,7 @@ class Interface(base.Interface):
 						# Close the dialog and sleep (0.1 is not enough).
 						# This alows the dialog to properley close and reset everything.
 						# If not present, the internal iscanceled variable of the progress dialog will stay True after the first cancel.
-						interface.core.Core.close()
+						interface.Core.close()
 						tools.Time.sleep(0.5)
 
 				# END of updateProgress

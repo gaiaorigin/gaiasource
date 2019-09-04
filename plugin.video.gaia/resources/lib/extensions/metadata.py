@@ -333,7 +333,7 @@ class Metadata(object):
 		('Grym' , ['grym']),
 		('HiDt' , ['hidt']),
 		('EbP' , ['ebp']),
-		('DZON3' , ['d-zon3', 'dzon3']),
+		('DZON3' , ['zon3', 'd zon3', 'dzon3']),
 		('MTeam' , ['mteam']),
 		('RAPiDCOWS' , ['rapidcows']),
 		('ExKinoRay' , ['exkinoray']),
@@ -646,6 +646,12 @@ class Metadata(object):
 		('Nanban', ['nanban']),
 		('homefei', ['homefei']),
 		('STVFRV', ['stvfrv']),
+		('G4RiS', ['g4ris']),
+		('Revertron', ['revertron']),
+		('Siambit', ['siambit']),
+		('playBD', ['playbd']),
+		('LEGiON', ['legion']),
+		('QxR', ['qxr']),
 	])
 
 	VideoQualityUltra = 'HDULTRA'
@@ -824,7 +830,7 @@ class Metadata(object):
 
 	DictionaryIgnore = OrderedDict([
 		('Extras' , ['extra', 'extras']),
-		('Soundtrack' , ['ost', 'soundtrack', 'soundtracks', 'thememusic', 'theme music', 'themesong', 'themesongs', 'theme song', 'theme songs', 'music', 'album', 'albums', 'mp3', 'flac']),
+		('Soundtrack' , ['ost', 'soundtrack', 'soundtracks', 'thememusic', 'theme music', 'themesong', 'themesongs', 'theme song', 'theme songs', 'music', 'album', 'albums', 'flac']), # Do not include "mp3", since this removes valid links (eg: Kim.Possible.Intégrale.VF.PDTV.XviD.MP3-splanck-BaLLanTeAm).
 		('Trailer' , ['trailer', 'trailers']),
 		('Sample' , ['sample', 'samples', 'preview', 'previews']),
 	])

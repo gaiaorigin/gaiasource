@@ -187,8 +187,10 @@ class Interface(base.Interface):
 		return result
 
 	def add(self, link, category = None, title = None, season = None, episode = None, pack = False, close = True, source = None, cached = None, cloud = False, select = False):
+		if cloud: interface.Loader.show()
 		result = self.mDebrid.add(link = link, category = category, title = title, season = season, episode = episode, pack = pack, source = source)
 		if select: result = self._addSelect(result)
+		if cloud: interface.Loader.hide()
 		if result['success']:
 			return result
 		elif result['id']:

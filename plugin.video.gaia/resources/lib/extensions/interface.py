@@ -337,7 +337,7 @@ class Format(object):
 	def _colorSettings(self, customize, type, default):
 		if customize:
 			color = tools.Settings.getString('interface.color.' + type)
-			try: return re.search('\\[.*\\](.*)\\[.*\\]', color, re.IGNORECASE).group(1)
+			try: return re.search('\\[.*\\](.*)\\[.*\\]', color, re.IGNORECASE).group(1).encode('utf-8') # Important to encode, otherwise custom colors fail.
 			except: return ''
 		else:
 			return default

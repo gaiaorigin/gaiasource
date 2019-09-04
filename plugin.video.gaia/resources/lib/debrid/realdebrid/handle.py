@@ -48,7 +48,7 @@ class Handle(base.Handle):
 		if self.mService.accountValid():
 			if select: pack = True # Even non-season-pack archives should be selectable.
 			from resources.lib.extensions import tools
-			return interface.Interface().add(link = link, title = title, season = season, episode = episode, pack = pack, close = close, source = item['source'], cached = cached, select = select)
+			return interface.Interface().add(link = link, title = title, season = season, episode = episode, pack = pack, close = close, source = item['source'], cached = cached, select = select, cloud = cloud)
 		return None
 
 	def services(self):

@@ -886,7 +886,7 @@ class Core(base.Core):
 
 	def delete(self, id):
 		result = self._retrieve(mode = Core.ModeDelete, category = Core.CategoryTorrents, action = Core.ActionDelete, id = id)
-		if self.success():
+		if self.success() or self.mErrorCode == 0: # The delete request does not return and data, only HTTP 204.
 			return True
 		else:
 			return Core.ErrorRealDebrid

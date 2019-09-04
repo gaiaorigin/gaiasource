@@ -950,7 +950,9 @@ class Core(base.Core):
 	def addHoster(self, link, season = None, episode = None, pack = False, cached = False, cloud = False):
 		if cloud: result = self._retrieve(category = Core.CategoryTransfer, action = Core.ActionCreate, source = link)
 		else: result = self._retrieve(category = Core.CategoryTransfer, action = Core.ActionDownload, source = link)
-		if self.success(): return self._addLink(result = result, season = season, episode = episode, pack = pack)
+		if self.success():
+			if cloud: return self._addLink(id = result['id'], season = season, episode = episode, pack = pack)
+			else: return self._addLink(result = result, season = season, episode = episode, pack = pack)
 		else: return self.addResult(error = self._errorType())
 
 	def addTorrent(self, link, title = None, season = None, episode = None, pack = False, cached = False, cloud = False):
@@ -1506,7 +1508,8 @@ class Core(base.Core):
 				else:
 					parentId = result['parent_id'] if 'parent_id' in result else None
 					parentName = result['name'] if 'name' in result else None
-					files = self._itemAddDirectory(items = content, recursive = True, parentId = parentId, parentName = parentName)
+					recursive = not parentName == 'root' # Do not scan the directory if the file is directly inside the root directory, otherwise everything in the cloud is scanned.
+					files = self._itemAddDirectory(items = content, recursive = recursive, parentId = parentId, parentName = parentName)
 
 				largest = self._itemLargest(files = files, season = season, episode = episode)
 
