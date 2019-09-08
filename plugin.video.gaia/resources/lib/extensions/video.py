@@ -806,8 +806,9 @@ class Extra(Video):
 		Video.__init__(self, type = type, kids = kids)
 
 	def _query(self, title = None, year = None, season = None):
-		if season is None: return '"%s" "extra"|"extras"|"easter egg"|"easter eggs"' % (title)
-		else: return '"%s" "season %s"|s%s "extra"|"extras"|"easter egg"|"easter eggs"' % (title, str(season), str(season))
+		# Do not search for "easter eggs", since this returns no results (eg: Gaame of Thrones).
+		if season is None: return '"%s" "extra"|"extras"' % (title)
+		else: return '"%s" "season %s"|s%s "extra"|"extras"' % (title, str(season), str(season))
 
 	def _prefer(self, season = None):
 		return []

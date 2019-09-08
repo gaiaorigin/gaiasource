@@ -1341,9 +1341,7 @@ class episodes:
 		addonPoster, addonBanner = control.addonPoster(), control.addonBanner()
 		addonFanart, settingFanart = control.addonFanart(), tools.Settings.getBoolean('interface.theme.fanart')
 
-		recap = False
 		recapEnabled = video.Recap.enabled()
-		more = False
 		moreEnabled = video.Review.enabled() or video.Extra.enabled() or video.Deleted.enabled() or video.Making.enabled() or video.Director.enabled() or video.Interview.enabled() or video.Explanation.enabled()
 
 		indicators = playcount.getShowIndicators()
@@ -1573,9 +1571,7 @@ class episodes:
 				item.setInfo(type = 'Video', infoLabels = tools.Media.metadataClean(meta))
 
 				# Recap
-				if not multiple and extrasEnabled and recapEnabled and not recap and int(season) > 1:
-					recap = True
-
+				if not multiple and extrasEnabled and recapEnabled and int(season) > 1 and int(episode) <= 1:
 					artRecap = copy.deepcopy(art)
 					if not fanart == '0' and not fanart == None: artRecap['thumb'] = fanart
 					elif not poster == '0' and not poster == None: artRecap['thumb'] = poster
@@ -1605,9 +1601,7 @@ class episodes:
 				control.addItem(handle = syshandle, url = url, listitem = item, isFolder = isFolder)
 
 				# Extras
-				if not multiple and extrasEnabled and moreEnabled and not more and counter == total and int(season) > 0 and not futureEpisode:
-					more = True
-
+				if not multiple and extrasEnabled and moreEnabled and (counter == total or (counter < len(items) and not items[counter - 1]['season'] == items[counter]['season'])) and int(season) > 0 and not futureEpisode:
 					artMore = copy.deepcopy(art)
 					if not fanart == '0' and not fanart == None: artMore['thumb'] = fanart
 					elif not poster == '0' and not poster == None: artMore['thumb'] = poster
