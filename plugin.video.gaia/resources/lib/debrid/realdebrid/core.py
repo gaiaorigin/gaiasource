@@ -379,7 +379,8 @@ class Core(base.Core):
 					self.mAuthenticationRefresh = result['refresh_token']
 
 					Core.AuthenticationToken = self.mAuthenticationToken
-					self._accountAuthenticationSettings()
+					tools.Settings.set('accounts.debrid.realdebrid.token', self.mAuthenticationToken)
+					tools.Settings.set('accounts.debrid.realdebrid.refresh', self.mAuthenticationRefresh)
 			except:
 				tools.Logger.error()
 		else:
