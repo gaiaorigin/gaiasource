@@ -53,17 +53,9 @@ class Interface(base.Interface):
 				date = account['expiration']['date']
 				days = str(account['expiration']['remaining'])
 
-				loyaltyDate = account['loyalty']['time']['date']
-				loyaltyPoints = '%.3f' % account['loyalty']['points']
-
-				total = convert.ConverterSize(account['usage']['total']['size']['bytes']).stringOptimal()
-				remaining = convert.ConverterSize(account['usage']['remaining']['size']['bytes']).stringOptimal() + (' (%.1f%%)' % account['usage']['remaining']['percentage'])
-				consumed = convert.ConverterSize(account['usage']['consumed']['size']['bytes']).stringOptimal() + (' (%.1f%%)' % account['usage']['consumed']['percentage'])
-				consumedWeb = convert.ConverterSize(account['usage']['consumed']['web']['size']['bytes']).stringOptimal() + (' (%.1f%%)' % account['usage']['consumed']['web']['percentage'])
-				consumedNntp = convert.ConverterSize(account['usage']['consumed']['nntp']['size']['bytes']).stringOptimal() + (' (%.1f%%)' % account['usage']['consumed']['nntp']['percentage'])
-				consumedNntpUnlimited = convert.ConverterSize(account['usage']['consumed']['nntpunlimited']['size']['bytes']).stringOptimal() + (' (%.1f%%)' % account['usage']['consumed']['nntpunlimited']['percentage'])
-
-				items = []
+				loyaltyDate = account['loyaltyDate']
+				total = account['usageTotal']
+				remaining = account['remaining']
 
 				items = []
 
@@ -91,8 +83,7 @@ class Interface(base.Interface):
 				items.append({
 					'title' : 33750,
 					'items' : [
-						{ 'title' : 33346, 'value' : loyaltyDate },
-						{ 'title' : 33349, 'value' : loyaltyPoints }
+						{ 'title' : 33346, 'value' : loyaltyDate }
 					]
 				})
 
@@ -101,11 +92,7 @@ class Interface(base.Interface):
 					'title' : 33228,
 					'items' : [
 						{ 'title' : 33497, 'value' : total },
-						{ 'title' : 33367, 'value' : remaining },
-						{ 'title' : 33754, 'value' : consumed },
-						{ 'title' : 33751, 'value' : consumedWeb },
-						{ 'title' : 33752, 'value' : consumedNntp },
-						{ 'title' : 33753, 'value' : consumedNntpUnlimited },
+						{ 'title' : 33367, 'value' : remaining }
 					]
 				})
 

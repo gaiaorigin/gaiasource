@@ -177,115 +177,12 @@ class Core(base.Core):
 					usageHtml = usageHtml.find_all('table', recursive = False)[0]
 					usageHtml = usageHtml.find_all('tr', recursive = False)
 
-					usageTotal = usageHtml[0].find_all('td', recursive = False)[1].getText()
-					index = usageTotal.find('(')
-					if index >= 0: usageTotal = int(usageTotal[index + 1 : usageTotal.find(' ', index)].replace(',', '').strip())
-					else: usageTotal = 0
+					account['usageTotal'] = usageHtml[0].find_all('td', recursive = False)[1].getText()
+					account['remaining'] = usageHtml[1].find_all('td', recursive = False)[2].getText()
+					usageLoyaltyTime = usageHtml[2].find_all('td', recursive = False)[2].getText()
 
-					usageConsumed = usageHtml[1].find_all('td', recursive = False)[2].getText()
-					index = usageConsumed.find('(')
-					if index >= 0: usageConsumed = int(usageConsumed[index + 1 : usageConsumed.find(' ', index)].replace(',', '').strip())
-					else: usageConsumed = 0
-
-					usageWeb = usageHtml[2].find_all('td', recursive = False)[2].getText()
-					index = usageWeb.find('(')
-					if index >= 0: usageWeb = int(usageWeb[index + 1 : usageWeb.find(' ', index)].replace(',', '').strip())
-					else: usageWeb = 0
-
-					usageNntp = usageHtml[3].find_all('td', recursive = False)[2].getText()
-					index = usageNntp.find('(')
-					if index >= 0: usageNntp = int(usageNntp[index + 1 : usageNntp.find(' ', index)].replace(',', '').strip())
-					else: usageNntp = 0
-
-					usageNntpUnlimited = usageHtml[4].find_all('td', recursive = False)[2].getText()
-					index = usageNntpUnlimited.find('(')
-					if index >= 0: usageNntpUnlimited = int(usageNntpUnlimited[index + 1 : usageNntpUnlimited.find(' ', index)].replace(',', '').strip())
-					else: usageNntpUnlimited = 0
-
-					usageRemaining = usageHtml[5].find_all('td', recursive = False)[2].getText()
-					index = usageRemaining.find('(')
-					if index >= 0: usageRemaining = int(usageRemaining[index + 1 : usageRemaining.find(' ', index)].replace(',', '').strip())
-					else: usageRemaining = 0
-
-					usageLoyalty = usageHtml[6].find_all('td', recursive = False)[2].getText()
-					index = usageLoyalty.find('(')
-					if index >= 0:
-						usageLoyaltyTime = usageLoyalty[:index].strip()
-						usageLoyaltyTimestamp = convert.ConverterTime(usageLoyaltyTime, format = convert.ConverterTime.FormatDate).timestamp()
-						usageLoyaltyTime = datetime.datetime.fromtimestamp(usageLoyaltyTimestamp)
-						usageLoyaltyPoints = float(usageLoyalty[index + 1 : usageLoyalty.find(')', index)].strip())
-					else:
-						usageLoyaltyTimestamp = 0
-						usageLoyaltyTime = None
-
-					usagePrecentageRemaining = usageRemaining / float(usageTotal)
-					usagePrecentageConsumed = usageConsumed / float(usageTotal)
-					usagePrecentageWeb = usageWeb / float(usageTotal)
-					usagePrecentageNntp = usageNntp / float(usageTotal)
-					usagePrecentageNntpUnlimited = usageNntpUnlimited / float(usageTotal)
-
-					account.update({
-						'loyalty' : {
-							'time' : {
-								'timestamp' : usageLoyaltyTimestamp,
-								'date' : usageLoyaltyTime.strftime('%Y-%m-%d')
-							},
-							'points' : usageLoyaltyPoints,
-						},
-						'usage' : {
-							'total' : {
-								'size' : {
-									'bytes' : usageTotal,
-									'description' : convert.ConverterSize(float(usageTotal)).stringOptimal(),
-								},
-							},
-							'remaining' : {
-								'value' : usagePrecentageRemaining,
-								'percentage' : round(usagePrecentageRemaining * 100.0, 1),
-								'size' : {
-									'bytes' : usageRemaining,
-									'description' : convert.ConverterSize(float(usageRemaining)).stringOptimal(),
-								},
-								'description' : '%.0f%%' % round(usagePrecentageRemaining * 100.0, 0), # Must round, otherwise 2.5% changes to 2% instead of 3%.
-							},
-							'consumed' : {
-								'value' : usagePrecentageConsumed,
-								'percentage' : round(usagePrecentageConsumed * 100.0, 1),
-								'size' : {
-									'bytes' : usageConsumed,
-									'description' : convert.ConverterSize(usageConsumed).stringOptimal(),
-								},
-								'description' : '%.0f%%' % round(usagePrecentageConsumed * 100.0, 0), # Must round, otherwise 2.5% changes to 2% instead of 3%.
-								'web' : {
-									'value' : usagePrecentageWeb,
-									'percentage' : round(usagePrecentageWeb * 100.0, 1),
-									'size' : {
-										'bytes' : usageWeb,
-										'description' : convert.ConverterSize(usageWeb).stringOptimal(),
-									},
-									'description' : '%.0f%%' % round(usagePrecentageWeb * 100.0, 0), # Must round, otherwise 2.5% changes to 2% instead of 3%.
-								},
-								'nntp' : {
-									'value' : usagePrecentageNntp,
-									'percentage' : round(usagePrecentageNntp * 100.0, 1),
-									'size' : {
-										'bytes' : usageNntp,
-										'description' : convert.ConverterSize(usageNntp).stringOptimal(),
-									},
-									'description' : '%.0f%%' % round(usagePrecentageNntp * 100.0, 0), # Must round, otherwise 2.5% changes to 2% instead of 3%.
-								},
-								'nntpunlimited' : {
-									'value' : usagePrecentageNntpUnlimited,
-									'percentage' : round(usagePrecentageNntpUnlimited * 100.0, 1),
-									'size' : {
-										'bytes' : usageNntpUnlimited,
-										'description' : convert.ConverterSize(usageNntpUnlimited).stringOptimal(),
-									},
-									'description' : '%.0f%%' % round(usagePrecentageNntpUnlimited * 100.0, 0), # Must round, otherwise 2.5% changes to 2% instead of 3%.
-								},
-							}
-						}
-					})
+					usageLoyaltyTime = usageLoyaltyTime[0 : usageLoyaltyTime.find(' ')].strip()
+					account['loyaltyDate'] = usageLoyaltyTime
 		except:
 			pass
 		return account

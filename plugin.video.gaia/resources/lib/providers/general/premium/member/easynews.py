@@ -35,7 +35,7 @@ class source(provider.ProviderBase):
 		self.language = ['un']
 
 		self.domains = ['easynews.com']
-		self.base_link = 'http://members.easynews.com'
+		self.base_link = 'https://secure.members.easynews.com'
 
 		# safeO=1: removes adult content
 		# u=1: removes duplicates
